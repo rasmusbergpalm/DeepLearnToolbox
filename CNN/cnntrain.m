@@ -18,7 +18,5 @@ function net = cnntrain(net, x, y)
         net = cnnapplygrads(net);
     end
     toc;
-
-    plot(L)
     
 end
