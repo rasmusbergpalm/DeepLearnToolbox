@@ -9,8 +9,14 @@ function net = nntrain(net, x, y, opts)
         kk = randperm(m);
         tic;
         for l=1:numbatches
-            batch_x = double(x(kk((l-1)*opts.batchsize+1:l*opts.batchsize),:));
-            batch_y = double(y(kk((l-1)*opts.batchsize+1:l*opts.batchsize),:));
+            batch_x = x(kk((l-1)*opts.batchsize+1:l*opts.batchsize),:);
+            if(strcmp(class(batch_x),'uint8'))
+                batch_x = double(batch_x)/255;
+            end
+            batch_y = y(kk((l-1)*opts.batchsize+1:l*opts.batchsize),:);
+            if(strcmp(class(batch_y),'uint8'))
+                batch_y = double(batch_y)/255;
+            end
             net = nnff(net, batch_x, batch_y);
     %             if(rand() < 1e-3)
     %                 disp 'Performing numerical gradient checking ...';
