@@ -1,4 +1,4 @@
-function X = randp(P,varargin) ;
+function X = randp(P,varargin)
 % RANDP - pick random values with relative probability
 %
 %     R = RANDP(PROB,..) returns integers in the range from 1 to
