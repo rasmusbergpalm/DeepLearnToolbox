@@ -5,6 +5,7 @@ function net = nntrain(net, x, y, opts)
         error('numbatches not integer');
     end
     net.rL = [];
+    n=1;
     for i=1:opts.numepochs
         kk = randperm(m);
         tic;
@@ -25,7 +26,11 @@ function net = nntrain(net, x, y, opts)
     %             end
             net = nnbp(net);
             net = nnapplygrads(net);
-            net.rL = [net.rL net.L];
+            if(isempty(net.rL))
+                net.rL(n) = net.L;
+            end
+            net.rL(n+1) = 0.99*net.rL(n) + 0.01*net.L;
+            n=n+1;
         end
         toc;
         disp(['epoch ' num2str(i) '/' num2str(opts.numepochs)]);

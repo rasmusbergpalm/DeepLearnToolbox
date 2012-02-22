@@ -1,5 +1,4 @@
 function net = dbntrain(net, x, opts)
-    m = size(x,1);
     n = numel(net.rbm);
     
     net.rbm{1} = rbmtrain(net.rbm{1}, x, opts);

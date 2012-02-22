@@ -1,5 +1,4 @@
 function rbm = rbmtrain(rbm, x, opts)
-    lr = rbm.lr;
     m = size(x,1);
     numbatches = m/opts.batchsize;
     if(rem(numbatches,1)~=0)
@@ -19,10 +18,14 @@ function rbm = rbmtrain(rbm, x, opts)
 
             c1 = h1'*v1;
             c2 = h2'*v2;
+            
+            rbm.vW = rbm.momentum*rbm.vW + rbm.alpha*(c1-c2)/opts.batchsize;
+            rbm.vb = rbm.momentum*rbm.vb + rbm.alpha*sum(v1-v2)'/opts.batchsize;
+            rbm.c = rbm.momentum*rbm.vc + rbm.alpha*sum(h1-h2)'/opts.batchsize;
 
-            rbm.W = rbm.W + lr*(c1-c2)/opts.batchsize;
-            rbm.b = rbm.b + lr*sum(v1-v2)'/opts.batchsize;
-            rbm.c = rbm.c + lr*sum(h1-h2)'/opts.batchsize;
+            rbm.W = rbm.W + rbm.vW;
+            rbm.b = rbm.b + rbm.vb;
+            rbm.c = rbm.c + rbm.vc;
             
             err = err + sum(sum((v1-v2).^2));
         end
