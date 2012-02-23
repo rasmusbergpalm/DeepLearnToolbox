@@ -10,22 +10,22 @@ A good overview of the theory of Deep Learning theory is
 
 For a more informal introduction, see the following videos by Geoffrey Hinton and Andrew Ng.
 
-* [The Next Generation of Neural Networks (Hinton, 2007)](http://www.youtube.com/watch?v=AyzOUbkUf3M)
-* [Recent Developments in Deep Learning (Hinton, 2010)](http://www.youtube.com/watch?v=VdIURAu1-aU)
-* [Unsupervised Feature Learning and Deep Learning (Ng, 2011)](http://www.youtube.com/watch?v=ZmNOAtZIgIk)
+* [The Next Generation of Neural Networks](http://www.youtube.com/watch?v=AyzOUbkUf3M) (Hinton, 2007)
+* [Recent Developments in Deep Learning](http://www.youtube.com/watch?v=VdIURAu1-aU) (Hinton, 2010)
+* [Unsupervised Feature Learning and Deep Learning](http://www.youtube.com/watch?v=ZmNOAtZIgIk) (Ng, 2011)
 
 This toolbox includes:
 ----------------------
 
-NN:   Feedforward Backprop Neural Nets.
+NN:   A library for Feedforward Backprop Neural Networks
 
-CNN:  Convolutional Neural Networks.
+CNN:  A library for Convolutional Neural Networks
 
-DBN:  Deep Belief Networks.
+DBN:  A library for Deep Belief Networks
 
-SAE:  Stacked Auto-Encoders.
+SAE:  A library for Stacked Auto-Encoders
 
-SPAE: Stacked Convolutional Auto-Encoders.
+SPAE: A library for Stacked Convolutional Auto-Encoders
 
 Setup
 -------
