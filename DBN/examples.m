@@ -11,7 +11,7 @@ test_y = double(test_y);
 
 %% ex1 train a 100 hidden unit RBM and visualize its weights
 dbn.sizes = [100];
-opts.numepochs = 30;
+opts.numepochs = 5;
 opts.batchsize = 100;
 opts.momentum = 0;
 opts.alpha = 1;
@@ -35,6 +35,7 @@ for i=1:3
     nn.b{i} = dbn.rbm{i}.c;
 end
 nn.alpha = 1;
+nn.lambda = 1e-4;
 opts.numepochs = 10;
 opts.batchsize = 100;
 nn = nntrain(nn, train_x, train_y, opts);
