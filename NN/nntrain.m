@@ -19,12 +19,12 @@ function net = nntrain(net, x, y, opts)
                 batch_y = double(batch_y)/255;
             end
             net = nnff(net, batch_x, batch_y);
-    %             if(rand() < 1e-3)
-    %                 disp 'Performing numerical gradient checking ...';
-    %                 nnchecknumgrad(net, x(i,:), y(i,:));
-    %                 disp 'No errors found ...';
-    %             end
             net = nnbp(net);
+            
+%             disp 'Performing numerical gradient checking ...';
+%             nnchecknumgrad(net, x(i,:), y(i,:));
+%             disp 'No errors found ...';
+            
             net = nnapplygrads(net);
             if(isempty(net.rL))
                 net.rL(n) = net.L;
@@ -32,8 +32,8 @@ function net = nntrain(net, x, y, opts)
             net.rL(n+1) = 0.99*net.rL(n) + 0.01*net.L;
             n=n+1;
         end
-        toc;
-        disp(['epoch ' num2str(i) '/' num2str(opts.numepochs)]);
+        t=toc;
+        disp(['epoch ' num2str(i) '/' num2str(opts.numepochs) '. Took ' num2str(t) ' seconds' '. Mean squared error is ' num2str(net.rL(end))]);
     end
 
 end

@@ -21,13 +21,13 @@ function rbm = rbmtrain(rbm, x, opts)
             
             rbm.vW = rbm.momentum*rbm.vW + rbm.alpha*(c1-c2)/opts.batchsize;
             rbm.vb = rbm.momentum*rbm.vb + rbm.alpha*sum(v1-v2)'/opts.batchsize;
-            rbm.c = rbm.momentum*rbm.vc + rbm.alpha*sum(h1-h2)'/opts.batchsize;
+            rbm.vc = rbm.momentum*rbm.vc + rbm.alpha*sum(h1-h2)'/opts.batchsize;
 
             rbm.W = rbm.W + rbm.vW;
             rbm.b = rbm.b + rbm.vb;
             rbm.c = rbm.c + rbm.vc;
             
-            err = err + sum(sum((v1-v2).^2));
+            err = err + sum(sum((v1-v2).^2))/opts.batchsize;
         end
         disp(['epoch ' num2str(i) '/' num2str(opts.numepochs)  '. Average reconstruction error is: ' num2str(err/numbatches)]);
     end

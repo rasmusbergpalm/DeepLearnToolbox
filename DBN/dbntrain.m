@@ -1,10 +1,10 @@
-function net = dbntrain(net, x, opts)
-    n = numel(net.rbm);
+function dbn = dbntrain(dbn, x, opts)
+    n = numel(dbn.rbm);
     
-    net.rbm{1} = rbmtrain(net.rbm{1}, x, opts);
+    dbn.rbm{1} = rbmtrain(dbn.rbm{1}, x, opts);
     for i=2:n
-        x = rbmup(net.rbm{i-1}, x);
-        net.rbm{i} = rbmtrain(net.rbm{i}, x, opts);
+        x = rbmup(dbn.rbm{i-1}, x);
+        dbn.rbm{i} = rbmtrain(dbn.rbm{i}, x, opts);
     end
     
 end

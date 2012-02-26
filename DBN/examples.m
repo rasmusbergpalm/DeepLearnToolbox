@@ -1,0 +1,44 @@
+clear all; close all; clc;
+addpath('../data');
+addpath('../util');
+
+load mnist_uint8;
+
+train_x = double(train_x)/255;
+train_y = double(train_y);
+test_x = double(test_x)/255;
+test_y = double(test_y);
+
+%% ex1 train a 100 hidden unit RBM and visualize its weights
+dbn.sizes = [100];
+opts.numepochs = 30;
+opts.batchsize = 100;
+opts.momentum = 0;
+opts.alpha = 1;
+dbn = dbnsetup(dbn, train_x, opts);
+dbn = dbntrain(dbn, train_x, opts);
+figure; visualize(dbn.rbm{1}.W',1); %Visualize the RMB weights
+
+%% ex2 train a 100-100-100 DBN and use its weights to initialize a NN
+dbn.sizes = [100 100 100];
+opts.numepochs = 5;
+opts.batchsize = 100;
+opts.momentum = 0;
+opts.alpha = 1;
+dbn = dbnsetup(dbn, train_x, opts);
+dbn = dbntrain(dbn, train_x, opts);
+
+nn.size = [100 100 100];
+nn = nnsetup(nn, train_x, train_y);
+for i=1:3
+    nn.W{i} = dbn.rbm{i}.W;
+    nn.b{i} = dbn.rbm{i}.c;
+end
+nn.alpha = 1;
+opts.numepochs = 10;
+opts.batchsize = 100;
+nn = nntrain(nn, train_x, train_y, opts);
+[er, bad] = nntest(nn, test_x, test_y);
+
+disp([num2str(er*100) '% error']);
+figure; visualize(nn.W{1}',1);
