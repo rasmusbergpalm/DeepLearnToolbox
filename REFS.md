@@ -7,3 +7,7 @@ Convolutional Neural Nets:
 -------
 * "Handwritten Digit Recognition with a Back-Propagation Network" Yann LeCun 1990 - Introduces CNNs
 * "Notes on Convolutional Neural Networks" Jake Bouvrie 2006 - How to implement CNNs
+
+Auto Encoders
+-------
+* "Extracting and Composing Robust Features with Denoising Autoencoders" Pascal Vincent 2008 - Introduces the Denoising Autoencoder
