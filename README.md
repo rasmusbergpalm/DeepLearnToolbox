@@ -17,7 +17,7 @@ For a more informal introduction, see the following videos by Geoffrey Hinton an
 This toolbox includes:
 ----------------------
 
-NN:   A library for Feedforward Backprop Neural Networks
+NN:   A library for Feedforward Backpropagation Neural Networks
 
 CNN:  A library for Convolutional Neural Networks
 
@@ -27,10 +27,14 @@ SAE:  A library for Stacked Auto-Encoders
 
 SPAE: A library for Stacked Convolutional Auto-Encoders
 
+util: Utility functions used by the libraries.
+
+data: Data used by the examples.
+
 Setup
--------
+-----
 1. Download.
 2. addpath(genpath('DeepLearnToolbox'));
 
 Everything is work in progress
--------
+------------------------------
