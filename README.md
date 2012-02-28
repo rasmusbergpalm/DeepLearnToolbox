@@ -14,25 +14,36 @@ For a more informal introduction, see the following videos by Geoffrey Hinton an
 * [Recent Developments in Deep Learning](http://www.youtube.com/watch?v=VdIURAu1-aU) (Hinton, 2010)
 * [Unsupervised Feature Learning and Deep Learning](http://www.youtube.com/watch?v=ZmNOAtZIgIk) (Ng, 2011)
 
-This toolbox includes:
+Directories included in the toolbox
+-----------------------------------
+
+NN/   A library for Feedforward Backpropagation Neural Networks
+
+CNN/  A library for Convolutional Neural Networks
+
+DBN/  A library for Deep Belief Networks
+
+SAE/  A library for Stacked Auto-Encoders
+
+SPAE/ A library for Stacked Convolutional Auto-Encoders
+
+util/ Utility functions used by the libraries.
+
+data/ Data used by the examples.
+
+Overview of libraries
+---------------------
+
+(Not true yet:) All libraries have two example "applications", a simple one named ??? and a more complicated
+one called ???. The simple one just gives an example of how the library is meant to be called at the code level,
+and the more complicated one is intended to demonstrate what the library might be used for and capable of.
+
+Neural Network Library
 ----------------------
-
-NN:   A library for Feedforward Backpropagation Neural Networks
-
-CNN:  A library for Convolutional Neural Networks
-
-DBN:  A library for Deep Belief Networks
-
-SAE:  A library for Stacked Auto-Encoders
-
-SPAE: A library for Stacked Convolutional Auto-Encoders
-
-util: Utility functions used by the libraries.
-
-data: Data used by the examples.
 
 Setup
 -----
+
 1. Download.
 2. addpath(genpath('DeepLearnToolbox'));
 
