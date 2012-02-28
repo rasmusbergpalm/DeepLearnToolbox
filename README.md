@@ -17,29 +17,41 @@ For a more informal introduction, see the following videos by Geoffrey Hinton an
 Directories included in the toolbox
 -----------------------------------
 
-NN/   A library for Feedforward Backpropagation Neural Networks
+`NN/`   - A library for Feedforward Backpropagation Neural Networks
 
-CNN/  A library for Convolutional Neural Networks
+`CNN/`  - A library for Convolutional Neural Networks
 
-DBN/  A library for Deep Belief Networks
+`DBN/`  - A library for Deep Belief Networks
 
-SAE/  A library for Stacked Auto-Encoders
+`SAE/`  - A library for Stacked Auto-Encoders
 
-SPAE/ A library for Stacked Convolutional Auto-Encoders
+`SPAE/` - A library for Stacked Convolutional Auto-Encoders
 
-util/ Utility functions used by the libraries.
+`util/` - Utility functions used by the libraries.
 
-data/ Data used by the examples.
+`data/` - Data used by the examples.
 
 Overview of libraries
 ---------------------
 
-(Not true yet:) All libraries have two example "applications", a simple one named ??? and a more complicated
-one called ???. The simple one just gives an example of how the library is meant to be called at the code level,
-and the more complicated one is intended to demonstrate what the library might be used for and capable of.
+(**Not true yet:**) All libraries have two example "applications", a simlpe one named `example.m` and a more complicated
+one named `demo.m`. The simple one just gives an example of how the library is meant to be invoked at the code level,
+and the more complicated one demonstrates what the library might be used for and/or is capable of.
 
-Neural Network Library
-----------------------
+NN - Neural Network Library
+---------------------------
+
+CNN - Convolutional Neural Network Library
+------------------------------------------
+
+DBN - Deep Belief Network Library
+---------------------------------
+
+SAE - Stacked Auto-Encoder Library
+----------------------------------
+
+SPAE - Stacked Convolutional Auto-Encoder Library
+-------------------------------------------------
 
 Setup
 -----
