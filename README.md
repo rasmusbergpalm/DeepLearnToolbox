@@ -35,7 +35,7 @@ Directories included in the toolbox
 
 Example
 ---------------------
-`
+```matlab
 %% ex1: Using 100 hidden units, learn a feedforward backprop neural net to recognize handwritten digits
 nn.size = [100];                          %Vector of number of hidden units. It will automatically add input and output units
 nn = nnsetup(nn, train_x, train_y);       %Setup the network
@@ -46,7 +46,7 @@ opts.batchsize = 100;                     %Take a mean gradient step over this m
 nn = nntrain(nn, train_x, train_y, opts); %Train the network
 [err, bad] = nntest(nn, test_x, test_y);  %Test the network performance
 disp([num2str(err*100) '% error']);       %Display error rate
-`
+```
 
 Overview of libraries
 ---------------------
