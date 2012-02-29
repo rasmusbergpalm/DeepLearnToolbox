@@ -27,9 +27,9 @@ Directories included in the toolbox
 
 `SPAE/` - A library for Stacked Convolutional Auto-Encoders
 
-`util/` - Utility functions used by the libraries.
+`util/` - Utility functions used by the libraries
 
-`data/` - Data used by the examples.
+`data/` - Data used by the examples
 
 Overview of libraries
 ---------------------
