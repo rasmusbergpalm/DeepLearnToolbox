@@ -14,6 +14,8 @@ For a more informal introduction, see the following videos by Geoffrey Hinton an
 * [Recent Developments in Deep Learning](http://www.youtube.com/watch?v=VdIURAu1-aU) (Hinton, 2010)
 * [Unsupervised Feature Learning and Deep Learning](http://www.youtube.com/watch?v=ZmNOAtZIgIk) (Ng, 2011)
 
+For references on each library check REFS.md
+
 Directories included in the toolbox
 -----------------------------------
 
@@ -31,27 +33,27 @@ Directories included in the toolbox
 
 `data/` - Data used by the examples
 
+Example
+---------------------
+```matlab
+%% ex1: Using 100 hidden units, learn a feedforward backprop neural net to recognize handwritten digits
+nn.size = [100];                          %Vector of number of hidden units. It will automatically add input and output units
+nn = nnsetup(nn, train_x, train_y);       %Setup the network
+nn.lambda = 1e-5;                         %Add L2 weight decay
+nn.alpha = 1e-0;                          %Define learning rate
+opts.numepochs = 30;                      %Number of full sweeps through data
+opts.batchsize = 100;                     %Take a mean gradient step over this many samples
+nn = nntrain(nn, train_x, train_y, opts); %Train the network
+[err, bad] = nntest(nn, test_x, test_y);  %Test the network performance
+disp([num2str(err*100) '% error']);       %Display error rate
+```
+
 Overview of libraries
 ---------------------
 
 (**Not true yet:**) All libraries have two example "applications", a simlpe one named `example.m` and a more complicated
 one named `demo.m`. The simple one just gives an example of how the library is meant to be invoked at the code level,
 and the more complicated one demonstrates what the library might be used for and/or is capable of.
-
-NN - Neural Network Library
----------------------------
-
-CNN - Convolutional Neural Network Library
-------------------------------------------
-
-DBN - Deep Belief Network Library
----------------------------------
-
-SAE - Stacked Auto-Encoder Library
-----------------------------------
-
-SPAE - Stacked Convolutional Auto-Encoder Library
--------------------------------------------------
 
 Setup
 -----
