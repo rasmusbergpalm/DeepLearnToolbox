@@ -13,8 +13,8 @@ test_y  = double(test_y);
 nn.size = [100];       %  Vector of number of hidden units. It will automatically add input and output units
 nn = nnsetup(nn, train_x, train_y);
 
-nn.lambda = 1e-5;      %  L2 weight decay
-nn.alpha  = 1e-0;      %  Learning rate
+nn.lambda = 1e-5;       %  L2 weight decay
+nn.alpha  = 1e-0;       %  Learning rate
 opts.numepochs =  30;   %  Number of full sweeps through data
 opts.batchsize = 100;   %  Take a mean gradient step over this many samples
 nn = nntrain(nn, train_x, train_y, opts);
@@ -27,8 +27,8 @@ figure; visualize(nn.W{1}', 1)   %  Visualize the weights
 nn.size = [100 50];    %  Vector of number of hidden units. It will automatically add input and output units
 nn = nnsetup(nn, train_x, train_y);
 
-nn.lambda = 1e-5;      %  L2 weight decay
-nn.alpha  = 1e-0;      %  Learning rate
+nn.lambda = 1e-5;       %  L2 weight decay
+nn.alpha  = 1e-0;       %  Learning rate
 opts.numepochs =  30;   %  Number of full sweeps through data
 opts.batchsize = 100;   %  Take a mean gradient step over this many samples
 nn = nntrain(nn, train_x, train_y, opts);
