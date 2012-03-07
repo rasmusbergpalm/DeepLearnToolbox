@@ -20,7 +20,8 @@ opts.batchsize = 100;   %  Take a mean gradient step over this many samples
 nn = nntrain(nn, train_x, train_y, opts);
 
 [er, bad] = nntest(nn, test_x, test_y);
-disp([num2str(er * 100) '% error']);
+%disp([num2str(er * 100) '% error']);
+printf('%5.2f% error', 100 * er)
 figure; visualize(nn.W{1}', 1)   %  Visualize the weights
 
 %%  ex2: Using 100-50 hidden units, learn to recognize handwritten digits
@@ -34,7 +35,8 @@ opts.batchsize = 100;   %  Take a mean gradient step over this many samples
 nn = nntrain(nn, train_x, train_y, opts);
 
 [er, bad] = nntest(nn, test_x, test_y);
-disp([num2str(er * 100) '% error']);
+%disp([num2str(er * 100) '% error']);
+printf('%5.2f% error', 100 * er)
 figure; visualize(nn.W{1}', 1)   %  Visualize the weights
 
 %%  ex3: Train a denoising autoencoder (DAE) and use it to initialize the weights for a NN
@@ -65,6 +67,7 @@ nn = nntrain(nn, train_x, train_y, opts);
 
 [er, bad] = nntest(nn, test_x, test_y);
 
-disp([num2str(er * 100) '% error']);
+%disp([num2str(er * 100) '% error']);
+printf('%5.2f% error', 100 * er)
 figure; visualize(DAE.W{1}', 1)   %  Visualize the DAE weights
 figure; visualize(nn.W{1}',  1)   %  Visualize the NN weights
