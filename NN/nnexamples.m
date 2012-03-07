@@ -10,7 +10,7 @@ train_y = double(train_y);
 test_y  = double(test_y);
 
 %%  ex1: Using 100 hidden units, learn to recognize handwritten digits
-nn.size = [100];        %  Vector of number of hidden units. It will automatically add input and output units
+nn.size = [100];       %  Vector of number of hidden units. It will automatically add input and output units
 nn = nnsetup(nn, train_x, train_y);
 
 nn.lambda = 1e-5;       %  L2 weight decay
@@ -20,12 +20,11 @@ opts.batchsize = 100;   %  Take a mean gradient step over this many samples
 nn = nntrain(nn, train_x, train_y, opts);
 
 [er, bad] = nntest(nn, test_x, test_y);
-%disp([num2str(er * 100) '% error']);
-printf('%4.2f% error', 100 * er);
+disp([num2str(er * 100) '% error']);
 figure; visualize(nn.W{1}', 1)   %  Visualize the weights
 
 %%  ex2: Using 100-50 hidden units, learn to recognize handwritten digits
-nn.size = [100 50];     %  Vector of number of hidden units. It will automatically add input and output units
+nn.size = [100 50];    %  Vector of number of hidden units. It will automatically add input and output units
 nn = nnsetup(nn, train_x, train_y);
 
 nn.lambda = 1e-5;       %  L2 weight decay
@@ -35,8 +34,7 @@ opts.batchsize = 100;   %  Take a mean gradient step over this many samples
 nn = nntrain(nn, train_x, train_y, opts);
 
 [er, bad] = nntest(nn, test_x, test_y);
-%disp([num2str(er * 100) '% error']);
-printf('%4.2f% error', 100 * er);
+disp([num2str(er * 100) '% error']);
 figure; visualize(nn.W{1}', 1)   %  Visualize the weights
 
 %%  ex3: Train a denoising autoencoder (DAE) and use it to initialize the weights for a NN
@@ -67,7 +65,6 @@ nn = nntrain(nn, train_x, train_y, opts);
 
 [er, bad] = nntest(nn, test_x, test_y);
 
-%disp([num2str(er * 100) '% error']);
-printf('%4.2f% error', 100 * er);
+disp([num2str(er * 100) '% error']);
 figure; visualize(DAE.W{1}', 1)   %  Visualize the DAE weights
 figure; visualize(nn.W{1}',  1)   %  Visualize the NN weights

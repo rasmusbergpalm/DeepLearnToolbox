@@ -43,5 +43,6 @@ opts.batchsize = 100;
 nn = nntrain(nn, train_x, train_y, opts);
 [er, bad] = nntest(nn, test_x, test_y);
 
-disp([num2str(er * 100) '% error']);
+%disp([num2str(er * 100) '% error']);
+printf('%5.2f% error', 100 * er)
 figure; visualize(nn.W{1}', 1);
