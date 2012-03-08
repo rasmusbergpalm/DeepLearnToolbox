@@ -1,6 +1,8 @@
 clear all; close all; clc;
-addpath('../data');
-addpath('../util');
+
+[pathstr, name, ext] = fileparts(mfilename('fullpath'));
+addpath(strcat(pathstr, '/../data'));
+addpath(strcat(pathstr, '/../util'));
 
 load mnist_uint8;
 

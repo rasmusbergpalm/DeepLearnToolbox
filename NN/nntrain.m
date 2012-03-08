@@ -57,5 +57,6 @@ function nn = nntrain(nn, x, y, opts)
 
         t = toc;
 %        disp(['epoch ' num2str(i) '/' num2str(numepochs)]);
-        disp(['epoch ' num2str(i) '/' num2str(opts.numepochs) '. Took ' num2str(t) ' seconds' '. Mean squared error is ' num2str(nn.rL(end))]);
+%        disp(['epoch ' num2str(i) '/' num2str(opts.numepochs) '. Took ' num2str(t) ' seconds' '. Mean squared error is ' num2str(nn.rL(end))]);
+        printf('epoch %d/%d. Took %f seconds. Mean squared error is %f.', i, opts.numepochs, t, nn.rL(i));
 end

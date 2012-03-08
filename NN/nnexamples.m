@@ -1,6 +1,8 @@
 clear all; close all; clc;
-addpath('../data');
-addpath('../util');
+
+[pathstr, name, ext] = fileparts(mfilename('fullpath'));
+addpath(strcat(pathstr, '/../data'));
+addpath(strcat(pathstr, '/../util'));
 
 load mnist_uint8;
 
@@ -10,7 +12,7 @@ train_y = double(train_y);
 test_y  = double(test_y);
 
 %%  ex1: Using 100 hidden units, learn to recognize handwritten digits
-nn.size = [100];       %  Vector of number of hidden units. It will automatically add input and output units
+nn.size = [100];        %  Vector of number of hidden units. It will automatically add input and output units
 nn = nnsetup(nn, train_x, train_y);
 
 nn.lambda = 1e-5;       %  L2 weight decay
