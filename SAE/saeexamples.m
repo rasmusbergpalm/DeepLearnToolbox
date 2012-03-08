@@ -6,8 +6,8 @@ addpath(strcat(pathstr, '/../util'));
 
 load mnist_uint8;
 
-train_x = double(train_x)/255;
-test_x  = double(test_x)/255;
+train_x = double(train_x) / 255;
+test_x  = double(test_x)  / 255;
 train_y = double(train_y);
 test_y  = double(test_y);
 
@@ -27,7 +27,7 @@ opts.batchsize = 100;
 sae = saetrain(sae, train_x, opts);
 
 %  use the SDAE to initialize a FFNN
-nn.size = [100 100]; 
+nn.size = [100 100];
 nn = nnsetup(nn, train_x, train_y);
 
 nn.W{1} = sae.ae{1}.W{1};
@@ -43,6 +43,6 @@ opts.batchsize = 100;
 nn = nntrain(nn, train_x, train_y, opts);
 
 [er, bad] = nntest(nn, test_x, test_y);
-%disp([num2str(er * 100) '% error']);
+
 printf('%5.2f% error', 100 * er);
 figure; visualize(nn.W{1}', 1)   %  Visualize the weights
