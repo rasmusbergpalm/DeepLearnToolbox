@@ -1,6 +1,8 @@
 clear all; close all; clc;
-addpath('../data');
-addpath('../util');
+
+[pathstr, name, ext] = fileparts(mfilename('fullpath'));
+addpath(strcat(pathstr, '/../data'));
+addpath(strcat(pathstr, '/../util'));
 
 load mnist_uint8;
 
@@ -43,5 +45,6 @@ opts.batchsize = 100;
 nn = nntrain(nn, train_x, train_y, opts);
 [er, bad] = nntest(nn, test_x, test_y);
 
-disp([num2str(er * 100) '% error']);
+%disp([num2str(er * 100) '% error']);
+printf('%5.2f% error', 100 * er)
 figure; visualize(nn.W{1}', 1);
