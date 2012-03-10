@@ -6,8 +6,8 @@ addpath(strcat(pathstr, '/../util'));
 
 load mnist_uint8;
 
-train_x = double(train_x)/255;
-test_x  = double(test_x)/255;
+train_x = double(train_x) / 255;
+test_x  = double(test_x)  / 255;
 train_y = double(train_y);
 test_y  = double(test_y);
 
