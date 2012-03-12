@@ -1,7 +1,7 @@
 function net = cnnapplygrads(net, opts)
     for l = 2 : numel(net.layers)
         if strcmp(net.layers{l}.type, 'c')
-            for j = 1 : numel(net.layers{l}.a
+            for j = 1 : numel(net.layers{l}.a)
                 for ii = 1 : numel(net.layers{l - 1}.a)
                     net.layers{l}.k{ii}{j} = net.layers{l}.k{ii}{j} - opts.alpha * net.layers{l}.dk{ii}{j};
                 end
