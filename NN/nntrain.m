@@ -18,8 +18,7 @@ function nn = nntrain(nn, x, y, opts)
         error('numbatches not integer');
     end
 
-%    nn.rL = [];
-    nn.rL = zeros(1, numepochs * numbatches);
+    nn.rL = [];
     n = 1;
     for i = 1 : numepochs
         tic;
@@ -38,15 +37,14 @@ function nn = nntrain(nn, x, y, opts)
             end
             
             nn = nnff(nn, batch_x, batch_y);
-%                if rand() < 1e-3
-%                    disp 'Performing numerical gradient checking ...';
-%                    nnchecknumgrad(nn, x(i, :), y(i, :));
-%                    disp 'No errors found ...';
-%                end
             nn = nnbp(nn);
+            
+%             disp 'Performing numerical gradient checking ...';
+%             nnchecknumgrad(nn, batch_x, batch_y);
+%             disp 'No errors found ...';
+            
             nn = nnapplygrads(nn);
 
-%            if isempty(nn.rL)
             if n == 1
                 nn.rL(n) = nn.L;
             end
@@ -58,5 +56,5 @@ function nn = nntrain(nn, x, y, opts)
         t = toc;
 %        disp(['epoch ' num2str(i) '/' num2str(numepochs)]);
 %        disp(['epoch ' num2str(i) '/' num2str(opts.numepochs) '. Took ' num2str(t) ' seconds' '. Mean squared error is ' num2str(nn.rL(end))]);
-        printf('epoch %d/%d. Took %f seconds. Mean squared error is %f.', i, opts.numepochs, t, nn.rL(i));
+        printf('epoch %d/%d. Took %f seconds. Mean squared error is %f.', i, opts.numepochs, t, nn.rL(end));
 end

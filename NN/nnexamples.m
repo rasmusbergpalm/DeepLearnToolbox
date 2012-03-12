@@ -1,4 +1,4 @@
-clear all; close all; clc;
+clear all; close all; clc; dbstop if error
 
 [pathstr, name, ext] = fileparts(mfilename('fullpath'));
 addpath(strcat(pathstr, '/../data'));
@@ -17,7 +17,7 @@ nn = nnsetup(nn, train_x, train_y);
 
 nn.lambda = 1e-5;       %  L2 weight decay
 nn.alpha  = 1e-0;       %  Learning rate
-opts.numepochs =  30;   %  Number of full sweeps through data
+opts.numepochs =  100;   %  Number of full sweeps through data
 opts.batchsize = 100;   %  Take a mean gradient step over this many samples
 nn = nntrain(nn, train_x, train_y, opts);
 
