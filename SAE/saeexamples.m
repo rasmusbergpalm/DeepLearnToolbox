@@ -44,5 +44,5 @@ nn = nntrain(nn, train_x, train_y, opts);
 
 [er, bad] = nntest(nn, test_x, test_y);
 
-printf('%5.2f% error', 100 * er);
+printf('%5.2f% error\n', 100 * er);
 figure; visualize(nn.W{1}', 1)   %  Visualize the weights

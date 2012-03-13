@@ -8,9 +8,9 @@ function pae = paetrain(pae, x, opts)
         l  = randi(size(x{i1}{1},1) - opts.batchsize - n + 1);
         x1{1} = double(x{i1}{1}(l : l + opts.batchsize - 1, :, :)) / 255;
 
-        if n == 1   %Auto Encoder
+        if n == 1   %  Auto Encoder
             x2{1} = x1{1};
-        else        %Predictive Encoder
+        else        %  Predictive Encoder
             x2{1} = double(x{i1}{1}(l + n : l + n + opts.batchsize - 1, :, :)) / 255;
         end
         %  Add noise to input, for denoising stacked autoenoder

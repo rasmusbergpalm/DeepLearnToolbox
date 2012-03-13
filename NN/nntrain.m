@@ -1,20 +1,22 @@
-function nn = nntrain(nn, x, y, opts)
+function nn = nntrain(nn, x, y, opts, x_test, y_test)
     m = size(x, 1);
 
+    opt.debug    = 0;
     opt.optimize = 'memory';
+    opt.verbose  = 1;
 
-    if opt.optimize == 'speed'
-      if strcmp(class(x), 'uint8')
-        x = double(x) / 255;
-      end
+    if strcmp(opt.optimize, 'speed')
+        if strcmp(class(x), 'uint8')
+            x = double(x) / 255;
+        end
 
-      if strcmp(class(y), 'uint8')
-        y = double(y) / 255;
-      end
+        if strcmp(class(y), 'uint8')
+            y = double(y) / 255;
+        end
     end
 
     batchsize = opts.batchsize;
-    numepochs = opts.numepochs
+    numepochs = opts.numepochs;
 
     numbatches = m / batchsize;
 
@@ -32,22 +34,22 @@ function nn = nntrain(nn, x, y, opts)
             batch_x = x(kk((l - 1) * batchsize + 1 : l * batchsize), :);
             batch_y = y(kk((l - 1) * batchsize + 1 : l * batchsize), :);
 
-            if opt.optimize == 'memory'
-              if strcmp(class(x), 'uint8')
-                batch_x = double(batch_x) / 255;
-              end
+            if strcmp(opt.optimize, 'memory')
+                if strcmp(class(x), 'uint8')
+                    batch_x = double(batch_x) / 255;
+                end
 
-              if strcmp(class(y), 'uint8')
-                batch_y = double(batch_y) / 255;
-              end
+                if strcmp(class(y), 'uint8')
+                    batch_y = double(batch_y) / 255;
+                end
             end
 
             nn = nnff(nn, batch_x, batch_y);
 
-            if rand() < 1e-3
-              disp 'Performing numerical gradient checking ...';
-              nnchecknumgrad(nn, x(i, :), y(i, :));
-              disp 'No errors found ...';
+            if rand() < opt.debug
+                printf('Performing numerical gradient checking ...\n');
+                nnchecknumgrad(nn, x(i, :), y(i, :));
+                printf('No errors found ...\n');
             end
 
             nn = nnbp(nn);
@@ -55,12 +57,23 @@ function nn = nntrain(nn, x, y, opts)
 
             if n == 1
                 nn.rL(n) = nn.L;
+            else
+                nn.rL(n) = 0.99 * nn.rL(n - 1) + 0.01 * nn.L;
             end
 
-            nn.rL(n + 1) = 0.99 * nn.rL(n) + 0.01 * nn.L;
             n = n + 1;
         end
 
-        t = toc;
-        printf('epoch %d/%d. Took %f seconds. Mean squared error is %f.', i, opts.numepochs, t, nn.rL(i));
+        if opt.verbose
+            t = toc;
+            printf('\aEpoch %2d/%2d. Took %f seconds. Mean squared error is %f.', i, numepochs, t, nn.rL(n - 1));
+
+%            if i == 10 * floor(i / 10) & i < numepochs
+            if exist('x_test') & exist('y_test') & i == 10 * floor(i / 10)
+                [er, bad] = nntest(nn, x_test, y_test);
+
+                printf(' Recognition error: %5.2f%%\n', 100 * er)
+            end
+        end
+    end
 end

@@ -1,7 +1,7 @@
 clear all; close all;% clc;
 
 do_examples = [1 2 3 4];
-do_examples = [3];
+do_examples = [0];
 
 [pathstr, name, ext] = fileparts(mfilename('fullpath'));
 addpath(strcat(pathstr, '/../data'));
@@ -25,7 +25,27 @@ n_y = size(y_train, 2);
 m_train = size(x_train, 1);
 m_test  = size(x_test,  1);
 
-printf('\nThere are %d training examples and %d test examples.\n', m_train, m_test)
+printf('\nThere are %d training examples and %d test examples.\n\n', m_train, m_test)
+
+
+if find(do_examples == 0)
+    N = 100;
+
+    ae = aeinit([n_x N n_x]);
+
+    ae.lambda = 1e-5;       %  L2 weight decay
+    ae.alpha  = 1e-0;       %  Learning rate
+    opts.numepochs =   5;   %  Number of full sweeps through data
+    opts.batchsize = 100;   %  Take a mean gradient step over this many samples
+
+    ae = aetrain(ae, x_train, opts);
+
+    y = aeeval(ae, x_train);
+
+    size(x_train)
+    size(y)
+end
+
 
 %%  ex1: Using 100 hidden units, learn to recognize handwritten digits
 if find(do_examples == 1)
@@ -75,34 +95,46 @@ end
 %%  ex3: Using 100-50-50 hidden units, learn to recognize handwritten digits
 
 if find(do_examples == 3)
-    printf('\n===== NN with 100-64-36 hidden units. =====\n\n')
+    printf('\n===== NN with 100-50 hidden units. =====\n\n')
 
-    layers = [n_x 100 64 36 n_y];
+    layers = [n_x 100 50 n_y];
 
     nn = nninit(layers);
 
-    if 1
+    if 0
+%      sae.size = layers(2 : end - 1);
+%      sae = saesetup(sae, x_train);
       sae = saeinit(layers);
 
-        for u = 2 : nn.n - 1
-            sae.ae{u}.alpha = 1;
-            sae.ae{u}.inl   = 0.5;   %  fraction of zero-masked inputs (the noise)
-        end
+      sae.ae{2}.alpha = 1;
+      sae.ae{2}.inl   = 0.5;   %  fraction of zero-masked inputs (the noise)
+      sae.ae{3}.alpha = 1;
+      sae.ae{3}.inl   = 0.5;   %  fraction of zero-masked inputs (the noise)
+      sae.ae{4}.alpha = 1;
+      sae.ae{4}.inl   = 0.5;   %  fraction of zero-masked inputs (the noise)
+      sae.ae{5}.alpha = 1;
+      sae.ae{5}.inl   = 0.5;   %  fraction of zero-masked inputs (the noise)
 
-        opts.numepochs =  20;
-        opts.batchsize = 100;
+      opts.numepochs =  20;
+      opts.batchsize = 100;
 
-        sae = saetrain(sae, x_train, opts);
+      sae = saetrain(sae, x_train, opts);
 
-        for i = 2 : nn.n - 1
-            nn.W{i - 1} = sae.ae{i}.W{1};
-            nn.b{i - 1} = sae.ae{i}.b{1};
-        end
+%      for i = 1 : nn.n - 2
+%          nn.W{i} = sae.ae{i}.W{1}
+%          nn.b{i} = sae.ae{i}.b{1}
+%      end
+
+      for i = 2 : nn.n - 1
+          nn.W{i - 1} = sae.ae{i}.W{1};
+          nn.b{i - 1} = sae.ae{i}.b{1};
+      end
     end
 
     nn.lambda = 1e-5;       %  L2 weight decay
     nn.alpha  = 1e-0;       %  Learning rate
-    opts.numepochs = 500;   %  Number of full sweeps through data
+    opts.numepochs = 100;   %  Number of full sweeps through data
+%    opts.numepochs =   1;   %  Number of full sweeps through data
     opts.batchsize = 100;   %  Take a mean gradient step over this many samples
 
     nn = nntrain(nn, x_train, y_train, opts, x_test, y_test);
