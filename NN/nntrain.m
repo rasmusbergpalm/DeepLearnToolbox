@@ -24,7 +24,7 @@ function nn = nntrain(nn, x, y, opts, x_test, y_test)
         error('numbatches not integer');
     end
 
-    nn.rL = zeros(1, numepochs * numbatches);
+    nn.rL = nan(1, numepochs * numbatches);
     n = 1;
     for i = 1 : numepochs
         tic;
@@ -66,7 +66,7 @@ function nn = nntrain(nn, x, y, opts, x_test, y_test)
 
         if opt.verbose
             t = toc;
-            printf('\aEpoch %2d/%2d. Took %f seconds. Mean squared error is %f.', i, numepochs, t, nn.rL(n - 1));
+            printf('\aEpoch %2d/%2d. Took %f seconds. Mean squared error is %f.', i, numepochs, t, nn.rL(end));
 
 %            if i == 10 * floor(i / 10) & i < numepochs
             if exist('x_test') & exist('y_test') & i == 10 * floor(i / 10)

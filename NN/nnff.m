@@ -14,8 +14,6 @@ function net = nnff(net, x, y)
     else
         %%  feedforward pass
         for i = 2 : n
-%            class(net.a{i - 1})
-%            class(net.W{i - 1})
             net.a{i} = sigm(repmat(net.b{i - 1}', m, 1) + net.a{i - 1} * net.W{i - 1}');
             net.p{i} = 0.99 * net.p{i} + 0.01 * sum(net.a{i}, 1) / size(net.a{i}, 1);
         end

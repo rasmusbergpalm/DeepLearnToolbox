@@ -1,4 +1,4 @@
-function y = nneval(net, x)
+function y = nneval(net, x, opts)
     n = net.n;
     m = size(x, 1);
 
