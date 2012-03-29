@@ -11,7 +11,9 @@ function net = nnbp(net)
     end
 
     for i = 1 : (n - 1)
-        net.dW{i} = (d{i + 1}' * net.a{i}) / size(d{i + 1}, 1);
-        net.db{i} = sum(d{i + 1}, 1)'      / size(d{i + 1}, 1);
+        m = size(d{i + 1}, 1);
+
+        net.dW{i} = (d{i + 1}' * net.a{i}) / m;
+        net.db{i} = sum(d{i + 1}, 1)'      / m;
     end
 end

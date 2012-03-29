@@ -1,8 +1,11 @@
 function net = nnapplygrads(net)
     %  TODO add momentum
-%    for i = 1 : (numel(net.size) - 1)
+
+    alpha  = net.alpha;
+    lambda = net.lambda;
+
     for i = 1 : (net.n - 1)
-        net.W{i} = net.W{i} - net.alpha * (net.dW{i} + net.lambda * net.W{i});
-        net.b{i} = net.b{i} - net.alpha * net.db{i};
+        net.W{i} = net.W{i} - alpha * (net.dW{i} + lambda * net.W{i});
+        net.b{i} = net.b{i} - alpha * net.db{i};
     end
 end

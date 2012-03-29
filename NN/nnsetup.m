@@ -10,9 +10,8 @@ function nn = nnsetup(nn, x, y)
     nn.inl    = 0;      %  input noise level. Used for Denoising AutoEncoders
 
     for i = 2 : nn.n
-        nn.b{i - 1} = zeros(nn.size(i), 1);   %  biases?
-                                              %  weights?
-        nn.W{i - 1} = (rand(nn.size(i), nn.size(i - 1)) - 0.5) * 2 * 4 * sqrt(6 / (nn.size(i) + nn.size(i - 1)));
-        nn.p{i}     = zeros(1, nn.size(i));   %  rhos?
+        nn.b{i - 1} = zeros(nn.size(i), 1);   %  biases
+        nn.W{i - 1} = (rand(nn.size(i), nn.size(i - 1)) - 0.5) * 2 * 4 * sqrt(6 / (nn.size(i) + nn.size(i - 1)));   %  weights
+        nn.p{i}     = zeros(1, nn.size(i));   %  rhos
     end
 end

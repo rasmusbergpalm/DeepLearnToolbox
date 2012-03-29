@@ -1,7 +1,7 @@
 clear all; close all;% clc;
 
 do_examples = [1 2 3 4];
-do_examples = [3];
+do_examples = [1];
 
 [pathstr, name, ext] = fileparts(mfilename('fullpath'));
 addpath(strcat(pathstr, '/../data'));
@@ -29,14 +29,16 @@ printf('\nThere are %d training examples and %d test examples.\n', m_train, m_te
 
 %%  ex1: Using 100 hidden units, learn to recognize handwritten digits
 if find(do_examples == 1)
-    printf('\n===== NN with 100 hidden units. =====\n\n')
+    printf('\n===== NN with 36 hidden units. =====\n\n')
 
-    layers = [n_x 100 n_y];
+    layers = [n_x 36 n_y];
     nn = nninit(layers);
 
     nn.lambda = 1e-5;       %  L2 weight decay
     nn.alpha  = 1e-0;       %  Learning rate
-    opts.numepochs = 100;   %  Number of full sweeps through data
+    nn.rho    = 0.03;
+    nn.beta   = 1;
+    opts.numepochs = 1000;   %  Number of full sweeps through data
 %    opts.numepochs =   1;   %  Number of full sweeps through data
     opts.batchsize = 100;   %  Take a mean gradient step over this many samples
     nn = nntrain(nn, x_train, y_train, opts, x_test, y_test);
@@ -45,7 +47,7 @@ if find(do_examples == 1)
 
     printf('\nError: %5.2f%%\n', 100 * er)
 
-    figure; visualize(nn.W{2}', 1)   %  Visualize the weights
+    figure; visualize(nn.W{1}', 1)   %  Visualize the weights
 end
 
 %%  ex2: Using 100-50 hidden units, learn to recognize handwritten digits
@@ -126,18 +128,21 @@ if find(do_examples == 4)
 
     DAE.lambda = 1e-5;
     DAE.alpha  = 1e-0;
-    opts.numepochs =   1;
+    DAE.beta   = 1e-0;
+    DAE.rho    = 0.05;
+    opts.numepochs =  10;
     opts.batchsize = 100;
 
     %  This is a bit of a hack so we can apply different noise for each epoch.
     %  We should apply the noise when selecting the batches really.
+%    for i = 1 : 30
     for i = 1 : 30
-        DAE = nntrain(DAE, x_train .* double(rand(size(x_train)) > 0.5), x_train, opts, x_test, y_test);
+        DAE = nntrain(DAE, x_train .* double(rand(size(x_train)) > 0.5), x_train, opts, x_test, x_test);
     end
 
     %  Use the DAE weights and biases to initialize a standard NN
 
-    layers = [n_x 100 n_y];
+    layers = [n_x 100 49 n_y];
     nn = nninit(layers);
 
     nn.W{1} = DAE.W{1};
@@ -145,8 +150,8 @@ if find(do_examples == 4)
 
     nn.lambda = 1e-5;
     nn.alpha  = 1e-0;
-    opts.numepochs = 100;
-    opts.batchsize = 100;
+    opts.numepochs = 4000;
+    opts.batchsize =  100;
 
     nn = nntrain(nn, x_train, y_train, opts, x_test, y_test);
 
