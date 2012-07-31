@@ -14,7 +14,7 @@ For a more informal introduction, see the following videos by Geoffrey Hinton an
 * [Recent Developments in Deep Learning](http://www.youtube.com/watch?v=VdIURAu1-aU) (Hinton, 2010)
 * [Unsupervised Feature Learning and Deep Learning](http://www.youtube.com/watch?v=ZmNOAtZIgIk) (Ng, 2011)
 
-For references on each library check REFS.md
+If you use this library in your research please cite "Prediction as a candidate for learning deep hierarchical models of data" R. B. Palm - 2012 [bibtex]
 
 Directories included in the toolbox
 -----------------------------------
@@ -32,6 +32,8 @@ Directories included in the toolbox
 `util/` - Utility functions used by the libraries
 
 `data/` - Data used by the examples
+
+For references on each library check REFS.md
 
 Example: Deep Belief Network
 ---------------------
