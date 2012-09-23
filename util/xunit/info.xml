@@ -1,0 +1,28 @@
+<productinfo
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="optional">
+<?xml-stylesheet type="text/xsl" href="optional"?>
+
+<matlabrelease>R2009a</matlabrelease>
+<name>MATLAB xUnit Test Framework</name>
+<type>Other</type>
+<icon>$toolbox/matlab/icons/matlabicon.gif</icon>
+<help_location>../doc/</help_location>
+
+<list>
+
+<listitem>
+<label>Help</label>
+<callback>doc xunit</callback>
+<icon>$toolbox/matlab/icons/book_mat.gif</icon>
+</listitem>
+
+<listitem>
+<label>Web Page (File Exchange)</label>
+<callback>web http://www.mathworks.com/matlabcentral/fileexchange/22846 -browser;</callback>
+<icon>$toolbox/matlab/icons/webicon.gif</icon>
+</listitem>
+
+</list>
+
+</productinfo>
