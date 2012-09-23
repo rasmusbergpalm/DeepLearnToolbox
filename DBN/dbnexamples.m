@@ -1,9 +1,5 @@
 clear all; close all; clc;
 
-[pathstr, name, ext] = fileparts(mfilename('fullpath'));
-addpath(strcat(pathstr, '/../data'));
-addpath(strcat(pathstr, '/../util'));
-
 load mnist_uint8;
 
 train_x = double(train_x) / 255;
@@ -30,12 +26,7 @@ opts.alpha     =   1;
 dbn = dbnsetup(dbn, train_x, opts);
 dbn = dbntrain(dbn, train_x, opts);
 
-nn.size = [100 100 100];
-nn = nnsetup(nn, train_x, train_y);
-for i = 1 : 3
-    nn.W{i} = dbn.rbm{i}.W;
-    nn.b{i} = dbn.rbm{i}.c;
-end
+nn = dbnunfoldtonn(dbn);
 
 nn.alpha  = 1;
 nn.lambda = 1e-4;

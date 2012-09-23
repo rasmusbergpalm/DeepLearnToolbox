@@ -1,16 +1,17 @@
 function rbm = rbmtrain(rbm, x, opts)
+    assert(isfloat(x), 'x must be a float');
     m = size(x, 1);
     numbatches = m / opts.batchsize;
-    if rem(numbatches, 1) ~= 0
-        error('numbatches not integer');
-    end
+    
+    assert(rem(numbatches, 1) ~= 0, 'numbatches not integer');
+    
 
     for i = 1 : opts.numepochs
         kk = randperm(m);
         err = 0;
         for l = 1 : numbatches
             batch = x(kk((l - 1) * opts.batchsize + 1 : l * opts.batchsize), :);
-
+            
             v1 = batch;
             h1 = sigmrnd(repmat(rbm.c', opts.batchsize, 1) + v1 * rbm.W');
             v2 = sigmrnd(repmat(rbm.b', opts.batchsize, 1) + h1 * rbm.W);

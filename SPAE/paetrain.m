@@ -26,11 +26,12 @@ function pae = paetrain(pae, x, opts)
         if m == 1
             pae.rL(1) = pae.L;
         end
-        pae.rL(m + 1) = 0.99 * pae.rL(m) + 0.01 * pae.L;
-        if pae.sv < 1e-10
-            disp('Converged');
-            break;
-        end
+%         pae.rL(m + 1) = 0.99 * pae.rL(m) + 0.01 * pae.L;
+        pae.rL(m + 1) = pae.L;
+%         if pae.sv < 1e-10
+%             disp('Converged');
+%             break;
+%         end
         toc;
     end
 

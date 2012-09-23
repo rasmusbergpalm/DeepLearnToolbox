@@ -1,16 +1,9 @@
 function nn = nntrain(nn, x, y, opts)
+    assert(isfloat(x), 'x must be a float');
     m = size(x, 1);
-
-%    if strcmp(class(x), 'uint8')
-%        x = double(x) / 255;
-%    end
-%
-%    if strcmp(class(y), 'uint8')
-%        y = double(y) / 255;
-%    end
-
+    
     batchsize = opts.batchsize;
-    numepochs = opts.numepochs
+    numepochs = opts.numepochs;
 
     numbatches = m / batchsize;
 
@@ -27,18 +20,11 @@ function nn = nntrain(nn, x, y, opts)
         for l = 1 : numbatches
             batch_x = x(kk((l - 1) * batchsize + 1 : l * batchsize), :);
             batch_y = y(kk((l - 1) * batchsize + 1 : l * batchsize), :);
-
-            if strcmp(class(x), 'uint8')
-              batch_x = double(batch_x) / 255;
-            end
-
-            if strcmp(class(y), 'uint8')
-              batch_y = double(batch_y) / 255;
-            end
             
             nn = nnff(nn, batch_x, batch_y);
             nn = nnbp(nn);
             
+%             Enable to verify numerical correcness of algorithm
 %             disp 'Performing numerical gradient checking ...';
 %             nnchecknumgrad(nn, batch_x, batch_y);
 %             disp 'No errors found ...';
@@ -54,7 +40,6 @@ function nn = nntrain(nn, x, y, opts)
         end
 
         t = toc;
-%        disp(['epoch ' num2str(i) '/' num2str(numepochs)]);
-%        disp(['epoch ' num2str(i) '/' num2str(opts.numepochs) '. Took ' num2str(t) ' seconds' '. Mean squared error is ' num2str(nn.rL(end))]);
-        printf('epoch %d/%d. Took %f seconds. Mean squared error is %f.', i, opts.numepochs, t, nn.rL(end));
+        disp(['epoch ' num2str(i) '/' num2str(opts.numepochs) '. Took ' num2str(t) ' seconds' '. Mean squared error is ' num2str(nn.rL(end))]);
+    end
 end
