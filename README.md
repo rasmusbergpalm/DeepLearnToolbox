@@ -14,7 +14,9 @@ For a more informal introduction, see the following videos by Geoffrey Hinton an
 * [Recent Developments in Deep Learning](http://www.youtube.com/watch?v=VdIURAu1-aU) (Hinton, 2010)
 * [Unsupervised Feature Learning and Deep Learning](http://www.youtube.com/watch?v=ZmNOAtZIgIk) (Ng, 2011)
 
-For references on each library check REFS.md
+If you use this toolbox in your research please cite:
+
+[Prediction as a candidate for learning deep hierarchical models of data](http://www2.imm.dtu.dk/pubdb/views/publication_details.php?id=6284) (Palm, 2012)
 
 Directories included in the toolbox
 -----------------------------------
@@ -33,27 +35,78 @@ Directories included in the toolbox
 
 `data/` - Data used by the examples
 
-Example
+For references on each library check REFS.md
+
+Example: Deep Belief Network
 ---------------------
 ```matlab
-%% ex1: Using 100 hidden units, learn a feedforward backprop neural net to recognize handwritten digits
-nn.size = [100];                          %Vector of number of hidden units. It will automatically add input and output units
-nn = nnsetup(nn, train_x, train_y);       %Setup the network
-nn.lambda = 1e-5;                         %Add L2 weight decay
-nn.alpha = 1e-0;                          %Define learning rate
-opts.numepochs = 30;                      %Number of full sweeps through data
-opts.batchsize = 100;                     %Take a mean gradient step over this many samples
-nn = nntrain(nn, train_x, train_y, opts); %Train the network
-[err, bad] = nntest(nn, test_x, test_y);  %Test the network performance
-disp([num2str(err*100) '% error']);       %Display error rate
+%%  train a 100-100-100 DBN and use its weights to initialize a FFNN
+dbn.sizes = [100 100 100];      % Number of neurons in each layer
+opts.numepochs =   5;           % Number of full sweeps through data
+opts.batchsize = 100;           % Mini-batch size
+opts.momentum  =   0;           % Momentum (0 = none)
+opts.alpha     =   1;           % Learning rate
+dbn = dbnsetup(dbn, train_x, opts);     % Init network
+dbn = dbntrain(dbn, train_x, opts);     % Train network
+
+% Use the parameters learned from pre-training to initialize a FFNN to be used for classification
+nn.size = [100 100 100];
+nn = nnsetup(nn, train_x, train_y);
+for i = 1 : 3
+    nn.W{i} = dbn.rbm{i}.W;
+    nn.b{i} = dbn.rbm{i}.c;
+end
+
+nn.alpha  = 1;
+nn.lambda = 1e-4;
+opts.numepochs =  10;
+opts.batchsize = 100;
+
+nn = nntrain(nn, train_x, train_y, opts);
+[er, bad] = nntest(nn, test_x, test_y);
+
+printf('%5.2f% error', 100 * er)
+figure; visualize(nn.W{1}', 1);         %Visualize the weights in the lowest layer
 ```
 
-Overview of libraries
+Example: Stacked Denoising Auto Encoder
 ---------------------
+```matlab
+%%  ex1 train a 100-100 hidden unit SDAE and use it to initialize a FFNN
+%  Setup and train a stacked denoising autoencoder (SDAE)
+sae.size = [100 100];
+sae = saesetup(sae, train_x);
 
-(**Not true yet:**) All libraries have two example "applications", a simlpe one named `example.m` and a more complicated
-one named `demo.m`. The simple one just gives an example of how the library is meant to be invoked at the code level,
-and the more complicated one demonstrates what the library might be used for and/or is capable of.
+sae.ae{1}.alpha = 1;      % Learning rate
+sae.ae{1}.inl   = 0.5;    % fraction of zero-masked inputs (the noise)
+sae.ae{2}.alpha = 1;      % Learning rate
+sae.ae{2}.inl   = 0.5;    % fraction of zero-masked inputs (the noise)
+
+opts.numepochs =   5;     % Number of full sweeps through data
+opts.batchsize = 100;     % Mini-batch size
+
+sae = saetrain(sae, train_x, opts);     % Do the pre-training
+
+%  use the SDAE to initialize a FFNN
+nn.size = [100 100]; 
+nn = nnsetup(nn, train_x, train_y);
+
+nn.W{1} = sae.ae{1}.W{1};
+nn.b{1} = sae.ae{1}.b{1};
+nn.W{2} = sae.ae{2}.W{1};
+nn.b{2} = sae.ae{2}.b{1};
+nn.lambda = 1e-5;   %  L2 weight decay
+nn.alpha  = 1e-0;   %  Learning rate
+
+opts.numepochs =   5;
+opts.batchsize = 100;
+
+nn = nntrain(nn, train_x, train_y, opts);
+
+[er, bad] = nntest(nn, test_x, test_y);
+printf('%5.2f% error', 100 * er); % Display error rate
+figure; visualize(nn.W{1}', 1)   %  Visualize the weights
+```
 
 Setup
 -----
