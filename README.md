@@ -29,11 +29,13 @@ Directories included in the toolbox
 
 `SAE/`  - A library for Stacked Auto-Encoders
 
-`SPAE/` - A library for Stacked Convolutional Auto-Encoders
+`CAE/` - A library for Convolutional Auto-Encoders
 
 `util/` - Utility functions used by the libraries
 
 `data/` - Data used by the examples
+
+`tests/` - unit tests to verify toolbox is working
 
 For references on each library check REFS.md
 
