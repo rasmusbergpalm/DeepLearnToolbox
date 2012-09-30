@@ -15,9 +15,6 @@ function net = cnntrain(net, x, y, opts)
 
             net = cnnff(net, batch_x);
             net = cnnbp(net, batch_y);
-%            disp('checking grads');
-%            cnnnumgradcheck(net,batch_x,batch_y);
-%            disp('done.');
             net = cnnapplygrads(net, opts);
             if isempty(net.rL)
                 net.rL(1) = net.L;

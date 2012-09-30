@@ -22,13 +22,7 @@ function nn = nntrain(nn, x, y, opts)
             batch_y = y(kk((l - 1) * batchsize + 1 : l * batchsize), :);
             
             nn = nnff(nn, batch_x, batch_y);
-            nn = nnbp(nn);
-            
-%             Enable to verify numerical correcness of algorithm
-%             disp 'Performing numerical gradient checking ...';
-%             nnchecknumgrad(nn, batch_x, batch_y);
-%             disp 'No errors found ...';
-            
+            nn = nnbp(nn);            
             nn = nnapplygrads(nn);
 
             if n == 1

@@ -13,5 +13,4 @@ function net = nnff(net, x, y)
 
     net.e = y - net.a{n};
     net.L = 1/2 * sum(sum(net.e .^ 2)) / m; 
-%    net.L = 0.5 * sum(sum(net.e .^ 2)) / m; 
 end
