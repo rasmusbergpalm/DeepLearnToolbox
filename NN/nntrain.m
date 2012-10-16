@@ -7,9 +7,7 @@ function nn = nntrain(nn, x, y, opts)
 
     numbatches = m / batchsize;
 
-    if rem(numbatches, 1) ~= 0
-        error('numbatches not integer');
-    end
+    assert(rem(numbatches, 1) == 0, 'numbatches not integer');
 
     nn.rL = [];
     n = 1;

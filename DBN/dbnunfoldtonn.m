@@ -1,9 +1,9 @@
-function nn = dbnunfoldtonn(dbn)
+function nn = dbnunfoldtonn(dbn, outputsize)
 %DBNUNFOLDTONN Unfolds a DBN to a NN
-%   Takes a DBN structure, traverses all layers and assigns upwards weights
-%   and biases to an equally sized NN structure which it returns
+%   dbnunfoldtonn(dbn, outputsize ) returns the unfolded dbn with a final
+%   layer of size outputsize added.
 
-    nn = nnsetup(dbn.sizes);
+    nn = nnsetup([dbn.sizes outputsize]);
     for i = 1 : numel(dbn.rbm)
         nn.W{i} = dbn.rbm{i}.W;
         nn.b{i} = dbn.rbm{i}.c;

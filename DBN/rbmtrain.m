@@ -3,7 +3,7 @@ function rbm = rbmtrain(rbm, x, opts)
     m = size(x, 1);
     numbatches = m / opts.batchsize;
     
-    assert(rem(numbatches, 1) ~= 0, 'numbatches not integer');
+    assert(rem(numbatches, 1) == 0, 'numbatches not integer');
     
 
     for i = 1 : opts.numepochs
