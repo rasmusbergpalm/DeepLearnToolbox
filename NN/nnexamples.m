@@ -32,31 +32,14 @@ nn = nntrain(nn, train_x, train_y, opts);
 disp([num2str(er * 100) '% error']);
 figure; visualize(nn.W{1}', 1)   %Visualize the weights
 
-%%  ex3: Train a denoising autoencoder (DAE) and use it to initialize the weights for a NN
-DAE = nnsetup([784 100 784]);
-DAE.lambda = 1e-5;
-DAE.alpha  = 1e-0;
-opts.numepochs =   1;
-opts.batchsize = 100;
-%  This is a bit of a hack so we can apply different noise for each epoch.
-%  We should apply the noise when selecting the batches really.
-for i = 1 : 10
-    DAE = nntrain(DAE, train_x .* double(rand(size(train_x)) > 0.5), train_x, opts);
-end
-
-%  Use the DAE weights and biases to initialize a standard NN
-nn = nnsetup([784 100 10]);
-nn.W{1} = DAE.W{1};
-nn.b{1} = DAE.b{1};
-
-nn.lambda = 1e-5;
-nn.alpha  = 1e-0;
-opts.numepochs =  10;
-opts.batchsize = 100;
+%% ex3 using 800 800 hidden units w. dropout
+nn = nnsetup([784 800 800 10]);
+nn.dropoutFraction = 0.5;
+nn.alpha  = 1e-0;       %  Learning rate
+opts.numepochs = 100;   %  Number of full sweeps through data
+opts.batchsize = 1000;   %  Take a mean gradient step over this many samples
 nn = nntrain(nn, train_x, train_y, opts);
 
 [er, bad] = nntest(nn, test_x, test_y);
-
 disp([num2str(er * 100) '% error']);
-figure; visualize(DAE.W{1}', 1)   %  Visualize the DAE weights
-figure; visualize(nn.W{1}',  1)   %  Visualize the NN weights
+figure; visualize(nn.W{1}', 1)   %Visualize the weights

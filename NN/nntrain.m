@@ -17,6 +17,11 @@ function nn = nntrain(nn, x, y, opts)
         kk = randperm(m);
         for l = 1 : numbatches
             batch_x = x(kk((l - 1) * batchsize + 1 : l * batchsize), :);
+            %add noise to input (for use in denoising autoencoder)
+            if(nn.inputZeroMaskedFraction ~= 0)
+                batch_x = batch_x.*(rand(size(batch_x))>nn.inputZeroMaskedFraction);
+            end
+            
             batch_y = y(kk((l - 1) * batchsize + 1 : l * batchsize), :);
             
             nn = nnff(nn, batch_x, batch_y);
@@ -35,3 +40,4 @@ function nn = nntrain(nn, x, y, opts)
         disp(['epoch ' num2str(i) '/' num2str(opts.numepochs) '. Took ' num2str(t) ' seconds' '. Mean squared error is ' num2str(nn.rL(end))]);
     end
 end
+

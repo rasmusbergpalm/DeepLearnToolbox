@@ -5,12 +5,13 @@ function nn = nnsetup(size)
 
     nn.size   = size;
     nn.n      = numel(nn.size);
-    nn.alpha  = 0.1;    %  learning rate 
-    nn.lambda = 0;      %  L2 regularization
-    nn.beta   = 0;      %  sparsity rate
-    nn.rho    = 0.05;   %  sparsity target
-    nn.eta    = 0;      %  hidden layer noise level.
-    nn.inl    = 0;      %  input noise level. Used for Denoising AutoEncoders
+    
+    nn.alpha                            = 0.1;    %  learning rate 
+    nn.lambda                           = 0;      %  L2 regularization
+    nn.beta                             = 0;      %  sparsity rate
+    nn.rho                              = 0.05;   %  sparsity target
+    nn.inputZeroMaskedFraction     = 0;      %  Used for Denoising AutoEncoders
+    nn.dropoutFraction                  = 0;      %  dropout level (http://www.cs.toronto.edu/~hinton/absps/dropout.pdf)
 
     for i = 2 : nn.n
         nn.b{i - 1} = zeros(nn.size(i), 1);   %  biases
