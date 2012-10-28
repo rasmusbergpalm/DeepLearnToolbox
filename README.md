@@ -93,6 +93,7 @@ nn = nntrain(nn, train_x, train_y, opts);
 
 disp([num2str(er * 100) '% error']);
 figure; visualize(nn.W{1}', 1);
+
 ```
 
 
@@ -138,6 +139,7 @@ nn = nntrain(nn, train_x, train_y, opts);
 [er, bad] = nntest(nn, test_x, test_y);
 disp([num2str(er * 100) '% error']);
 figure; visualize(nn.W{1}', 1)   %  Visualize the weights
+
 ```
 
 
@@ -178,7 +180,8 @@ cnn = cnntrain(cnn, train_x, train_y, opts);
 %plot mean squared error
 plot(cnn.rL);
 %show test error
-disp([num2str(er*100) '% error']);```
+disp([num2str(er*100) '% error']);
+```
 
 
 Example: Neural Networks
@@ -229,6 +232,7 @@ nn = nntrain(nn, train_x, train_y, opts);
 
 [er, bad] = nntest(nn, test_x, test_y);
 disp([num2str(er * 100) '% error']);
-figure; visualize(nn.W{1}', 1)   %Visualize the weights```
+figure; visualize(nn.W{1}', 1)   %Visualize the weights
+```
 
 
