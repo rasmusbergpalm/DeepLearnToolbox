@@ -1,3 +1,4 @@
+
 DeepLearnToolbox
 ================
 
@@ -39,25 +40,48 @@ Directories included in the toolbox
 
 For references on each library check REFS.md
 
+Setup
+-----
+
+1. Download.
+2. addpath(genpath('DeepLearnToolbox'));
+
+Everything is work in progress
+------------------------------
+
 Example: Deep Belief Network
 ---------------------
 ```matlab
-%%  train a 100-100-100 DBN and use its weights to initialize a FFNN
-dbn.sizes = [100 100 100];      % Number of neurons in each layer
-opts.numepochs =   5;           % Number of full sweeps through data
-opts.batchsize = 100;           % Mini-batch size
-opts.momentum  =   0;           % Momentum (0 = none)
-opts.alpha     =   1;           % Learning rate
-dbn = dbnsetup(dbn, train_x, opts);     % Init network
-dbn = dbntrain(dbn, train_x, opts);     % Train network
 
-% Use the parameters learned from pre-training to initialize a FFNN to be used for classification
-nn.size = [100 100 100];
-nn = nnsetup(nn, train_x, train_y);
-for i = 1 : 3
-    nn.W{i} = dbn.rbm{i}.W;
-    nn.b{i} = dbn.rbm{i}.c;
-end
+clear all; close all; clc;
+
+load mnist_uint8;
+
+train_x = double(train_x) / 255;
+test_x  = double(test_x)  / 255;
+train_y = double(train_y);
+test_y  = double(test_y);
+
+%%  ex1 train a 100 hidden unit RBM and visualize its weights
+dbn.sizes = [100];
+opts.numepochs =   5;
+opts.batchsize = 100;
+opts.momentum  =   0;
+opts.alpha     =   1;
+dbn = dbnsetup(dbn, train_x, opts);
+dbn = dbntrain(dbn, train_x, opts);
+figure; visualize(dbn.rbm{1}.W', 1);   %  Visualize the RMB weights
+
+%%  ex2 train a 100-100-100 DBN and use its weights to initialize a NN
+dbn.sizes = [100 100 100];
+opts.numepochs =   5;
+opts.batchsize = 100;
+opts.momentum  =   0;
+opts.alpha     =   1;
+dbn = dbnsetup(dbn, train_x, opts);
+dbn = dbntrain(dbn, train_x, opts);
+
+nn = dbnunfoldtonn(dbn, 10);
 
 nn.alpha  = 1;
 nn.lambda = 1e-4;
@@ -67,36 +91,42 @@ opts.batchsize = 100;
 nn = nntrain(nn, train_x, train_y, opts);
 [er, bad] = nntest(nn, test_x, test_y);
 
-printf('%5.2f% error', 100 * er)
-figure; visualize(nn.W{1}', 1);         %Visualize the weights in the lowest layer
+disp([num2str(er * 100) '% error']);
+figure; visualize(nn.W{1}', 1);
 ```
 
-Example: Stacked Denoising Auto Encoder
+
+Example: Stacked Auto-Encoders
 ---------------------
 ```matlab
-%%  ex1 train a 100-100 hidden unit SDAE and use it to initialize a FFNN
+
+clear all; close all; clc;
+load mnist_uint8;
+
+train_x = double(train_x)/255;
+test_x  = double(test_x)/255;
+train_y = double(train_y);
+test_y  = double(test_y);
+
+%%  ex1 train a 100 hidden unit SDAE and use it to initialize a FFNN
 %  Setup and train a stacked denoising autoencoder (SDAE)
-sae.size = [100 100];
-sae = saesetup(sae, train_x);
+sae = saesetup([784 100]);
 
-sae.ae{1}.alpha = 1;      % Learning rate
-sae.ae{1}.inl   = 0.5;    % fraction of zero-masked inputs (the noise)
-sae.ae{2}.alpha = 1;      % Learning rate
-sae.ae{2}.inl   = 0.5;    % fraction of zero-masked inputs (the noise)
+sae.ae{1}.alpha                     = 0.5;
+sae.ae{1}.inputZeroMaskedFraction   = 0.5;
 
-opts.numepochs =   5;     % Number of full sweeps through data
-opts.batchsize = 100;     % Mini-batch size
+opts.numepochs =   5;
+opts.batchsize = 100;
 
-sae = saetrain(sae, train_x, opts);     % Do the pre-training
+sae = saetrain(sae, train_x, opts);
+
+figure; visualize(sae.ae{1}.W{1}', 1)   %  Visualize the weights
 
 %  use the SDAE to initialize a FFNN
-nn.size = [100 100]; 
-nn = nnsetup(nn, train_x, train_y);
+nn = nnsetup([784 100 10]);
 
 nn.W{1} = sae.ae{1}.W{1};
 nn.b{1} = sae.ae{1}.b{1};
-nn.W{2} = sae.ae{2}.W{1};
-nn.b{2} = sae.ae{2}.b{1};
 nn.lambda = 1e-5;   %  L2 weight decay
 nn.alpha  = 1e-0;   %  Learning rate
 
@@ -106,15 +136,99 @@ opts.batchsize = 100;
 nn = nntrain(nn, train_x, train_y, opts);
 
 [er, bad] = nntest(nn, test_x, test_y);
-printf('%5.2f% error', 100 * er); % Display error rate
+disp([num2str(er * 100) '% error']);
 figure; visualize(nn.W{1}', 1)   %  Visualize the weights
 ```
 
-Setup
------
 
-1. Download.
-2. addpath(genpath('DeepLearnToolbox'));
+Example: Convolutional Neural Nets
+---------------------
+```matlab
 
-Everything is work in progress
-------------------------------
+clear all; close all; clc;
+addpath('../data');
+load mnist_uint8;
+
+train_x = double(reshape(train_x',28,28,60000))/255;
+test_x = double(reshape(test_x',28,28,10000))/255;
+train_y = double(train_y');
+test_y = double(test_y');
+
+%% ex1 
+%will run 1 epoch in about 200 second and get around 11% error. 
+%With 100 epochs you'll get around 1.2% error
+
+cnn.layers = {
+    struct('type', 'i') %input layer
+    struct('type', 'c', 'outputmaps', 6, 'kernelsize', 5) %convolution layer
+    struct('type', 's', 'scale', 2) %sub sampling layer
+    struct('type', 'c', 'outputmaps', 12, 'kernelsize', 5) %convolution layer
+    struct('type', 's', 'scale', 2) %subsampling layer
+};
+cnn = cnnsetup(cnn, train_x, train_y);
+
+opts.alpha = 1;
+opts.batchsize = 50;
+opts.numepochs = 1;
+
+cnn = cnntrain(cnn, train_x, train_y, opts);
+
+[er, bad] = cnntest(cnn, test_x, test_y);
+
+%plot mean squared error
+plot(cnn.rL);
+%show test error
+disp([num2str(er*100) '% error']);```
+
+
+Example: Neural Networks
+---------------------
+```matlab
+
+clear all; close all; clc; dbstop if error
+load mnist_uint8;
+
+train_x = double(train_x) / 255;
+test_x  = double(test_x)  / 255;
+train_y = double(train_y);
+test_y  = double(test_y);
+
+%%  ex1: Using 100 hidden units, learn to recognize handwritten digits
+nn = nnsetup([784 100 10]);
+
+nn.lambda = 1e-5;       %  L2 weight decay
+nn.alpha  = 1e-0;       %  Learning rate
+opts.numepochs =  10;   %  Number of full sweeps through data
+opts.batchsize = 100;   %  Take a mean gradient step over this many samples
+nn = nntrain(nn, train_x, train_y, opts);
+
+[er, bad] = nntest(nn, test_x, test_y);
+disp([num2str(er * 100) '% error']);
+figure; visualize(nn.W{1}', 1)   %  Visualize the weights
+
+%%  ex2: Using 100-50 hidden units, learn to recognize handwritten digits
+nn = nnsetup([784 100 50 10]);
+
+nn.lambda = 1e-5;       %  L2 weight decay
+nn.alpha  = 1e-0;       %  Learning rate
+opts.numepochs =  10;   %  Number of full sweeps through data
+opts.batchsize = 100;   %  Take a mean gradient step over this many samples
+nn = nntrain(nn, train_x, train_y, opts);
+
+[er, bad] = nntest(nn, test_x, test_y);
+disp([num2str(er * 100) '% error']);
+figure; visualize(nn.W{1}', 1)   %Visualize the weights
+
+%% ex3 using 800-800 hidden units w. dropout
+nn = nnsetup([784 800 800 10]);
+nn.dropoutFraction = 0.5;
+nn.alpha  = 1e1;       %  Learning rate
+opts.numepochs = 10;   %  Number of full sweeps through data
+opts.batchsize = 100;   %  Take a mean gradient step over this many samples
+nn = nntrain(nn, train_x, train_y, opts);
+
+[er, bad] = nntest(nn, test_x, test_y);
+disp([num2str(er * 100) '% error']);
+figure; visualize(nn.W{1}', 1)   %Visualize the weights```
+
+
