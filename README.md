@@ -1,4 +1,3 @@
-
 DeepLearnToolbox
 ================
 
@@ -225,7 +224,7 @@ figure; visualize(nn.W{1}', 1)   %Visualize the weights
 %% ex3 using 800-800 hidden units w. dropout
 nn = nnsetup([784 800 800 10]);
 nn.dropoutFraction = 0.5;
-nn.alpha  = 1e1;       %  Learning rate
+nn.alpha  = 1;       %  Learning rate
 opts.numepochs = 10;   %  Number of full sweeps through data
 opts.batchsize = 100;   %  Take a mean gradient step over this many samples
 nn = nntrain(nn, train_x, train_y, opts);
