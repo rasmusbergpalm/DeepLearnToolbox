@@ -10,7 +10,7 @@ test_y  = double(test_y);
 %  Setup and train a stacked denoising autoencoder (SDAE)
 sae = saesetup([784 100]);
 
-sae.ae{1}.alpha                     = 0.5;
+sae.ae{1}.learningRate              = 0.5;
 sae.ae{1}.inputZeroMaskedFraction   = 0.5;
 
 opts.numepochs =   5;
@@ -25,8 +25,8 @@ nn = nnsetup([784 100 10]);
 
 nn.W{1} = sae.ae{1}.W{1};
 nn.b{1} = sae.ae{1}.b{1};
-nn.lambda = 1e-5;   %  L2 weight decay
-nn.alpha  = 1e-0;   %  Learning rate
+nn.weightPenaltyL2 = 1e-5;   %  L2 weight decay
+nn.learningRate  = 1e-0;   %  Learning rate
 
 opts.numepochs =   5;
 opts.batchsize = 100;

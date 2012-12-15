@@ -1,4 +1,15 @@
-function nn = nntrain(nn, x, y, opts)
+function [nn, L] = nntrain(nn, x, y, opts)
+%NNTRAIN trains a neural net
+% [nn, L] = nnff(nn, x, y, opts) trains the neural network nn with input x and 
+% output y for opts.numepochs epochs, with minibatches of size
+% opts.batchsize. Returns a neural network nn with updated activations,
+% errors, weights and biases, (nn.a, nn.e, nn.W, nn.b) and L, the sum 
+% squared error for each training minibatch.
+
+    if(~isfield(opts, 'silent'))
+        opts.silent = 0;
+    end
+
     assert(isfloat(x), 'x must be a float');
     m = size(x, 1);
     
@@ -7,9 +18,9 @@ function nn = nntrain(nn, x, y, opts)
 
     numbatches = m / batchsize;
 
-    assert(rem(numbatches, 1) == 0, 'numbatches not integer');
+    assert(rem(numbatches, 1) == 0, 'numbatches must be a integer');
 
-    nn.rL = [];
+    L = zeros(numepochs*numbatches);
     n = 1;
     for i = 1 : numepochs
         tic;
@@ -17,7 +28,8 @@ function nn = nntrain(nn, x, y, opts)
         kk = randperm(m);
         for l = 1 : numbatches
             batch_x = x(kk((l - 1) * batchsize + 1 : l * batchsize), :);
-            %add noise to input (for use in denoising autoencoder)
+            
+            %Add noise to input (for use in denoising autoencoder)
             if(nn.inputZeroMaskedFraction ~= 0)
                 batch_x = batch_x.*(rand(size(batch_x))>nn.inputZeroMaskedFraction);
             end
@@ -28,16 +40,15 @@ function nn = nntrain(nn, x, y, opts)
             nn = nnbp(nn);            
             nn = nnapplygrads(nn);
 
-            if n == 1
-                nn.rL(n) = nn.L;
-            end
-
-            nn.rL(n + 1) = 0.99 * nn.rL(n) + 0.01 * nn.L;
+            L(n) = nn.L;
+            
             n = n + 1;
         end
 
         t = toc;
-        disp(['epoch ' num2str(i) '/' num2str(opts.numepochs) '. Took ' num2str(t) ' seconds' '. Mean squared error is ' num2str(nn.rL(end))]);
+        if(opts.silent ~= 1)
+            disp(['epoch ' num2str(i) '/' num2str(opts.numepochs) '. Took ' num2str(t) ' seconds' '. Mean squared error on training set is ' num2str(mean(L((n-numbatches):(n-1))))]);
+        end
     end
 end
 

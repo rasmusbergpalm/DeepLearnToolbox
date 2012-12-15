@@ -1,8 +1,11 @@
-function net = nnapplygrads(net)
+function nn = nnapplygrads(nn)
+%NNAPPLYGRADS updates weights and biases with calculated gradients
+% nn = nnapplygrads(nn) returns an neural network structure with updated
+% weights and biases
+
     %  TODO add momentum
-%    for i = 1 : (numel(net.size) - 1)
-    for i = 1 : (net.n - 1)
-        net.W{i} = net.W{i} - net.alpha * (net.dW{i} + net.lambda * net.W{i});
-        net.b{i} = net.b{i} - net.alpha * net.db{i};
+    for i = 1 : (nn.n - 1)
+        nn.W{i} = nn.W{i} - nn.learningRate * (nn.dW{i} + nn.weightPenaltyL2 * nn.W{i});
+        nn.b{i} = nn.b{i} - nn.learningRate * nn.db{i};
     end
 end

@@ -1,24 +1,31 @@
-function net = nnff(net, x, y)
-%    n = numel(net.size);
-    n = net.n;
+function nn = nnff(nn, x, y)
+%NNFF performs a feedforward pass
+% nn = nnff(nn, x, y) returns an neural nnwork structure with updated
+% layer activations, error and sum squared loss (nn.a, nn.e and nn.L)
+
+    n = nn.n;
     m = size(x, 1);
 
-    net.a{1} = x;
+    nn.a{1} = x;
 
-    %%  feedforward pass
+    %feedforward pass
     for i = 2 : n
-        net.a{i} = sigm(repmat(net.b{i - 1}', m, 1) + net.a{i - 1} * net.W{i - 1}');
-        if(net.dropoutFraction > 0 && i<n)
-            if(net.testing)
-                net.a{i} = net.a{i}.*(1 - net.dropoutFraction);
+        nn.a{i} = sigm(repmat(nn.b{i - 1}', m, 1) + nn.a{i - 1} * nn.W{i - 1}');
+        if(nn.dropoutFraction > 0 && i<n)
+            if(nn.testing)
+                nn.a{i} = nn.a{i}.*(1 - nn.dropoutFraction);
             else
-                net.a{i} = net.a{i}.*(rand(size(net.a{i}))>net.dropoutFraction);
+                nn.a{i} = nn.a{i}.*(rand(size(nn.a{i}))>nn.dropoutFraction);
             end
         end
         
-        net.p{i} = 0.99 * net.p{i} + 0.01 * mean(net.a{i}, 1);
+        %calculate running exponential activations for use with sparsity
+        if(nn.nonSparsityPenalty>0)
+            nn.p{i} = 0.99 * nn.p{i} + 0.01 * mean(nn.a{i}, 1);
+        end
     end
 
-    net.e = y - net.a{n};
-    net.L = 1/2 * sum(sum(net.e .^ 2)) / m; 
+    %error and loss
+    nn.e = y - nn.a{n};
+    nn.L = 1/2 * sum(sum(nn.e .^ 2)) / m; 
 end

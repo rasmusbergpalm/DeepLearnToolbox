@@ -28,8 +28,8 @@ dbn = dbntrain(dbn, train_x, opts);
 
 nn = dbnunfoldtonn(dbn, 10);
 
-nn.alpha  = 1;
-nn.lambda = 1e-4;
+nn.learningRate  = 1;
+nn.weightPenaltyL2 = 1e-4;
 opts.numepochs =  10;
 opts.batchsize = 100;
 
