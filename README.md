@@ -70,7 +70,7 @@ opts.momentum  =   0;
 opts.alpha     =   1;
 dbn = dbnsetup(dbn, train_x, opts);
 dbn = dbntrain(dbn, train_x, opts);
-figure; visualize(dbn.rbm{1}.W', 1);   %  Visualize the RMB weights
+figure; visualize(dbn.rbm{1}.W', 1);   %  Visualize the RBM weights
 
 %%  ex2 train a 100-100-100 DBN and use its weights to initialize a NN
 dbn.sizes = [100 100 100];
@@ -83,8 +83,8 @@ dbn = dbntrain(dbn, train_x, opts);
 
 nn = dbnunfoldtonn(dbn, 10);
 
-nn.alpha  = 1;
-nn.lambda = 1e-4;
+nn.learningRate  = 1;
+nn.weightPenaltyL2 = 1e-4;
 opts.numepochs =  10;
 opts.batchsize = 100;
 
@@ -113,7 +113,7 @@ test_y  = double(test_y);
 %  Setup and train a stacked denoising autoencoder (SDAE)
 sae = saesetup([784 100]);
 
-sae.ae{1}.alpha                     = 0.5;
+sae.ae{1}.learningRate              = 0.5;
 sae.ae{1}.inputZeroMaskedFraction   = 0.5;
 
 opts.numepochs =   5;
@@ -128,8 +128,8 @@ nn = nnsetup([784 100 10]);
 
 nn.W{1} = sae.ae{1}.W{1};
 nn.b{1} = sae.ae{1}.b{1};
-nn.lambda = 1e-5;   %  L2 weight decay
-nn.alpha  = 1e-0;   %  Learning rate
+nn.weightPenaltyL2 = 1e-5;   %  L2 weight decay
+nn.learningRate  = 1e-0;   %  Learning rate
 
 opts.numepochs =   5;
 opts.batchsize = 100;
@@ -181,6 +181,7 @@ cnn = cnntrain(cnn, train_x, train_y, opts);
 plot(cnn.rL);
 %show test error
 disp([num2str(er*100) '% error']);
+
 ```
 
 
@@ -199,9 +200,8 @@ test_y  = double(test_y);
 %%  ex1: Using 100 hidden units, learn to recognize handwritten digits
 nn = nnsetup([784 100 10]);
 
-nn.lambda = 1e-5;       %  L2 weight decay
-nn.alpha  = 1e-0;       %  Learning rate
-opts.numepochs =  10;   %  Number of full sweeps through data
+nn.learningRate = 1;    %  Learning rate
+opts.numepochs =  1;   %  Number of full sweeps through data
 opts.batchsize = 100;   %  Take a mean gradient step over this many samples
 nn = nntrain(nn, train_x, train_y, opts);
 
@@ -212,9 +212,9 @@ figure; visualize(nn.W{1}', 1)   %  Visualize the weights
 %%  ex2: Using 100-50 hidden units, learn to recognize handwritten digits
 nn = nnsetup([784 100 50 10]);
 
-nn.lambda = 1e-5;       %  L2 weight decay
-nn.alpha  = 1e-0;       %  Learning rate
-opts.numepochs =  10;   %  Number of full sweeps through data
+nn.weightPenaltyL2 = 1e-5;       %  L2 weight decay
+nn.learningRate  = 1;       %  Learning rate
+opts.numepochs =  1;   %  Number of full sweeps through data
 opts.batchsize = 100;   %  Take a mean gradient step over this many samples
 nn = nntrain(nn, train_x, train_y, opts);
 
@@ -222,17 +222,19 @@ nn = nntrain(nn, train_x, train_y, opts);
 disp([num2str(er * 100) '% error']);
 figure; visualize(nn.W{1}', 1)   %Visualize the weights
 
-%% ex3 using 800-800 hidden units w. dropout
-nn = nnsetup([784 800 800 10]);
+%% ex3 using 100 hidden units w. dropout
+nn = nnsetup([784 100 10]);
 nn.dropoutFraction = 0.5;
-nn.alpha  = 1e1;       %  Learning rate
-opts.numepochs = 10;   %  Number of full sweeps through data
+
+nn.learningRate  = 1;       %  Learning rate
+opts.numepochs = 1;   %  Number of full sweeps through data
 opts.batchsize = 100;   %  Take a mean gradient step over this many samples
 nn = nntrain(nn, train_x, train_y, opts);
 
 [er, bad] = nntest(nn, test_x, test_y);
 disp([num2str(er * 100) '% error']);
 figure; visualize(nn.W{1}', 1)   %Visualize the weights
+
 ```
 
 

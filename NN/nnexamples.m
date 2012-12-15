@@ -34,6 +34,7 @@ figure; visualize(nn.W{1}', 1)   %Visualize the weights
 %% ex3 using 100 hidden units w. dropout
 nn = nnsetup([784 100 10]);
 nn.dropoutFraction = 0.5;
+
 nn.learningRate  = 1;       %  Learning rate
 opts.numepochs = 1;   %  Number of full sweeps through data
 opts.batchsize = 100;   %  Take a mean gradient step over this many samples
