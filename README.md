@@ -53,8 +53,7 @@ Example: Deep Belief Network
 ---------------------
 ```matlab
 
-clear all; close all; clc;
-
+function test_example_DBN
 load mnist_uint8;
 
 train_x = double(train_x) / 255;
@@ -63,8 +62,9 @@ train_y = double(train_y);
 test_y  = double(test_y);
 
 %%  ex1 train a 100 hidden unit RBM and visualize its weights
+rng(0);
 dbn.sizes = [100];
-opts.numepochs =   5;
+opts.numepochs =   1;
 opts.batchsize = 100;
 opts.momentum  =   0;
 opts.alpha     =   1;
@@ -72,28 +72,28 @@ dbn = dbnsetup(dbn, train_x, opts);
 dbn = dbntrain(dbn, train_x, opts);
 figure; visualize(dbn.rbm{1}.W', 1);   %  Visualize the RBM weights
 
-%%  ex2 train a 100-100-100 DBN and use its weights to initialize a NN
-dbn.sizes = [100 100 100];
-opts.numepochs =   5;
+%%  ex2 train a 100-100 hidden unit DBN and use its weights to initialize a NN
+rng(0);
+%train dbn
+dbn.sizes = [100 100];
+opts.numepochs =   1;
 opts.batchsize = 100;
 opts.momentum  =   0;
 opts.alpha     =   1;
 dbn = dbnsetup(dbn, train_x, opts);
 dbn = dbntrain(dbn, train_x, opts);
 
+%unfold dbn to nn
 nn = dbnunfoldtonn(dbn, 10);
 
+%train nn
 nn.learningRate  = 1;
-nn.weightPenaltyL2 = 1e-4;
-opts.numepochs =  10;
+opts.numepochs =  1;
 opts.batchsize = 100;
-
 nn = nntrain(nn, train_x, train_y, opts);
 [er, bad] = nntest(nn, test_x, test_y);
 
-disp([num2str(er * 100) '% error']);
-figure; visualize(nn.W{1}', 1);
-
+assert(er < 0.12, 'Too big error');
 ```
 
 
@@ -101,7 +101,7 @@ Example: Stacked Auto-Encoders
 ---------------------
 ```matlab
 
-clear all; close all; clc;
+function test_example_SAE
 load mnist_uint8;
 
 train_x = double(train_x)/255;
@@ -111,35 +111,27 @@ test_y  = double(test_y);
 
 %%  ex1 train a 100 hidden unit SDAE and use it to initialize a FFNN
 %  Setup and train a stacked denoising autoencoder (SDAE)
+rng(0);
 sae = saesetup([784 100]);
-
-sae.ae{1}.learningRate              = 0.5;
+sae.ae{1}.learningRate              = 1;
 sae.ae{1}.inputZeroMaskedFraction   = 0.5;
-
-opts.numepochs =   5;
+opts.numepochs =   1;
 opts.batchsize = 100;
-
 sae = saetrain(sae, train_x, opts);
+visualize(sae.ae{1}.W{1}', 1)
 
-figure; visualize(sae.ae{1}.W{1}', 1)   %  Visualize the weights
-
-%  use the SDAE to initialize a FFNN
+% Use the SDAE to initialize a FFNN
 nn = nnsetup([784 100 10]);
-
 nn.W{1} = sae.ae{1}.W{1};
 nn.b{1} = sae.ae{1}.b{1};
-nn.weightPenaltyL2 = 1e-5;   %  L2 weight decay
-nn.learningRate  = 1e-0;   %  Learning rate
 
-opts.numepochs =   5;
+% Train the FFNN
+nn.learningRate  = 1;
+opts.numepochs =   1;
 opts.batchsize = 100;
-
 nn = nntrain(nn, train_x, train_y, opts);
-
 [er, bad] = nntest(nn, test_x, test_y);
-disp([num2str(er * 100) '% error']);
-figure; visualize(nn.W{1}', 1)   %  Visualize the weights
-
+assert(er < 0.21, 'Too big error');
 ```
 
 
@@ -147,8 +139,7 @@ Example: Convolutional Neural Nets
 ---------------------
 ```matlab
 
-clear all; close all; clc;
-addpath('../data');
+function test_example_CNN
 load mnist_uint8;
 
 train_x = double(reshape(train_x',28,28,60000))/255;
@@ -156,10 +147,10 @@ test_x = double(reshape(test_x',28,28,10000))/255;
 train_y = double(train_y');
 test_y = double(test_y');
 
-%% ex1 
+%% ex1 Train a 6c-2s-12c-2s Convolutional neural network 
 %will run 1 epoch in about 200 second and get around 11% error. 
 %With 100 epochs you'll get around 1.2% error
-
+rng(0)
 cnn.layers = {
     struct('type', 'i') %input layer
     struct('type', 'c', 'outputmaps', 6, 'kernelsize', 5) %convolution layer
@@ -178,9 +169,9 @@ cnn = cnntrain(cnn, train_x, train_y, opts);
 [er, bad] = cnntest(cnn, test_x, test_y);
 
 %plot mean squared error
-plot(cnn.rL);
-%show test error
-disp([num2str(er*100) '% error']);
+figure; plot(cnn.rL);
+
+assert(er<0.12, 'Too big error');
 
 ```
 
@@ -189,7 +180,7 @@ Example: Neural Networks
 ---------------------
 ```matlab
 
-clear all; close all; clc; dbstop if error
+function test_example_NN
 load mnist_uint8;
 
 train_x = double(train_x) / 255;
@@ -197,43 +188,46 @@ test_x  = double(test_x)  / 255;
 train_y = double(train_y);
 test_y  = double(test_y);
 
-%%  ex1: Using 100 hidden units, learn to recognize handwritten digits
+%% ex1 vanilla neural net
+rng(0);
 nn = nnsetup([784 100 10]);
 
-nn.learningRate = 1;    %  Learning rate
+nn.learningRate = 1;   %  Learning rate
 opts.numepochs =  1;   %  Number of full sweeps through data
-opts.batchsize = 100;   %  Take a mean gradient step over this many samples
+opts.batchsize = 100;  %  Take a mean gradient step over this many samples
+opts.silent = 1;
 nn = nntrain(nn, train_x, train_y, opts);
 
 [er, bad] = nntest(nn, test_x, test_y);
-disp([num2str(er * 100) '% error']);
-figure; visualize(nn.W{1}', 1)   %  Visualize the weights
+assert(er < 0.1, 'Too big error');
 
-%%  ex2: Using 100-50 hidden units, learn to recognize handwritten digits
-nn = nnsetup([784 100 50 10]);
-
-nn.weightPenaltyL2 = 1e-5;       %  L2 weight decay
-nn.learningRate  = 1;       %  Learning rate
-opts.numepochs =  1;   %  Number of full sweeps through data
-opts.batchsize = 100;   %  Take a mean gradient step over this many samples
-nn = nntrain(nn, train_x, train_y, opts);
-
-[er, bad] = nntest(nn, test_x, test_y);
-disp([num2str(er * 100) '% error']);
-figure; visualize(nn.W{1}', 1)   %Visualize the weights
-
-%% ex3 using 100 hidden units w. dropout
+%% ex2 neural net with L2 weight decay
+rng(0);
 nn = nnsetup([784 100 10]);
-nn.dropoutFraction = 0.5;
 
-nn.learningRate  = 1;       %  Learning rate
-opts.numepochs = 1;   %  Number of full sweeps through data
-opts.batchsize = 100;   %  Take a mean gradient step over this many samples
+nn.weightPenaltyL2 = 1e-4;  %  L2 weight decay
+nn.learningRate = 1;        %  Learning rate
+opts.numepochs =  1;        %  Number of full sweeps through data
+opts.batchsize = 100;       %  Take a mean gradient step over this many samples
+opts.silent = 1;
 nn = nntrain(nn, train_x, train_y, opts);
 
 [er, bad] = nntest(nn, test_x, test_y);
-disp([num2str(er * 100) '% error']);
-figure; visualize(nn.W{1}', 1)   %Visualize the weights
+assert(er < 0.1, 'Too big error');
+
+%% ex3 neural net with dropout
+rng(0);
+nn = nnsetup([784 100 10]);
+
+nn.dropoutFraction = 0.5;   %  Dropout fraction 
+nn.learningRate = 1;        %  Learning rate
+opts.numepochs =  1;        %  Number of full sweeps through data
+opts.batchsize = 100;       %  Take a mean gradient step over this many samples
+opts.silent = 1;
+nn = nntrain(nn, train_x, train_y, opts);
+
+[er, bad] = nntest(nn, test_x, test_y);
+assert(er < 0.16, 'Too big error');
 
 ```
 

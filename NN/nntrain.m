@@ -6,10 +6,6 @@ function [nn, L] = nntrain(nn, x, y, opts)
 % errors, weights and biases, (nn.a, nn.e, nn.W, nn.b) and L, the sum 
 % squared error for each training minibatch.
 
-    if(~isfield(opts, 'silent'))
-        opts.silent = 0;
-    end
-
     assert(isfloat(x), 'x must be a float');
     m = size(x, 1);
     
@@ -46,9 +42,9 @@ function [nn, L] = nntrain(nn, x, y, opts)
         end
 
         t = toc;
-        if(opts.silent ~= 1)
-            disp(['epoch ' num2str(i) '/' num2str(opts.numepochs) '. Took ' num2str(t) ' seconds' '. Mean squared error on training set is ' num2str(mean(L((n-numbatches):(n-1))))]);
-        end
+        
+        disp(['epoch ' num2str(i) '/' num2str(opts.numepochs) '. Took ' num2str(t) ' seconds' '. Mean squared error on training set is ' num2str(mean(L((n-numbatches):(n-1))))]);
+        
     end
 end
 

@@ -4,7 +4,6 @@ function rbm = rbmtrain(rbm, x, opts)
     numbatches = m / opts.batchsize;
     
     assert(rem(numbatches, 1) == 0, 'numbatches not integer');
-    
 
     for i = 1 : opts.numepochs
         kk = randperm(m);
@@ -30,6 +29,8 @@ function rbm = rbmtrain(rbm, x, opts)
 
             err = err + sum(sum((v1 - v2) .^ 2)) / opts.batchsize;
         end
+        
         disp(['epoch ' num2str(i) '/' num2str(opts.numepochs)  '. Average reconstruction error is: ' num2str(err / numbatches)]);
+        
     end
 end
