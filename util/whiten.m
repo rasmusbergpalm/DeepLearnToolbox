@@ -1,6 +1,7 @@
-function [X] = whiten(X,fudgefactor)
-    X = bsxfun(@minus, X, mean(X));
-    A = X'*X;
-    [V,D] = eig(A);
-    X = X*V*diag(1./(diag(D)+fudgefactor).^(1/2))*V';
+function X = whiten(X, fudgefactor)
+    C = cov(X);
+    M = mean(X);
+    [V,D] = eig(C);
+    P = V * diag(sqrt(1./(diag(D) + fudgefactor))) * V';
+    X = bsxfun(@minus, X, M) * P;
 end

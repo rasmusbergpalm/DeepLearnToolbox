@@ -1,8 +1,11 @@
 function patches = im2patches(im,m,n)
+    assert(rem(size(im,1),m)==0)
+    assert(rem(size(im,2),n)==0)
+    
     patches = [];
-    for i=1:10:n
-        for u=1:10:m
-             patch = im(u:u+9,i:i+9);
+    for i=1:m:size(im,1)
+        for u=1:n:size(im,2)
+             patch = im(u:u+m-1,i:i+n-1);
              patches = [patches patch(:)];
         end
     end
