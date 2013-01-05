@@ -16,7 +16,7 @@ function [nn, L] = nntrain(nn, x, y, opts)
 
     assert(rem(numbatches, 1) == 0, 'numbatches must be a integer');
 
-    L = zeros(numepochs*numbatches);
+    L = zeros(numepochs*numbatches,1);
     n = 1;
     for i = 1 : numepochs
         tic;
