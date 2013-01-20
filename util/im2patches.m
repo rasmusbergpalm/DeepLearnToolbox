@@ -5,8 +5,9 @@ function patches = im2patches(im,m,n)
     patches = [];
     for i=1:m:size(im,1)
         for u=1:n:size(im,2)
-             patch = im(u:u+m-1,i:i+n-1);
+             patch = im(i:i+n-1,u:u+m-1);
              patches = [patches patch(:)];
         end
     end
+    patches = patches';
 end
