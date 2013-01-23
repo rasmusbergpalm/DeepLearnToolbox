@@ -15,7 +15,7 @@ sae.ae{1}.inputZeroMaskedFraction   = 0.5;
 opts.numepochs =   1;
 opts.batchsize = 100;
 sae = saetrain(sae, train_x, opts);
-visualize(sae.ae{1}.W{1}', 1)
+visualize(sae.ae{1}.W{1}')
 
 % Use the SDAE to initialize a FFNN
 nn = nnsetup([784 100 10]);

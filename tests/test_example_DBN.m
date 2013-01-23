@@ -15,7 +15,7 @@ opts.momentum  =   0;
 opts.alpha     =   1;
 dbn = dbnsetup(dbn, train_x, opts);
 dbn = dbntrain(dbn, train_x, opts);
-figure; visualize(dbn.rbm{1}.W', 1);   %  Visualize the RBM weights
+figure; visualize(dbn.rbm{1}.W');   %  Visualize the RBM weights
 
 %%  ex2 train a 100-100 hidden unit DBN and use its weights to initialize a NN
 rng(0);
