@@ -70,7 +70,7 @@ opts.momentum  =   0;
 opts.alpha     =   1;
 dbn = dbnsetup(dbn, train_x, opts);
 dbn = dbntrain(dbn, train_x, opts);
-figure; visualize(dbn.rbm{1}.W', 1);   %  Visualize the RBM weights
+figure; visualize(dbn.rbm{1}.W');   %  Visualize the RBM weights
 
 %%  ex2 train a 100-100 hidden unit DBN and use its weights to initialize a NN
 rng(0);
@@ -94,6 +94,7 @@ nn = nntrain(nn, train_x, train_y, opts);
 [er, bad] = nntest(nn, test_x, test_y);
 
 assert(er < 0.12, 'Too big error');
+
 ```
 
 
@@ -118,7 +119,7 @@ sae.ae{1}.inputZeroMaskedFraction   = 0.5;
 opts.numepochs =   1;
 opts.batchsize = 100;
 sae = saetrain(sae, train_x, opts);
-visualize(sae.ae{1}.W{1}', 1)
+visualize(sae.ae{1}.W{1}')
 
 % Use the SDAE to initialize a FFNN
 nn = nnsetup([784 100 10]);
@@ -132,6 +133,7 @@ opts.batchsize = 100;
 nn = nntrain(nn, train_x, train_y, opts);
 [er, bad] = nntest(nn, test_x, test_y);
 assert(er < 0.21, 'Too big error');
+
 ```
 
 
