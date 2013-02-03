@@ -1,7 +1,7 @@
 function nn = nnff(nn, x, y)
 %NNFF performs a feedforward pass
-% nn = nnff(nn, x, y) returns an neural nnwork structure with updated
-% layer activations, error and sum squared loss (nn.a, nn.e and nn.L)
+% nn = nnff(nn, x, y) returns an neural network structure with updated
+% layer activations, error and loss (nn.a, nn.e and nn.L)
 
     n = nn.n;
     m = size(x, 1);
