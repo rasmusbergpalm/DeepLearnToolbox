@@ -5,8 +5,12 @@ function nn = nnbp(nn)
     
     n = nn.n;
     sparsityError = 0;
-    
-    d{n} = - nn.e .* (nn.a{n} .* (1 - nn.a{n}));
+    switch nn.output
+        case 'sigm'
+            d{n} = - nn.e .* (nn.a{n} .* (1 - nn.a{n}));
+        case {'softmax','linear'}
+             d{n} = - nn.e;
+    end
     for i = (n - 1) : -1 : 2
         if(nn.nonSparsityPenalty>0)
             pi = repmat(nn.p{i}, size(nn.a{i}, 1), 1);

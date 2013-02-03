@@ -14,6 +14,7 @@ function nn = nnsetup(architecture)
     nn.inputZeroMaskedFraction          = 0;      %  Used for Denoising AutoEncoders
     nn.dropoutFraction                  = 0;      %  Dropout level (http://www.cs.toronto.edu/~hinton/absps/dropout.pdf)
     nn.testing                          = 0;      %  Internal variable. nntest sets this to one.
+    nn.output                           = 'sigm'; %  output unit 'sigm' (=logistic), 'softmax' and 'linear'
 
     for i = 2 : nn.n
         % biases and bias momentum

@@ -1,6 +1,6 @@
 function nnchecknumgrad(nn, x, y)
     epsilon = 1e-6;
-    er = 1e-10;
+    er = 1e-8;
     n = nn.n;
     for l = 1 : (n - 1)
         for i = 1 : size(nn.W{l}, 1)
