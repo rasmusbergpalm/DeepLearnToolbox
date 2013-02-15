@@ -23,6 +23,10 @@ function net = cnnsetup(net, x, y)
             inputmaps = net.layers{l}.outputmaps;
         end
     end
+    % 'onum' is the number of labels, that's why it is calculated using size(y, 1). If you have 20 labels so the output of the network will be 20 neurons.
+    % 'fvnum' is the number of output neurons at the last layer, the layer just before the output layer.
+    % 'ffb' is the biases of the output neurons.
+    % 'ffW' is the weights between the last layer and the output neurons. Note that the last layer is fully connected to the output layer, that's why the size of the weights is (onum * fvnum)
     fvnum = prod(mapsize) * inputmaps;
     onum = size(y, 1);
 
