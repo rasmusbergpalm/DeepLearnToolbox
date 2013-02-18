@@ -6,6 +6,8 @@ function nn = nnsetup(architecture)
     nn.size   = architecture;
     nn.n      = numel(nn.size);
     
+    nn.normalize_input                  = 0;            % Normalize input elements. set to 1 to normaliza, 0 otherwise
+    nn.activation_function              = 'sigm';   % 'sigm','tanh_opt'
     nn.learningRate                     = 0.1;    %  learning rate 
     nn.momentum                         = 0.5;    %  Momentum
     nn.weightPenaltyL2                  = 0;      %  L2 regularization
@@ -16,13 +18,9 @@ function nn = nnsetup(architecture)
     nn.testing                          = 0;      %  Internal variable. nntest sets this to one.
     nn.output                           = 'sigm'; %  output unit 'sigm' (=logistic), 'softmax' and 'linear'
 
-    for i = 2 : nn.n
-        % biases and bias momentum
-        nn.b{i - 1} = zeros(nn.size(i), 1);
-        nn.vb{i - 1} = zeros(size(nn.b{i - 1}));
-        
+    for i = 2 : nn.n   
         % weights and weight momentum
-        nn.W{i - 1} = (rand(nn.size(i), nn.size(i - 1)) - 0.5) * 2 * 4 * sqrt(6 / (nn.size(i) + nn.size(i - 1)));
+        nn.W{i - 1} = (rand(nn.size(i), nn.size(i - 1)+1) - 0.5) * 2 * 4 * sqrt(6 / (nn.size(i) + nn.size(i - 1)));
         nn.vW{i - 1} = zeros(size(nn.W{i - 1}));
         
         % average activations (for use with sparsity)

@@ -10,7 +10,14 @@ test_y  = double(test_y);
 rng(0);
 nn = nnsetup([784 100 10]);
 
-nn.learningRate = 1;   %  Learning rate
+nn.activation_function='tanh_opt';
+if strcmp(nn.activation_function,'sigm') == 1
+    nn.learningRate = 1;
+elseif strcmp(nn.activation_function,'tanh_opt') == 1
+    nn.learningRate = 3;
+    nn.normalize_input = 1;
+end
+
 opts.numepochs =  1;   %  Number of full sweeps through data
 opts.batchsize = 100;  %  Take a mean gradient step over this many samples
 opts.silent = 1;
@@ -18,6 +25,7 @@ nn = nntrain(nn, train_x, train_y, opts);
 
 [er, bad] = nntest(nn, test_x, test_y);
 assert(er < 0.1, 'Too big error');
+
 
 %% ex2 neural net with L2 weight decay
 rng(0);
@@ -32,6 +40,7 @@ nn = nntrain(nn, train_x, train_y, opts);
 
 [er, bad] = nntest(nn, test_x, test_y);
 assert(er < 0.1, 'Too big error');
+
 
 %% ex3 neural net with dropout
 rng(0);

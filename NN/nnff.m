@@ -10,7 +10,13 @@ function nn = nnff(nn, x, y)
 
     %feedforward pass
     for i = 2 : n-1
-        nn.a{i} = sigm(repmat(nn.b{i - 1}', m, 1) + nn.a{i - 1} * nn.W{i - 1}');
+        switch nn.activation_function 
+            case 'sigm'
+                % Calculate the unit's outputs (including the bias term)
+                nn.a{i} = [ones(m,1) sigm(nn.a{i - 1} * nn.W{i - 1}')];
+            case 'tanh_opt'
+                nn.a{i} = [ones(m,1) tanh_opt(nn.a{i - 1} * nn.W{i - 1}')];
+        end
         if(nn.dropoutFraction > 0)
             if(nn.testing)
                 nn.a{i} = nn.a{i}.*(1 - nn.dropoutFraction);
@@ -25,11 +31,11 @@ function nn = nnff(nn, x, y)
     end
     switch nn.output 
         case 'sigm'
-            nn.a{n} = sigm(repmat(nn.b{n - 1}', m, 1) + nn.a{n - 1} * nn.W{n - 1}');
+            nn.a{n} = sigm(nn.a{n - 1} * nn.W{n - 1}');
         case 'linear'
-            nn.a{n} = repmat(nn.b{n - 1}', m, 1) + nn.a{n - 1} * nn.W{n - 1}';
+            nn.a{n} = nn.a{n - 1} * nn.W{n - 1}';
         case 'softmax'
-            nn.a{n} = repmat(nn.b{n - 1}', m, 1) + nn.a{n - 1} * nn.W{n - 1}';
+            nn.a{n} = nn.a{n - 1} * nn.W{n - 1}';
             nn.a{n} = exp(bsxfun(@minus, nn.a{n}, max(nn.a{n},[],2)));
             nn.a{n} = bsxfun(@rdivide, nn.a{n}, sum(nn.a{n}, 2)); 
     end
