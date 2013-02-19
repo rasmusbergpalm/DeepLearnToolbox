@@ -10,11 +10,8 @@ function [nn, L] = nntrain(nn, x, y, opts)
     m = size(x, 1);
     
     if nn.normalize_input==1
-       x=zscore(x);
+       x = zscore(x);
     end
-    
-    % Compact notation to include biases in the weight vector
-    x=[ones(m,1) x];
     
     batchsize = opts.batchsize;
     numepochs = opts.numepochs;

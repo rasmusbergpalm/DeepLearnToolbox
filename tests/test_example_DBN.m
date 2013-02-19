@@ -30,12 +30,13 @@ dbn = dbntrain(dbn, train_x, opts);
 
 %unfold dbn to nn
 nn = dbnunfoldtonn(dbn, 10);
+nn.normalize_input = 0;
+nn.activation_function = 'sigm';
 
 %train nn
-nn.learningRate  = 1;
 opts.numepochs =  1;
 opts.batchsize = 100;
 nn = nntrain(nn, train_x, train_y, opts);
 [er, bad] = nntest(nn, test_x, test_y);
 
-assert(er < 0.12, 'Too big error');
+assert(er < 0.10, 'Too big error');

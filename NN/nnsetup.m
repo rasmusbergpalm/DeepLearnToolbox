@@ -1,14 +1,14 @@
 function nn = nnsetup(architecture)
 %NNSETUP creates a Feedforward Backpropagate Neural Network
-% nn = nnsetup(size) returns an neural network structure with n=numel(size)
-% layers, size being a n x 1 vector of layer sizes e.g. [784 100 10]
+% nn = nnsetup(architecture) returns an neural network structure with n=numel(architecture)
+% layers, architecture being a n x 1 vector of layer sizes e.g. [784 100 10]
 
     nn.size   = architecture;
     nn.n      = numel(nn.size);
     
-    nn.normalize_input                  = 0;            % Normalize input elements. set to 1 to normaliza, 0 otherwise
-    nn.activation_function              = 'sigm';   % 'sigm','tanh_opt'
-    nn.learningRate                     = 0.1;    %  learning rate 
+    nn.normalize_input                  = 1;      %  normalize input elements. set to 1 to normalize, 0 otherwise
+    nn.activation_function              = 'tanh_opt'; % 'sigm','tanh_opt'
+    nn.learningRate                     = 2;    %  learning rate 
     nn.momentum                         = 0.5;    %  Momentum
     nn.weightPenaltyL2                  = 0;      %  L2 regularization
     nn.nonSparsityPenalty               = 0;      %  Non sparsity penalty
