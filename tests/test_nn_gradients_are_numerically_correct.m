@@ -2,8 +2,11 @@ function test_nn_gradients_are_numerically_correct
 batch_x = rand(20, 5);
 batch_y = rand(20, 2);
 
+batch_x=[ones(size(batch_x,1),1) batch_x];
+
 nn = nnsetup([5 3 2]);
 nn.output='sigm';
+nn.activation_function='tanh_opt';
 nn = nnff(nn, batch_x, batch_y);
 nn = nnbp(nn);
 nnchecknumgrad(nn, batch_x, batch_y);
