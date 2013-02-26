@@ -21,6 +21,7 @@ If you use this toolbox in your research please cite [Prediction as a candidate 
     author       = "R. B. Palm",
     title        = "Prediction as a candidate for learning deep hierarchical models of data",
     year         = "2012",
+}
 ```
 
 Directories included in the toolbox
