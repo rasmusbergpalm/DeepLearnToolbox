@@ -1,6 +1,6 @@
 function nnchecknumgrad(nn, x, y)
     epsilon = 1e-6;
-    er = 1e-8;
+    er = 1e-7;
     n = nn.n;
     for l = 1 : (n - 1)
         for i = 1 : size(nn.W{l}, 1)
@@ -17,19 +17,6 @@ function nnchecknumgrad(nn, x, y)
                 
                 assert(e < er, 'numerical gradient checking failed');
             end
-        end
-
-        for i = 1 : size(nn.b{l}, 1)
-            nn_m = nn; nn_p = nn;
-            nn_m.b{l}(i) = nn.b{l}(i) - epsilon;
-            nn_p.b{l}(i) = nn.b{l}(i) + epsilon;
-            rng(0);
-            nn_m = nnff(nn_m, x, y);
-            rng(0);
-            nn_p = nnff(nn_p, x, y);
-            db = (nn_p.L - nn_m.L) / (2 * epsilon);
-            e = abs(db - nn.db{l}(i));
-            assert(e < er, 'numerical gradient checking failed');
         end
     end
 end

@@ -1,4 +1,8 @@
 function [er, bad] = nntest(nn, x, y)
+    if nn.normalize_input==1;
+       x = zscore(x);
+    end
+    
     nn.testing = 1;
     nn = nnff(nn, x, y);
     nn.testing = 0;
