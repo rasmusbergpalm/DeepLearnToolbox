@@ -9,6 +9,10 @@ function [nn, L] = nntrain(nn, x, y, opts)
     assert(isfloat(x), 'x must be a float');
     m = size(x, 1);
     
+    if nn.normalize_input==1
+       x = zscore(x);
+    end
+    
     batchsize = opts.batchsize;
     numepochs = opts.numepochs;
 
