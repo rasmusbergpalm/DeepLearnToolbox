@@ -15,9 +15,14 @@ For a more informal introduction, see the following videos by Geoffrey Hinton an
 * [Recent Developments in Deep Learning](http://www.youtube.com/watch?v=VdIURAu1-aU) (Hinton, 2010)
 * [Unsupervised Feature Learning and Deep Learning](http://www.youtube.com/watch?v=ZmNOAtZIgIk) (Ng, 2011)
 
-If you use this toolbox in your research please cite:
+If you use this toolbox in your research please cite [Prediction as a candidate for learning deep hierarchical models of data](http://www2.imm.dtu.dk/pubdb/views/publication_details.php?id=6284)
 
-[Prediction as a candidate for learning deep hierarchical models of data](http://www2.imm.dtu.dk/pubdb/views/publication_details.php?id=6284) (Palm, 2012)
+```
+@MASTERSTHESIS\{IMM2012-06284,
+    author       = "R. B. Palm",
+    title        = "Prediction as a candidate for learning deep hierarchical models of data",
+    year         = "2012",
+```
 
 Directories included in the toolbox
 -----------------------------------
@@ -85,15 +90,16 @@ dbn = dbntrain(dbn, train_x, opts);
 
 %unfold dbn to nn
 nn = dbnunfoldtonn(dbn, 10);
+nn.normalize_input = 0;
+nn.activation_function = 'sigm';
 
 %train nn
-nn.learningRate  = 1;
 opts.numepochs =  1;
 opts.batchsize = 100;
 nn = nntrain(nn, train_x, train_y, opts);
 [er, bad] = nntest(nn, test_x, test_y);
 
-assert(er < 0.12, 'Too big error');
+assert(er < 0.10, 'Too big error');
 
 ```
 
@@ -114,25 +120,28 @@ test_y  = double(test_y);
 %  Setup and train a stacked denoising autoencoder (SDAE)
 rng(0);
 sae = saesetup([784 100]);
+sae.ae{1}.normalize_input           = 0;
+sae.ae{1}.activation_function       = 'sigm';
 sae.ae{1}.learningRate              = 1;
 sae.ae{1}.inputZeroMaskedFraction   = 0.5;
 opts.numepochs =   1;
 opts.batchsize = 100;
 sae = saetrain(sae, train_x, opts);
-visualize(sae.ae{1}.W{1}')
+visualize(sae.ae{1}.W{1}(:,2:end)')
 
 % Use the SDAE to initialize a FFNN
 nn = nnsetup([784 100 10]);
+nn.normalize_input                  = 0;
+nn.activation_function              = 'sigm';
+nn.learningRate                     = 1;
 nn.W{1} = sae.ae{1}.W{1};
-nn.b{1} = sae.ae{1}.b{1};
 
 % Train the FFNN
-nn.learningRate  = 1;
 opts.numepochs =   1;
 opts.batchsize = 100;
 nn = nntrain(nn, train_x, train_y, opts);
 [er, bad] = nntest(nn, test_x, test_y);
-assert(er < 0.21, 'Too big error');
+assert(er < 0.16, 'Too big error');
 
 ```
 
@@ -193,44 +202,56 @@ test_y  = double(test_y);
 %% ex1 vanilla neural net
 rng(0);
 nn = nnsetup([784 100 10]);
-
-nn.learningRate = 1;   %  Learning rate
 opts.numepochs =  1;   %  Number of full sweeps through data
 opts.batchsize = 100;  %  Take a mean gradient step over this many samples
-opts.silent = 1;
-nn = nntrain(nn, train_x, train_y, opts);
+[nn, L] = nntrain(nn, train_x, train_y, opts);
 
 [er, bad] = nntest(nn, test_x, test_y);
-assert(er < 0.1, 'Too big error');
+
+assert(er < 0.08, 'Too big error');
+
 
 %% ex2 neural net with L2 weight decay
 rng(0);
 nn = nnsetup([784 100 10]);
 
 nn.weightPenaltyL2 = 1e-4;  %  L2 weight decay
-nn.learningRate = 1;        %  Learning rate
 opts.numepochs =  1;        %  Number of full sweeps through data
 opts.batchsize = 100;       %  Take a mean gradient step over this many samples
-opts.silent = 1;
+
 nn = nntrain(nn, train_x, train_y, opts);
 
 [er, bad] = nntest(nn, test_x, test_y);
 assert(er < 0.1, 'Too big error');
+
 
 %% ex3 neural net with dropout
 rng(0);
 nn = nnsetup([784 100 10]);
 
 nn.dropoutFraction = 0.5;   %  Dropout fraction 
-nn.learningRate = 1;        %  Learning rate
 opts.numepochs =  1;        %  Number of full sweeps through data
 opts.batchsize = 100;       %  Take a mean gradient step over this many samples
-opts.silent = 1;
+
 nn = nntrain(nn, train_x, train_y, opts);
 
 [er, bad] = nntest(nn, test_x, test_y);
-assert(er < 0.16, 'Too big error');
+assert(er < 0.1, 'Too big error');
 
+%% ex4 neural net with sigmoid activation function, and without normalizing inputs
+rng(0);
+nn = nnsetup([784 100 10]);
+
+nn.activation_function = 'sigm';    %  Sigmoid activation function
+nn.normalize_input = 0;             %  Don't normalize inputs
+nn.learningRate = 1;                %  Sigm and non-normalized inputs require a lower learning rate
+opts.numepochs =  1;                %  Number of full sweeps through data
+opts.batchsize = 100;               %  Take a mean gradient step over this many samples
+
+nn = nntrain(nn, train_x, train_y, opts);
+
+[er, bad] = nntest(nn, test_x, test_y);
+assert(er < 0.1, 'Too big error');
 ```
 
 
