@@ -11,9 +11,10 @@ rng(0);
 nn = nnsetup([784 100 10]);
 opts.numepochs =  1;   %  Number of full sweeps through data
 opts.batchsize = 100;  %  Take a mean gradient step over this many samples
-[nn,L] = nntrain(nn, train_x, train_y, opts);
+[nn, L] = nntrain(nn, train_x, train_y, opts);
 
 [er, bad] = nntest(nn, test_x, test_y);
+
 assert(er < 0.08, 'Too big error');
 
 
@@ -42,4 +43,19 @@ opts.batchsize = 100;       %  Take a mean gradient step over this many samples
 nn = nntrain(nn, train_x, train_y, opts);
 
 [er, bad] = nntest(nn, test_x, test_y);
-assert(er < 0.16, 'Too big error');
+assert(er < 0.1, 'Too big error');
+
+%% ex4 neural net with sigmoid activation function, and without normalizing inputs
+rng(0);
+nn = nnsetup([784 100 10]);
+
+nn.activation_function = 'sigm';    %  Sigmoid activation function
+nn.normalize_input = 0;             %  Don't normalize inputs
+nn.learningRate = 1;                %  Sigm and non-normalized inputs require a lower learning rate
+opts.numepochs =  1;                %  Number of full sweeps through data
+opts.batchsize = 100;               %  Take a mean gradient step over this many samples
+
+nn = nntrain(nn, train_x, train_y, opts);
+
+[er, bad] = nntest(nn, test_x, test_y);
+assert(er < 0.1, 'Too big error');

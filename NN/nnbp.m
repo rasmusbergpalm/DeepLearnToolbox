@@ -21,7 +21,7 @@ function nn = nnbp(nn)
         
         if(nn.nonSparsityPenalty>0)
             pi = repmat(nn.p{i}, size(nn.a{i}, 1), 1);
-            sparsityError = nn.nonSparsityPenalty * (-nn.sparsityTarget ./ pi + (1 - nn.sparsityTarget) ./ (1 - pi));
+            sparsityError = [zeros(size(nn.a{i},1),1) nn.nonSparsityPenalty * (-nn.sparsityTarget ./ pi + (1 - nn.sparsityTarget) ./ (1 - pi))];
         end
         
         % Backpropagate first derivatives

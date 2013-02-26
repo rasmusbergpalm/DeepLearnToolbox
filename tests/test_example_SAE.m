@@ -21,6 +21,9 @@ visualize(sae.ae{1}.W{1}(:,2:end)')
 
 % Use the SDAE to initialize a FFNN
 nn = nnsetup([784 100 10]);
+nn.normalize_input                  = 0;
+nn.activation_function              = 'sigm';
+nn.learningRate                     = 1;
 nn.W{1} = sae.ae{1}.W{1};
 
 % Train the FFNN

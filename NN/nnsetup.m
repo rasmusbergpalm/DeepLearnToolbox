@@ -6,17 +6,17 @@ function nn = nnsetup(architecture)
     nn.size   = architecture;
     nn.n      = numel(nn.size);
     
-    nn.normalize_input                  = 1;      %  normalize input elements. set to 1 to normalize, 0 otherwise
-    nn.activation_function              = 'tanh_opt'; % 'sigm','tanh_opt'
-    nn.learningRate                     = 2;    %  learning rate 
-    nn.momentum                         = 0.5;    %  Momentum
-    nn.weightPenaltyL2                  = 0;      %  L2 regularization
-    nn.nonSparsityPenalty               = 0;      %  Non sparsity penalty
-    nn.sparsityTarget                   = 0.05;   %  Sparsity target
-    nn.inputZeroMaskedFraction          = 0;      %  Used for Denoising AutoEncoders
-    nn.dropoutFraction                  = 0;      %  Dropout level (http://www.cs.toronto.edu/~hinton/absps/dropout.pdf)
-    nn.testing                          = 0;      %  Internal variable. nntest sets this to one.
-    nn.output                           = 'sigm'; %  output unit 'sigm' (=logistic), 'softmax' and 'linear'
+    nn.normalize_input                  = 1;            %  normalize input elements to be between [-1 1]. Note: use a linear output function if training auto-encoders with normalized inputs
+    nn.activation_function              = 'tanh_opt';   %  Activation functions of hidden layers: 'sigm' (sigmoid) or 'tanh_opt' (optimal tanh).
+    nn.learningRate                     = 2;            %  learning rate Note: typically needs to be lower when using 'sigm' activation function and non-normalized inputs.
+    nn.momentum                         = 0.5;          %  Momentum
+    nn.weightPenaltyL2                  = 0;            %  L2 regularization
+    nn.nonSparsityPenalty               = 0;            %  Non sparsity penalty
+    nn.sparsityTarget                   = 0.05;         %  Sparsity target
+    nn.inputZeroMaskedFraction          = 0;            %  Used for Denoising AutoEncoders
+    nn.dropoutFraction                  = 0;            %  Dropout level (http://www.cs.toronto.edu/~hinton/absps/dropout.pdf)
+    nn.testing                          = 0;            %  Internal variable. nntest sets this to one.
+    nn.output                           = 'sigm';       %  output unit 'sigm' (=logistic), 'softmax' and 'linear'
 
     for i = 2 : nn.n   
         % weights and weight momentum

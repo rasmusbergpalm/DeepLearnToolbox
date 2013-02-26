@@ -2,7 +2,7 @@ function test_nn_gradients_are_numerically_correct
 batch_x = rand(20, 5);
 batch_y = rand(20, 2);
 
-for output = {'sigm','linear','softmax'}
+for output = {'sigm', 'linear', 'softmax'}
     y=batch_y;
     if(strcmp(output,'softmax'))
         % softmax output requires a binary output vector
@@ -10,16 +10,18 @@ for output = {'sigm','linear','softmax'}
     end
     
     for activation_function = {'sigm', 'tanh_opt'}
-        for normalize_input = {0,1}
-            for dropoutFraction = {0 0.4}
+        for normalize_input = {0, 1}
+            for dropoutFraction = {0 rand()}
                 nn = nnsetup([5 3 4 2]);
 
                 nn.activation_function = activation_function{1};
                 nn.output = output{1};
                 nn.normalize_input = normalize_input{1};
                 nn.dropoutFraction = dropoutFraction{1};
-                
-                nn = nnff(nn, batch_x, batch_y);
+
+
+                rng(0)
+                nn = nnff(nn, batch_x, y);
                 nn = nnbp(nn);
                 nnchecknumgrad(nn, batch_x, y);
             end
