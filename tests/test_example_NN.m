@@ -59,3 +59,22 @@ nn = nntrain(nn, train_x, train_y, opts);
 
 [er, bad] = nntest(nn, test_x, test_y);
 assert(er < 0.1, 'Too big error');
+
+%% ex5 neural net with normalized momentum after some iterations + Scaling learning rate
+rng(0);
+nn = nnsetup([784 100 10]);
+
+nn.activation_function = 'sigm';    %  Sigmoid activation function
+nn.normalize_input = 0;             %  Don't normalize inputs
+nn.learningRate = 1;                %  Sigm and non-normalized inputs require a lower learning rate
+opts.numepochs =  4;                %  Number of full sweeps through data
+opts.batchsize = 100;               %  Take a mean gradient step over this many samples
+nn.momentum  = 0.8; 
+nn.it_no_momentum = 2; 
+nn.normalize_momentum = 1;          %  Normalize momentum term (requires nn.it_no_momentum > 0)
+nn.scaling_learningRate = 0.998;
+
+nn = nntrain(nn, train_x, train_y, opts);
+
+[er, bad] = nntest(nn, test_x, test_y);
+assert(er < 0.07, 'Too big error');
