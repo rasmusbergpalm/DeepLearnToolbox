@@ -10,7 +10,10 @@ function [nn, L] = nntrain(nn, x, y, opts)
     m = size(x, 1);
     
     if nn.normalize_input==1
-       x = zscore(x);
+        [x, mu, sigma] = zscore(x);
+        nn.normalizeMean = mu;
+        sigma(sigma==0) = 1;
+        nn.normalizeStd  = sigma;
     end
     
     batchsize = opts.batchsize;

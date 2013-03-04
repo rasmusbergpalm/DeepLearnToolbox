@@ -247,7 +247,14 @@ opts.batchsize = 100;  %  Take a mean gradient step over this many samples
 
 assert(er < 0.08, 'Too big error');
 
+% Make an artificial one and verify that we can predict it
+x = zeros(1,28,28);
+x(:, 14:15, 6:22) = 1;
+x = reshape(x,1,28^2);
+figure; visualize(x');
+predicted = nnpredict(nn,x)-1;
 
+assert(predicted == 1);
 %% ex2 neural net with L2 weight decay
 rng(0);
 nn = nnsetup([784 100 10]);
