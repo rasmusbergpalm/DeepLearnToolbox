@@ -12,7 +12,7 @@ function [nn, L] = nntrain(nn, x, y, opts)
     if nn.normalize_input==1
         [x, mu, sigma] = zscore(x);
         nn.normalizeMean = mu;
-        sigma(sigma==0) = 1;
+        sigma(sigma==0) = 0.0001;%this should be very small value. 
         nn.normalizeStd  = sigma;
     end
     
