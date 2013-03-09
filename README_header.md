@@ -24,6 +24,8 @@ If you use this toolbox in your research please cite [Prediction as a candidate 
 }
 ```
 
+Contact: rasmusbergpalm at gmail dot com
+
 Directories included in the toolbox
 -----------------------------------
 
