@@ -1,4 +1,3 @@
-
 DeepLearnToolbox
 ================
 
@@ -24,6 +23,8 @@ If you use this toolbox in your research please cite [Prediction as a candidate 
     year         = "2012",
 }
 ```
+
+Contact: rasmusbergpalm at gmail dot com
 
 Directories included in the toolbox
 -----------------------------------
