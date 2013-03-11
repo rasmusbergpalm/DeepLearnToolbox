@@ -10,7 +10,6 @@ test_y  = double(test_y);
 %  Setup and train a stacked denoising autoencoder (SDAE)
 rng(0);
 sae = saesetup([784 100]);
-sae.ae{1}.normalize_input           = 0;
 sae.ae{1}.activation_function       = 'sigm';
 sae.ae{1}.learningRate              = 1;
 sae.ae{1}.inputZeroMaskedFraction   = 0.5;
@@ -21,7 +20,6 @@ visualize(sae.ae{1}.W{1}(:,2:end)')
 
 % Use the SDAE to initialize a FFNN
 nn = nnsetup([784 100 10]);
-nn.normalize_input                  = 0;
 nn.activation_function              = 'sigm';
 nn.learningRate                     = 1;
 nn.W{1} = sae.ae{1}.W{1};
@@ -37,12 +35,10 @@ assert(er < 0.16, 'Too big error');
 %  Setup and train a stacked denoising autoencoder (SDAE)
 rng(0);
 sae = saesetup([784 100 100]);
-sae.ae{1}.normalize_input           = 0;
 sae.ae{1}.activation_function       = 'sigm';
 sae.ae{1}.learningRate              = 1;
 sae.ae{1}.inputZeroMaskedFraction   = 0.5;
 
-sae.ae{2}.normalize_input           = 0;
 sae.ae{2}.activation_function       = 'sigm';
 sae.ae{2}.learningRate              = 1;
 sae.ae{2}.inputZeroMaskedFraction   = 0.5;
@@ -54,7 +50,6 @@ visualize(sae.ae{1}.W{1}(:,2:end)')
 
 % Use the SDAE to initialize a FFNN
 nn = nnsetup([784 100 100 10]);
-nn.normalize_input                  = 0;
 nn.activation_function              = 'sigm';
 nn.learningRate                     = 1;
 
