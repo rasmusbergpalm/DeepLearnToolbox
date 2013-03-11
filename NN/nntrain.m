@@ -23,10 +23,17 @@ function [nn, L] = nntrain(nn, x, y, opts)
 
     assert(rem(numbatches, 1) == 0, 'numbatches must be a integer');
 
+    
+    tmp_momentum=nn.momentum;
+    nn.momentum=0; % momentum is used only after nn.it_no_momentum epochs
+    
     L = zeros(numepochs*numbatches,1);
     n = 1;
     for i = 1 : numepochs
         tic;
+        if i>nn.it_no_momentum
+            nn.momentum=tmp_momentum;
+        end
 
         kk = randperm(m);
         for l = 1 : numbatches
@@ -51,6 +58,8 @@ function [nn, L] = nntrain(nn, x, y, opts)
         t = toc;
         
         disp(['epoch ' num2str(i) '/' num2str(opts.numepochs) '. Took ' num2str(t) ' seconds' '. Mean squared error on training set is ' num2str(mean(L((n-numbatches):(n-1))))]);
+                
+        nn.learningRate = nn.learningRate * nn.scaling_learningRate;
         
     end
 end
