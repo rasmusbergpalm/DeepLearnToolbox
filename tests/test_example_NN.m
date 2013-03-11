@@ -71,9 +71,9 @@ assert(er < 0.1, 'Too big error');
 rng(0);
 nn = nnsetup([784 20 10]);
 nn.normalize_input     = 1; 
-nn.activation_function = 'tanh_opt';        %  Sigmoid activation function
-nn.normalize_input     = 1;            
-nn.learningRate        = 0.1;          
+nn.activation_function = 'tanh_opt';    %  tanh activation function
+nn.normalize_input     = 1;             %  Normalize inputs to range [-1,1]
+nn.learningRate        = 0.1;           %  Decrearse learning rate to get smooth decrease in errors
 opts.numepochs         = 20;            %  Number of full sweeps through data
 opts.batchsize         = 100;           %  Take a mean gradient step over this many samples
 opts.plot              = 1;             %  enable plotting
@@ -83,9 +83,10 @@ nn = nntrain(nn, train_x, train_y, opts);
 [er, bad] = nntest(nn, test_x, test_y);
 assert(er < 0.1, 'Too big error');
 
-%% ex6 neural net with sigmoid and plotting of validation and training error
+%% ex6 neural net with sigmoid activation and plotting of validation and training error
 
-%create validation set
+% create train,val and test set
+% splits: 10000-10000-50000
 load mnist_uint8;
 
 val_x   = double(train_x(1:10000,:)) / 255;
@@ -98,15 +99,15 @@ test_y  = double(test_y);
 
 
 rng(0);
-nn                      = nnsetup([784 20 10]);
-nn.normalize_input      = 0;
-nn.activation_function  = 'sigm';
-nn.output               = 'softmax';
-nn.learningRate         = 0.1;
-opts.numepochs          = 20;        %  Number of full sweeps through data
-opts.batchsize          = 100;       %  Take a mean gradient step over this many samples
-opts.plot               = 1;          %  enable plotting
-nn = nntrain(nn, train_x, train_y, opts,val_x,val_y);
+nn                      = nnsetup([784 20 10]);     
+nn.normalize_input      = 0;                            %  dont normalize because we use sigmoid activation
+nn.activation_function  = 'sigm';                       %  use sigmoid activation
+nn.output               = 'softmax';                    %  use softmax output
+nn.learningRate         = 0.1;                          %  Decrease learning rate, otherwise the errors does not decrease nicely
+opts.numepochs          = 20;                           %  Number of full sweeps through data
+opts.batchsize          = 100;                          %  Take a mean gradient step over this many samples
+opts.plot               = 1;                            %  enable plotting
+nn = nntrain(nn, train_x, train_y, opts,val_x,val_y);   %  nntrain takes validation set as last two arguments (optionally)
 
 [er, bad] = nntest(nn, test_x, test_y);
 assert(er < 0.06, 'Too big error');
