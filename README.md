@@ -92,7 +92,6 @@ dbn = dbntrain(dbn, train_x, opts);
 
 %unfold dbn to nn
 nn = dbnunfoldtonn(dbn, 10);
-nn.normalize_input = 0;
 nn.activation_function = 'sigm';
 
 %train nn
@@ -122,7 +121,6 @@ test_y  = double(test_y);
 %  Setup and train a stacked denoising autoencoder (SDAE)
 rng(0);
 sae = saesetup([784 100]);
-sae.ae{1}.normalize_input           = 0;
 sae.ae{1}.activation_function       = 'sigm';
 sae.ae{1}.learningRate              = 1;
 sae.ae{1}.inputZeroMaskedFraction   = 0.5;
@@ -133,7 +131,6 @@ visualize(sae.ae{1}.W{1}(:,2:end)')
 
 % Use the SDAE to initialize a FFNN
 nn = nnsetup([784 100 10]);
-nn.normalize_input                  = 0;
 nn.activation_function              = 'sigm';
 nn.learningRate                     = 1;
 nn.W{1} = sae.ae{1}.W{1};
@@ -149,12 +146,10 @@ assert(er < 0.16, 'Too big error');
 %  Setup and train a stacked denoising autoencoder (SDAE)
 rng(0);
 sae = saesetup([784 100 100]);
-sae.ae{1}.normalize_input           = 0;
 sae.ae{1}.activation_function       = 'sigm';
 sae.ae{1}.learningRate              = 1;
 sae.ae{1}.inputZeroMaskedFraction   = 0.5;
 
-sae.ae{2}.normalize_input           = 0;
 sae.ae{2}.activation_function       = 'sigm';
 sae.ae{2}.learningRate              = 1;
 sae.ae{2}.inputZeroMaskedFraction   = 0.5;
@@ -166,7 +161,6 @@ visualize(sae.ae{1}.W{1}(:,2:end)')
 
 % Use the SDAE to initialize a FFNN
 nn = nnsetup([784 100 100 10]);
-nn.normalize_input                  = 0;
 nn.activation_function              = 'sigm';
 nn.learningRate                     = 1;
 
@@ -237,6 +231,10 @@ test_x  = double(test_x)  / 255;
 train_y = double(train_y);
 test_y  = double(test_y);
 
+% normalize
+[train_x, mu, sigma] = zscore(train_x);
+test_x = normalize(test_x, mu, sigma);
+
 %% ex1 vanilla neural net
 rng(0);
 nn = nnsetup([784 100 10]);
@@ -283,17 +281,47 @@ nn = nntrain(nn, train_x, train_y, opts);
 [er, bad] = nntest(nn, test_x, test_y);
 assert(er < 0.1, 'Too big error');
 
-%% ex4 neural net with sigmoid activation function, and without normalizing inputs
+%% ex4 neural net with sigmoid activation function
 rng(0);
 nn = nnsetup([784 100 10]);
 
 nn.activation_function = 'sigm';    %  Sigmoid activation function
-nn.normalize_input = 0;             %  Don't normalize inputs
-nn.learningRate = 1;                %  Sigm and non-normalized inputs require a lower learning rate
+nn.learningRate = 1;                %  Sigm require a lower learning rate
 opts.numepochs =  1;                %  Number of full sweeps through data
 opts.batchsize = 100;               %  Take a mean gradient step over this many samples
 
 nn = nntrain(nn, train_x, train_y, opts);
+
+[er, bad] = nntest(nn, test_x, test_y);
+assert(er < 0.1, 'Too big error');
+
+%% ex5 plotting functionality
+rng(0);
+nn = nnsetup([784 20 10]);
+opts.numepochs         = 5;            %  Number of full sweeps through data
+nn.output              = 'softmax';    %  use softmax output
+opts.batchsize         = 1000;         %  Take a mean gradient step over this many samples
+opts.plot              = 1;            %  enable plotting
+
+nn = nntrain(nn, train_x, train_y, opts);
+
+[er, bad] = nntest(nn, test_x, test_y);
+assert(er < 0.1, 'Too big error');
+
+%% ex6 neural net with sigmoid activation and plotting of validation and training error
+% split training data into training and validation data
+vx   = train_x(1:10000,:);
+tx = train_x(10001:end,:);
+vy   = train_y(1:10000,:);
+ty = train_y(10001:end,:);
+
+rng(0);
+nn                      = nnsetup([784 20 10]);     
+nn.output               = 'softmax';                   %  use softmax output
+opts.numepochs          = 5;                           %  Number of full sweeps through data
+opts.batchsize          = 1000;                        %  Take a mean gradient step over this many samples
+opts.plot               = 1;                           %  enable plotting
+nn = nntrain(nn, tx, ty, opts, vx, vy);                %  nntrain takes validation set as last two arguments (optionally)
 
 [er, bad] = nntest(nn, test_x, test_y);
 assert(er < 0.1, 'Too big error');

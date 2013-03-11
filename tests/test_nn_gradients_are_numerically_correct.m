@@ -10,21 +10,17 @@ for output = {'sigm', 'linear', 'softmax'}
     end
     
     for activation_function = {'sigm', 'tanh_opt'}
-        for normalize_input = {0, 1}
-            for dropoutFraction = {0 rand()}
-                nn = nnsetup([5 3 4 2]);
+        for dropoutFraction = {0 rand()}
+            nn = nnsetup([5 3 4 2]);
 
-                nn.activation_function = activation_function{1};
-                nn.output = output{1};
-                nn.normalize_input = normalize_input{1};
-                nn.dropoutFraction = dropoutFraction{1};
+            nn.activation_function = activation_function{1};
+            nn.output = output{1};
+            nn.dropoutFraction = dropoutFraction{1};
 
-
-                rng(0)
-                nn = nnff(nn, batch_x, y);
-                nn = nnbp(nn);
-                nnchecknumgrad(nn, batch_x, y);
-            end
+            rng(0)
+            nn = nnff(nn, batch_x, y);
+            nn = nnbp(nn);
+            nnchecknumgrad(nn, batch_x, y);
         end
     end
 end
