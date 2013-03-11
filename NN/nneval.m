@@ -7,12 +7,10 @@ assert(nargin == 4 || nargin == 6, 'Wrong number of arguments');
 nn                    = nnff(nn, train_x, train_y);
 loss.train.e(end + 1) = nn.L;
 
+% validation performance
 if nargin == 6
-    
-    % validation performance
     nn                    = nnff(nn, val_x, val_y);
     loss.val.e(end + 1)   = nn.L;
-    
 end
 
 %calc misclassification rate if softmax

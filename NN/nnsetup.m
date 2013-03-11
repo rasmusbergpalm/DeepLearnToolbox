@@ -6,7 +6,6 @@ function nn = nnsetup(architecture)
     nn.size   = architecture;
     nn.n      = numel(nn.size);
     
-    nn.normalize_input                  = 1;            %  normalize input elements to be between [-1 1]. Note: use a linear output function if training auto-encoders with normalized inputs
     nn.activation_function              = 'tanh_opt';   %  Activation functions of hidden layers: 'sigm' (sigmoid) or 'tanh_opt' (optimal tanh).
     nn.learningRate                     = 2;            %  learning rate Note: typically needs to be lower when using 'sigm' activation function and non-normalized inputs.
     nn.momentum                         = 0.5;          %  Momentum

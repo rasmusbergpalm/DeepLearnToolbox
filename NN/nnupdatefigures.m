@@ -11,32 +11,25 @@ if i > 1 %dont plot first point, its only a point
     
     %create data for plots
     if strcmp(nn.output,'softmax')
-        
         plot_x       = x_ax';
         plot_ye      = L.train.e';
         plot_yfrac   = L.train.e_frac';
         
     else
-        
         plot_x       = x_ax';
         plot_ye      = L.train.e';
-        
     end
     
     %add error on validation data if present
     if opts.validation == 1
-        
         plot_x       = [plot_x, x_ax'];
         plot_ye      = [plot_ye,L.val.e'];
-        
     end
     
     
     %add classification error on validation data if present
     if opts.validation == 1 && strcmp(nn.output,'softmax')
-        
-        plot_yfrac   = [plot_yfrac, L.val.e_frac'];
-        
+        plot_yfrac   = [plot_yfrac, L.val.e_frac'];        
     end
     
 %    plotting
@@ -54,7 +47,6 @@ if i > 1 %dont plot first point, its only a point
             set(gca,'LegendColorbarListeners',[]);
             setappdata(gca,'LegendColorbarManualSpace',1);
             setappdata(gca,'LegendColorbarReclaimSpace',1);
-            
         end
                
         p2 = subplot(1,2,2);
@@ -68,7 +60,6 @@ if i > 1 %dont plot first point, its only a point
             set(gca,'LegendColorbarListeners',[]);
             setappdata(gca,'LegendColorbarManualSpace',1);
             setappdata(gca,'LegendColorbarReclaimSpace',1);
-            
         end
 
     else

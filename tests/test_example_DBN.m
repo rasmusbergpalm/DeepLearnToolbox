@@ -30,7 +30,6 @@ dbn = dbntrain(dbn, train_x, opts);
 
 %unfold dbn to nn
 nn = dbnunfoldtonn(dbn, 10);
-nn.normalize_input = 0;
 nn.activation_function = 'sigm';
 
 %train nn
