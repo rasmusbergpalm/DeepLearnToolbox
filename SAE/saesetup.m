@@ -4,8 +4,8 @@ function sae = saesetup(size)
 
 sae = nnsetup(); % always call constructor first 
 sae.type = 'sae';
-
+sae.size=size;
     for u = 2 : numel(size)
-        sae.ae{u-1} = nnsetup([size(u-1) size(u) size(u-1)]);
+        sae.ae{u-1} = ffnnsetup([size(u-1) size(u) size(u-1)]);
     end
 end
