@@ -23,11 +23,10 @@ if nn.plot == 1
     fhandle = figure();
 end
 
-m = size(train_x, 1);
+m = size(train_y, 1);
 
 batchsize = nn.batchsize;
 numepochs = nn.numepochs;
-
 numbatches = m / batchsize;
 
 assert(rem(numbatches,1)==0, 'numbatches must be an integer');
@@ -52,9 +51,13 @@ for i = 1 : numepochs
         nn = nnbp(nn);
         nn = nnapplygrads(nn);
         
-        L(n) = nn.L;
-        
+        L(n) = nn.L; % MSE for each batch
         n = n + 1;
+        % running average error
+        if isempty(nn.rL)
+                nn.rL(1) = nn.L;
+        end
+        nn.rL(end + 1) = 0.99 * nn.rL(end) + 0.01 * nn.L;
     end
     
     t = toc;
