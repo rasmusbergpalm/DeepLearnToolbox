@@ -37,23 +37,24 @@ function nn = nnff(nn, x, y)
         %Add the bias term
         nn.a{i} = [ones(m,1) nn.a{i}];
     end
+    tmp = nn.a{n - 1} * nn.W{n - 1}';
     switch nn.output 
         case 'sigm'
-            nn.a{n} = sigm(nn.a{n - 1} * nn.W{n - 1}');
+            nn.a{n} = sigm(tmp);
         case 'linear'
-            nn.a{n} = nn.a{n - 1} * nn.W{n - 1}';
+            nn.a{n} = tmp;
         case 'softmax'
-            nn.a{n} = nn.a{n - 1} * nn.W{n - 1}';
+            nn.a{n} = tmp;
             nn.a{n} = exp(bsxfun(@minus, nn.a{n}, max(nn.a{n},[],2)));
             nn.a{n} = bsxfun(@rdivide, nn.a{n}, sum(nn.a{n}, 2)); 
     end
 
     %error and loss
-    nn.e = y - nn.a{n};
+    nn.e = nn.a{n} - y;
     
     switch nn.output
         case {'sigm', 'linear'}
-            nn.L = 1/2 * sum(sum(nn.e .^ 2)) / m; 
+            nn.L = loss_mse(nn.e);
         case 'softmax'
             nn.L = -sum(sum(y .* log(nn.a{n}))) / m;
     end
