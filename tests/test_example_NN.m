@@ -16,7 +16,7 @@ nn = nnsetup([784 100 10]);
 opts.numepochs =  1;   %  Number of full sweeps through data
 opts.batchsize = 100;  %  Take a mean gradient step over this many samples
 nn.momentum = 0;
-nn.dropoutFraction = 0;
+nn.dropout = 0;
 nn.weightPenaltyL2 = 0;
 [nn, L] = nntrain(nn, train_x, train_y, opts);
 
@@ -52,7 +52,7 @@ assert(er < 0.1, 'Too big error');
 rng(0);
 nn = nnsetup([784 100 10]);
 
-nn.dropoutFraction = 0.5;   %  Dropout fraction 
+nn.dropout = 0.5;   %  Dropout fraction 
 opts.numepochs =  5;        %  Number of full sweeps through data
 opts.batchsize = 100;       %  Take a mean gradient step over this many samples
 

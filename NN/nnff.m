@@ -20,11 +20,11 @@ function nn = nnff(nn, x, y)
         end
         
         %dropout
-        if(nn.dropoutFraction > 0)
+        if(nn.dropout > 0)
             if(nn.testing)
-                nn.a{i} = nn.a{i}.*(1 - nn.dropoutFraction);
+                nn.a{i} = nn.a{i}.*nn.dropout;
             else
-                nn.dropOutMask{i} = (rand(size(nn.a{i}))>nn.dropoutFraction);
+                nn.dropOutMask{i} = (rand(size(nn.a{i}))<nn.dropout);
                 nn.a{i} = nn.a{i}.*nn.dropOutMask{i};
             end
         end

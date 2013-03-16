@@ -19,7 +19,7 @@ function nn = nnsetup(architecture)
     nn.nonSparsityPenalty               = 0;            %  Non sparsity penalty
     nn.sparsityTarget                   = 0.05;         %  Sparsity target
     nn.inputZeroMaskedFraction          = 0;            %  Used for Denoising AutoEncoders
-    nn.dropoutFraction                  = 0.5;          %  Dropout level (http://www.cs.toronto.edu/~hinton/absps/dropout.pdf)
+    nn.dropout                          = 0.5;          %  Dropout level (http://www.cs.toronto.edu/~hinton/absps/dropout.pdf),0~-0.5, needs time to settle,percantage(0==off, 0.6==60% neur dropped out)
 % other
     %nn.W{i}    weights for each layer
     %nn.vW{i}   weights with momentum

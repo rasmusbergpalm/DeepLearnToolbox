@@ -31,7 +31,7 @@ function nn = nnbp(nn)
             d{i} = (d{i + 1}(:,2:end) * nn.W{i} + sparsityError) .* d_act;
         end
         
-        if(nn.dropoutFraction>0)
+        if(nn.dropout>0)
             d{i} = d{i} .* [ones(size(d{i},1),1) nn.dropOutMask{i}];
         end
 
