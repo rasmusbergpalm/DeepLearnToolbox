@@ -30,7 +30,7 @@ if i > 1 %dont plot first point, its only a point
         plot(plot_x,plot_ye);
         xlabel('Number of epochs'); ylabel('Error');title('Error');
         legend(p1, M,'Location','NorthEast');
-        set(p1, 'Xlim',[0,opts.numepochs + 1])
+        set(p1, 'Xlim',[0,nn.numepochs + 1])
         
         if i ==2 % speeds up plotting by factor of ~2
             set(gca,'LegendColorbarListeners',[]);
@@ -44,7 +44,7 @@ if i > 1 %dont plot first point, its only a point
         xlabel('Number of epochs'); ylabel('Misclassification rate');
         title('Misclassification rate')
         legend(p2, M,'Location','NorthEast');
-        set(p2, 'Xlim',[0,opts.numepochs + 1])
+        set(p2, 'Xlim',[0,nn.numepochs + 1])
     end
     drawnow;
 end
