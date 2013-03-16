@@ -1,4 +1,7 @@
 function net = cnnff(net, x)
+%% CNNFF do feed-forward propagation on a CNN
+% x ..data [ ] 
+
     n = numel(net.layers);
     net.layers{1}.a{1} = x;
     inputmaps = 1;

@@ -3,7 +3,7 @@ function net = cnnsetup(net, x, y)
 % good for img recognition, data x, labels y
 % x ..[width height num_samples]
 
-net = nnsetup(); % always call constructor first 
+net = nnsetup(net); % always call constructor first 
 
     net.type = 'cnn'; 
     inputmaps = 1;
