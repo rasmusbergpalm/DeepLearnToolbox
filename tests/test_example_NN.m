@@ -13,7 +13,7 @@ opts=[];
 
 %% ex1 vanilla neural net
 rng(0);
-nn = nnsetup([784 100 10]);
+nn = ffnnsetup([784 100 10]);
 nn.numepochs =  1;   %  Number of full sweeps through data
 nn.batchsize = 100;  %  Take a mean gradient step over this many samples
 nn.momentum = 0;
@@ -37,7 +37,7 @@ assert(predicted == 1,'Prediction is wrong');
 
 %% ex2 neural net with L2 weight decay
 rng(0);
-nn = nnsetup([784 100 10]);
+nn = ffnnsetup([784 100 10]);
 nn.weightPenaltyL2 = 1e-4;  %  L2 weight decay
 nn = nntrain(nn, train_x, train_y, opts);
 [er, bad] = nntest(nn, test_x, test_y);
@@ -45,7 +45,7 @@ assert(er < 0.1, 'Too big error');
 
 %% ex3 neural net with dropout
 rng(0);
-nn = nnsetup([784 100 10]);
+nn = ffnnsetup([784 100 10]);
 nn.dropout = 0.5;   %  Dropout fraction 
 nn = nntrain(nn, train_x, train_y, opts);
 [er, bad] = nntest(nn, test_x, test_y);
@@ -53,9 +53,9 @@ assert(er < 0.1, 'Too big error');
 
 %% ex4 neural net with sigmoid activation function
 rng(0);
-nn = nnsetup([784 100 10]);
+nn = ffnnsetup([784 100 10]);
 nn.activation_function = 'sigm';    %  Sigmoid activation function
-nn.learningRate = 1;                %  Sigm require a lower learning rate
+nn.alpha = 1;                %  Sigm require a lower learning rate
 nn.numepochs =  1;                %  Number of full sweeps through data
 nn = nntrain(nn, train_x, train_y, opts);
 [er, bad] = nntest(nn, test_x, test_y);
@@ -63,7 +63,7 @@ assert(er < 0.3, 'Too big error');
 
 %% ex5 plotting functionality
 rng(0);
-nn = nnsetup([784 20 10]);
+nn = ffnnsetup([784 20 10]);
 nn.output              = 'softmax';    %  use softmax output
 nn.batchsize         = 1000;         %  Take a mean gradient step over this many samples
 nn.plot              = 1;            %  enable plotting
@@ -81,7 +81,7 @@ vy   = train_y(1:10000,:);
 ty = train_y(10001:end,:);
 
 rng(0);
-nn                      = nnsetup([784 20 10]);     
+nn                      = ffnnsetup([784 20 10]);     
 nn.output               = 'softmax';                   %  use softmax output
 nn.batchsize          = 1000;                        %  Take a mean gradient step over this many samples
 nn.plot               = 1;                           %  enable plotting

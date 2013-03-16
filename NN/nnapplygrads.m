@@ -10,7 +10,7 @@ function nn = nnapplygrads(nn)
             dW = nn.dW{i};
         end
         
-        dW = nn.learningRate * dW;
+        dW = nn.alpha * dW;
         
         if(nn.momentum>0)
             nn.vW{i} = nn.momentum*nn.vW{i} + dW;
