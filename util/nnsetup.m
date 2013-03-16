@@ -1,4 +1,4 @@
-function nn = nnsetup()
+function nn = nnsetup(nn)
 %% NNSETUP abstract setup method, set defaults here, 
 % always call specific (cnnsetup,..) method, call thisone in your specific
 % *setup method
@@ -11,7 +11,7 @@ function nn = nnsetup()
     nn.plot                             = 1;            % display training progress
 % learning (convergence speed)
     nn.activation_function              = 'tanh_opt';   %  Activation functions of hidden layers: 'sigm' (sigmoid) or 'tanh_opt' (optimal tanh).
-    nn.learningRate                     = 2;            %  learning rate Note: typically needs to be lower when using 'sigm' activation function and non-normalized inputs.
+    nn.aplha                     = 2;            %  learning rate Note: typically needs to be lower when using 'sigm' activation function and non-normalized inputs.
     nn.momentum                         = 0.2;          %  Momentum, faster conv, better stability, rec. values 0~0.3
     nn.scaling_learningRate             = 0.99;         %  Scaling factor for the learning rate (each epoch), l.r. decline, (0.99^100=0.36)
 % generalization (stability)  
