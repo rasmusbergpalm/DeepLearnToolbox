@@ -5,6 +5,7 @@ function net = cnnsetup(net, x, y)
 
 net = nnsetup(); % always call constructor first 
 
+    net.type = 'cnn'; 
     inputmaps = 1;
     mapsize = size(squeeze(x(:, :, 1)));
 

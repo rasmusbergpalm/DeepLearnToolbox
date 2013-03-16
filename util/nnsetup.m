@@ -21,6 +21,7 @@ function nn = nnsetup()
     nn.inputZeroMaskedFraction          = 0;            %  Used for Denoising AutoEncoders
     nn.dropout                          = 0.5;          %  Dropout level (http://www.cs.toronto.edu/~hinton/absps/dropout.pdf),0~-0.5, needs time to settle,percantage(0==off, 0.6==60% neur dropped out)
 % other
+    %nn.type    specific NN class used {'cnn','ffnn','dbn','sae','cae',...}
     %nn.W{i}    weights for each layer
     %nn.vW{i}   weights with momentum
     %nn.dW{i}   derivative of W

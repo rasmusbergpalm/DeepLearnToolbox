@@ -4,7 +4,7 @@ function nn = ffnnsetup(architecture)
 % layers, architecture being a n x 1 vector of layer sizes e.g. [784 100 10]
 
 nn = nnsetup(); % always call constructor first 
-
+    nn.type = 'ffnn'; 
     nn.size   = architecture;   % architecture being a n x 1 vector of layer sizes e.g. [784 100 10]
     nn.n      = numel(nn.size); % number of layers
 
