@@ -50,7 +50,7 @@ function nn = nnff(nn, x, y)
     end
 
     %error and loss
-    nn.e = nn.a{n} - y;
+    nn.e = y - nn.a{n}; %! y - nn.a  and nn.a - y does matter! im surprised
     
     switch nn.output
         case {'sigm', 'linear'}
