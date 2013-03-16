@@ -15,11 +15,14 @@ rng(0);
 nn = nnsetup([784 100 10]);
 opts.numepochs =  1;   %  Number of full sweeps through data
 opts.batchsize = 100;  %  Take a mean gradient step over this many samples
+nn.momentum = 0;
+nn.dropoutFraction = 0;
+nn.weightPenaltyL2 = 0;
 [nn, L] = nntrain(nn, train_x, train_y, opts);
 
 [er, bad] = nntest(nn, test_x, test_y);
 
-assert(er < 0.08, 'Too big error');
+assert(er < 0.1, 'Too big error');
 
 % Make an artificial one and verify that we can predict it
 x = zeros(1,28,28);
@@ -27,14 +30,16 @@ x(:, 14:15, 6:22) = 1;
 x = reshape(x,1,28^2);
 figure; visualize(x');
 predicted = nnpredict(nn,x)-1;
+title(['NN prediction: 1 == ',num2str(predicted)]);
 
-assert(predicted == 1);
+assert(predicted == 1,'Prediction is wrong');
+
 %% ex2 neural net with L2 weight decay
 rng(0);
 nn = nnsetup([784 100 10]);
 
 nn.weightPenaltyL2 = 1e-4;  %  L2 weight decay
-opts.numepochs =  1;        %  Number of full sweeps through data
+opts.numepochs =  5;        %  Number of full sweeps through data
 opts.batchsize = 100;       %  Take a mean gradient step over this many samples
 
 nn = nntrain(nn, train_x, train_y, opts);
@@ -48,7 +53,7 @@ rng(0);
 nn = nnsetup([784 100 10]);
 
 nn.dropoutFraction = 0.5;   %  Dropout fraction 
-opts.numepochs =  1;        %  Number of full sweeps through data
+opts.numepochs =  5;        %  Number of full sweeps through data
 opts.batchsize = 100;       %  Take a mean gradient step over this many samples
 
 nn = nntrain(nn, train_x, train_y, opts);
@@ -68,7 +73,7 @@ opts.batchsize = 100;               %  Take a mean gradient step over this many 
 nn = nntrain(nn, train_x, train_y, opts);
 
 [er, bad] = nntest(nn, test_x, test_y);
-assert(er < 0.1, 'Too big error');
+assert(er < 0.3, 'Too big error');
 
 %% ex5 plotting functionality
 rng(0);
