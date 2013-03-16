@@ -1,10 +1,13 @@
 function dbn = dbntrain(dbn, x, opts)
-    n = numel(dbn.rbm);
+%% DBNTRAIN train deep belief network
+% fast (unsupervised) pre-training, layer-by-layer
+% later unfold to NN
+% train RBM:
 
-    dbn.rbm{1} = rbmtrain(dbn.rbm{1}, x, opts);
+    n = numel(dbn.rbm);
+    dbn.rbm{1} = rbmtrain(dbn.rbm{1}, x, dbn);
     for i = 2 : n
         x = rbmup(dbn.rbm{i - 1}, x);
-        dbn.rbm{i} = rbmtrain(dbn.rbm{i}, x, opts);
+        dbn.rbm{i} = rbmtrain(dbn.rbm{i}, x, dbn);
     end
-
 end
