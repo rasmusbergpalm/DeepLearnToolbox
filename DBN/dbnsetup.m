@@ -1,4 +1,10 @@
 function dbn = dbnsetup(dbn, x, opts)
+%% DBNSETUP create deep belief NN,
+% it's a deep NN that is pretrained fast
+% x .. data [ TODO dimensions]
+
+dbn = nnsetup(); % always call constructor first 
+
     n = size(x, 2);
     dbn.sizes = [n, dbn.sizes];
 

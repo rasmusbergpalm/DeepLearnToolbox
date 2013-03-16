@@ -1,4 +1,10 @@
 function net = cnnsetup(net, x, y)
+%% CNNSETUP create convolutional neural net
+% good for img recognition, data x, labels y
+% x ..[width height num_samples]
+
+net = nnsetup(); % always call constructor first 
+
     inputmaps = 1;
     mapsize = size(squeeze(x(:, :, 1)));
 
