@@ -9,6 +9,7 @@ test_y  = double(test_y);
 % normalize
 [train_x, mu, sigma] = zscore(train_x);
 test_x = normalize(test_x, mu, sigma);
+opts=[];
 
 %% ex1 vanilla neural net
 rng(0);
@@ -18,7 +19,6 @@ nn.batchsize = 100;  %  Take a mean gradient step over this many samples
 nn.momentum = 0;
 nn.dropout = 0;
 nn.weightPenaltyL2 = 0;
-opts=[];
 [nn, L] = nntrain(nn, train_x, train_y, opts);
 
 [er, bad] = nntest(nn, test_x, test_y);
@@ -66,7 +66,7 @@ rng(0);
 nn = nnsetup([784 20 10]);
 nn.output              = 'softmax';    %  use softmax output
 nn.batchsize         = 1000;         %  Take a mean gradient step over this many samples
-opts.plot              = 1;            %  enable plotting
+nn.plot              = 1;            %  enable plotting
 
 nn = nntrain(nn, train_x, train_y, opts);
 
@@ -84,7 +84,7 @@ rng(0);
 nn                      = nnsetup([784 20 10]);     
 nn.output               = 'softmax';                   %  use softmax output
 nn.batchsize          = 1000;                        %  Take a mean gradient step over this many samples
-opts.plot               = 1;                           %  enable plotting
+nn.plot               = 1;                           %  enable plotting
 nn = nntrain(nn, tx, ty, opts, vx, vy);                %  nntrain takes validation set as last two arguments (optionally)
 
 [er, bad] = nntest(nn, test_x, test_y);

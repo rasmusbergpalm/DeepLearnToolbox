@@ -19,7 +19,7 @@ if nargin == 6
 end
 
 fhandle = [];
-if isfield(opts,'plot') && opts.plot == 1
+if nn.plot == 1
     fhandle = figure();
 end
 
