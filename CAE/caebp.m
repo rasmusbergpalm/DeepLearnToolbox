@@ -16,7 +16,7 @@ function cae = caebp(cae, y)
     for j = 1 : numel(cae.a)   %  calc activation deltas
         z = 0;
         for i = 1 : numel(cae.o)
-             z = z + convn(cae.od{i}, flipall(cae.ok{i}{j}), 'full');
+             z = z + convn(cae.od{i}, cae.ok{i}{j}, 'full');
         end
         cae.ad{j} = cae.a{j} .* (1 - cae.a{j}) .* z;
     end
@@ -27,7 +27,7 @@ function cae = caebp(cae, y)
         cae.db{j} = sum(cae.ad{j}(:)) / ns;
         for i = 1 : numel(cae.o)
             cae.dok{i}{j} = convn(flipall(cae.a{j}), cae.od{i}, 'valid') / ns;
-            cae.dik{i}{j} = convn(cae.ad{j}, flipall(cae.i{i}), 'valid') / ns;
+            cae.dik{i}{j} = flipall(convn(cae.ad{j}, flipall(cae.i{i}), 'valid')) / ns;
         end
     end
 
