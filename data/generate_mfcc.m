@@ -15,10 +15,10 @@ data = zeros(1,26);
 
 for i=1:size(s,2)
     %at each step fetch a file from the corpus
+	currfile = list(s(i) + 1: e(i) - 1);
 	mkdir temp;
-	currfile = list(s(1): e(1))(2:end-1);
 	urlwrite(strcat(en_endpoint, currfile), strcat("./temp/", currfile));
-	
+ 	
     read_size = 0;
 	%Unzip the mfc files to temp dir and add them to the dataset.
 	%TODO: only working in Linux.
@@ -26,7 +26,7 @@ for i=1:size(s,2)
 	cd temp; untar(currfile); cd(currfile(1:end-4)); cd mfc;
 	mfcs = ls("*.mfc");
 	for j=1:size(mfcs,1)
-	    [d,fp,dt,tc,t]=readhtk(mfcs(j, :));
+	    [d,fp,dt,tc,t]=readhtk(strtrim(mfcs(j, :)));
 		%check if this file contains mfccs.
 		if dt!=6 
 		    continue 
@@ -35,8 +35,8 @@ for i=1:size(s,2)
 			data = [data; d];
 		end
 	end
-	cd("../../..");
-	rmdir("./temp/");
+	cd ../../..
+	rmdir("./temp/", "s");
 end
 read_size
 save filename data
