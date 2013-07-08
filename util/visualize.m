@@ -43,5 +43,9 @@ end
 if nargout==1
     r=a;
 else
-    imshow(a, [mm(1) mm(2)]);
+
+    imagesc(a, [mm(1) mm(2)]);
+    axis equal
+    colormap gray
+
 end
