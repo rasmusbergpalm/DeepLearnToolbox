@@ -1,4 +1,9 @@
 function scae = scaesetup(cae, x, opts)
+%% SCAESETUP initialize SCAE net
+% TODO
+scae = nnsetup(); % always call constructor first 
+scae.type = 'scae';
+
     x = x{1};
     for l = 1 : numel(cae)
         cae = cae{l};

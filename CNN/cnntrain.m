@@ -1,17 +1,19 @@
 function net = cnntrain(net, x, y, opts)
+%% CNNTRAIN train CNN
+% x
+% y
+
     m = size(x, 3);
-    numbatches = m / opts.batchsize;
-    if rem(numbatches, 1) ~= 0
-        error('numbatches not integer');
-    end
-    net.rL = [];
-    for i = 1 : opts.numepochs
-        disp(['epoch ' num2str(i) '/' num2str(opts.numepochs)]);
+    numbatches = m / net.batchsize;
+    assert(rem(numbatches, 1) == 0, 'numbatches must be an integer');
+    net.rL = []; % running loss
+    for i = 1 : net.numepochs
+        disp(['epoch ' num2str(i) '/' num2str(net.numepochs)]);
         tic;
         kk = randperm(m);
         for l = 1 : numbatches
-            batch_x = x(:, :, kk((l - 1) * opts.batchsize + 1 : l * opts.batchsize));
-            batch_y = y(:,    kk((l - 1) * opts.batchsize + 1 : l * opts.batchsize));
+            batch_x = x(:, :, kk((l - 1) * net.batchsize + 1 : l * net.batchsize));
+            batch_y = y(:,    kk((l - 1) * net.batchsize + 1 : l * net.batchsize));
 
             net = cnnff(net, batch_x);
             net = cnnbp(net, batch_y);
@@ -23,5 +25,4 @@ function net = cnntrain(net, x, y, opts)
         end
         toc;
     end
-    
 end

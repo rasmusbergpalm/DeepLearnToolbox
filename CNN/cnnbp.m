@@ -1,10 +1,13 @@
 function net = cnnbp(net, y)
+%% CNNBP backpropagation on CNN
+% y ..labels [TODO dim]
+
     n = numel(net.layers);
 
     %  error
     net.e = net.o - y;
     %  loss function
-    net.L = 1/2* sum(net.e(:) .^ 2) / size(net.e, 2);
+    net.L = loss_mse(net.e); %1/2* sum(net.e(:) .^ 2) / size(net.e, 2);
 
     %%  backprop deltas
     net.od = net.e .* (net.o .* (1 - net.o));   %  output delta

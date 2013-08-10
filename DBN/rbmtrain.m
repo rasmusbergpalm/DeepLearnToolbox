@@ -1,4 +1,8 @@
 function rbm = rbmtrain(rbm, x, opts)
+%% RBMTRAIN TODO - details of RBM
+% internal fn
+% train RBM layer (used in DBN)
+
     assert(isfloat(x), 'x must be a float');
     m = size(x, 1);
     numbatches = m / opts.batchsize;
