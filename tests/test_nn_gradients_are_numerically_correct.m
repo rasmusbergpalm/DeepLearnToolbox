@@ -17,7 +17,7 @@ for output = {'sigm', 'linear', 'softmax'}
             nn.output = output{1};
             nn.dropoutFraction = dropoutFraction{1};
 
-            rng(0)
+            rand('state',0)
             nn = nnff(nn, batch_x, y);
             nn = nnbp(nn);
             nnchecknumgrad(nn, batch_x, y);
