@@ -5,7 +5,11 @@ function nn = nnapplygrads(nn)
     
     for i = 1 : (nn.n - 1)
         if(nn.weightPenaltyL2>0)
-            dW = nn.dW{i} + nn.weightPenaltyL2 * nn.W{i};
+            if nn.biasPenaltyL2
+                dW = nn.dW{i} + nn.weightPenaltyL2 * nn.W{i};
+            else
+                dW = nn.dW{i} + nn.weightPenaltyL2 * [zeros(size(nn.W{i},1),1) nn.W{i}(:,2:end)];
+            end
         else
             dW = nn.dW{i};
         end
