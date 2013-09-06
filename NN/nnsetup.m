@@ -11,7 +11,6 @@ function nn = nnsetup(architecture)
     nn.momentum                         = 0.5;          %  Momentum
     nn.scaling_learningRate             = 1;            %  Scaling factor for the learning rate (each epoch)
     nn.weightPenaltyL2                  = 0;            %  L2 regularization
-    nn.biasPenaltyL2                    = true;         %  Bias L2 regularization: choose whether to include bias terms for L2 regularization
     nn.nonSparsityPenalty               = 0;            %  Non sparsity penalty
     nn.sparsityTarget                   = 0.05;         %  Sparsity target
     nn.inputZeroMaskedFraction          = 0;            %  Used for Denoising AutoEncoders
