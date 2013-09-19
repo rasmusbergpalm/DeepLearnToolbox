@@ -23,9 +23,23 @@ function net = cnnbp(net, y)
     for l = (n - 1) : -1 : 1
         if strcmp(net.layers{l}.type, 'c')
             for j = 1 : numel(net.layers{l}.a)
-                net.layers{l}.d{j} = net.layers{l}.a{j} .* (1 - net.layers{l}.a{j}) .* (expand(net.layers{l + 1}.d{j}, [net.layers{l + 1}.scale net.layers{l + 1}.scale 1]) / net.layers{l + 1}.scale ^ 2);
+                net.layers{l}.d{j} = net.layers{l}.a{j} .* (1 - net.layers{l}.a{j}) .* ...
+                    (expand(net.layers{l + 1}.d{j},[net.layers{l + 1}.scale net.layers{l + 1}.scale 1]) / net.layers{l + 1}.scale ^ 2);
+            end
+        elseif strcmp(net.layers{l}.type, 't')
+            for j = 1 : numel(net.layers{l}.a)
+                 net.layers{l}.d{j} = (1 - tanh(net.layers{l}.a{j}).^2) .* ...
+                    (expand(net.layers{l + 1}.d{j},[net.layers{l + 1}.scale net.layers{l + 1}.scale 1]) / net.layers{l + 1}.scale ^ 2);
             end
         elseif strcmp(net.layers{l}.type, 's')
+            for i = 1 : numel(net.layers{l}.a)
+                z = zeros(size(net.layers{l}.a{1}));
+                for j = 1 : numel(net.layers{l + 1}.a)
+                     z = z + convn(net.layers{l + 1}.d{j}, rot180(net.layers{l + 1}.k{i}{j}), 'full');
+                end
+                net.layers{l}.d{i} = z;
+            end
+        elseif strcmp(net.layers{l}.type, 'm')
             for i = 1 : numel(net.layers{l}.a)
                 z = zeros(size(net.layers{l}.a{1}));
                 for j = 1 : numel(net.layers{l + 1}.a)
@@ -39,6 +53,13 @@ function net = cnnbp(net, y)
     %%  calc gradients
     for l = 2 : n
         if strcmp(net.layers{l}.type, 'c')
+            for j = 1 : numel(net.layers{l}.a)
+                for i = 1 : numel(net.layers{l - 1}.a)
+                    net.layers{l}.dk{i}{j} = convn(flipall(net.layers{l - 1}.a{i}), net.layers{l}.d{j}, 'valid') / size(net.layers{l}.d{j}, 3);
+                end
+                net.layers{l}.db{j} = sum(net.layers{l}.d{j}(:)) / size(net.layers{l}.d{j}, 3);
+            end
+        elseif strcmp(net.layers{l}.type, 't')
             for j = 1 : numel(net.layers{l}.a)
                 for i = 1 : numel(net.layers{l - 1}.a)
                     net.layers{l}.dk{i}{j} = convn(flipall(net.layers{l - 1}.a{i}), net.layers{l}.d{j}, 'valid') / size(net.layers{l}.d{j}, 3);

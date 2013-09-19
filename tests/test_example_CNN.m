@@ -1,5 +1,6 @@
-function test_example_CNN
-load mnist_uint8;
+clc;clear;
+load('../data/mnist_uint8');
+addpath(genpath('..'))
 
 train_x = double(reshape(train_x',28,28,60000))/255;
 test_x = double(reshape(test_x',28,28,10000))/255;
