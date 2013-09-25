@@ -67,7 +67,7 @@ errs =  zeros(1, params.maxepoch);
 fprintf('\rTraining Learning v_var Gaussian-Binary RBM %d-%d   epochs:%d r:%f',...
     d, params.nHidNodes, params.maxepoch, r);
 for epoch = 1:params.maxepoch
-  
+    tic;
     if rem(epoch, int32(params.maxepoch/20)) == 0 || epoch < 30
         fprintf('\repoch %d',epoch);
     end
@@ -164,11 +164,13 @@ for epoch = 1:params.maxepoch
         fstd = max(fstd, 0.005); %have a lower bound!        
         %%%%%%%%%%%%%%%% END OF UPDATES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%        
     end
-
+    time_consumed=toc;
+  
     if rem(epoch, int32(params.maxepoch/20)) == 0 || epoch < 30
         fprintf(1, ' p%1.2f  ',  ptot/nBatches );
         fprintf(1, ' error %6.2f  mm:%.2f ', errsum,  momentum);
         fprintf(1, 'vh_W min %2.4f   max %2.4f ', min(min(vhW)), max(max(vhW)));
+        fprintf(1, ' time: %d', time_consumed);
     end
     errs(epoch) = errsum;    
 end
