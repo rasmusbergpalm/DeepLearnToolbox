@@ -10,13 +10,15 @@ test_y = double(test_y');
 %% ex1 Train a 6c-2s-12c-2s Convolutional neural network 
 %will run 1 epoch in about 200 second and get around 11% error. 
 %With 100 epochs you'll get around 1.2% error
-rand('state',0)
+%rand('state',0)
 cnn.layers = {
     struct('type', 'i') %input layer
-    struct('type', 'c', 'outputmaps', 6, 'kernelsize', 5) %convolution layer
-    struct('type', 's', 'scale', 2) %sub sampling layer
-    struct('type', 'c', 'outputmaps', 12, 'kernelsize', 5) %convolution layer
-    struct('type', 's', 'scale', 2) %subsampling layer
+    struct('type', 't', 'outputmaps', 6, 'kernelsize', 5) %convolution layer
+    struct('type', 'm', 'scale', 2) %sub sampling layer
+    struct('type', 't', 'outputmaps', 12, 'kernelsize', 5) %convolution layer
+    struct('type', 'm', 'scale', 2) %subsampling layer
+    struct('type', 'c', 'outputmaps', 1, 'kernelsize', 4) %convolution layer
+    struct('type', 'c', 'outputmaps', 1, 'kernelsize', 1) %convolution layer
 };
 cnn = cnnsetup(cnn, train_x, train_y);
 

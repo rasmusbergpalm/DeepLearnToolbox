@@ -30,4 +30,4 @@ for i=1:numel(cae.ok{1});
     mm = cae.ok{1}{i}(1,:,:); 
     ff(i,:) = mm(:); 
 end; 
-figure;visualize(ff',1)
+figure;visualize(ff')

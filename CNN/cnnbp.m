@@ -25,10 +25,17 @@ function net = cnnbp(net, y)
     end
 
     for l = (n - 1) : -1 : 1
-        if strcmp(net.layers{l}.type, 'c')
-            for j = 1 : numel(net.layers{l}.a)
-                net.layers{l}.d{j} = net.layers{l}.a{j} .* (1 - net.layers{l}.a{j}) .* ...
-                    (expand(net.layers{l + 1}.d{j},[net.layers{l + 1}.scale net.layers{l + 1}.scale 1]) / net.layers{l + 1}.scale ^ 2);
+        if  strcmp(net.layers{l}.type, 'c') 
+            if l==(n-1) % l==(n-1) condition means the last two layers are sigm fully connnected
+                 for j = 1 : numel(net.layers{l}.a)
+                    net.layers{l}.d{j} = net.layers{l}.a{j} .* (1 - net.layers{l}.a{j}) .* ...
+                        (net.layers{l + 1}.d{j});
+                end
+            else
+                for j = 1 : numel(net.layers{l}.a)
+                    net.layers{l}.d{j} = net.layers{l}.a{j} .* (1 - net.layers{l}.a{j}) .* ...
+                        (expand(net.layers{l + 1}.d{j},[net.layers{l + 1}.scale net.layers{l + 1}.scale 1]) / net.layers{l + 1}.scale ^ 2);
+                end
             end
         elseif strcmp(net.layers{l}.type, 't')
             for j = 1 : numel(net.layers{l}.a)
