@@ -14,7 +14,7 @@ function rbm = rbmtrain(rbm, x, opts)
             
             v1 = batch;
             h1 = sigmrnd(repmat(rbm.c', opts.batchsize, 1) + v1 * rbm.W');
-            v2 = sigmrnd(repmat(rbm.b', opts.bgatchsize, 1) + h1 * rbm.W);
+            v2 = sigmrnd(repmat(rbm.b', opts.batchsize, 1) + h1 * rbm.W);
             h2 = sigmrnd(repmat(rbm.c', opts.batchsize, 1) + v2 * rbm.W');
 
             c1 = h1' * v1;
@@ -36,7 +36,7 @@ function rbm = rbmtrain(rbm, x, opts)
         
         time_consumed=toc;
         disp(['epoch ' num2str(i) '/' num2str(opts.numepochs)...
-            '. Average reconstruction error is: ' num2str(err / numbatches) 'time: ' num2str(time_consumed)]);
+            '. Average reconstruction error is: ' num2str(err / numbatches) ' time: ' num2str(time_consumed)]);
         
     end
 end
