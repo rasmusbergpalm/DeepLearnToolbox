@@ -17,6 +17,10 @@ function net = cnnbp(net, y)
         net.fvd = net.fvd .* (net.fv .* (1 - net.fv));
     end
 
+    
+    %% See the notes from http://deeplearning.stanford.edu/wiki/index.php/Exercise:Convolution_and_Pooling
+    % about why we need to flip it first (mainly becaue of matlab built in
+    % function)
     %reshape feature vector deltas into output map style
     sa = size(net.layers{n}.a{1});
     fvnum = sa(1) * sa(2);
