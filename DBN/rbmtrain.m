@@ -45,9 +45,9 @@ function rbm = rbmtrain(rbm, x, opts)
         
         currentError /= numbatches;
         if(runUntilThresholdIsReached)
-            disp(['epoch ' num2str(iterator) '. Average reconstruction currentErroror is: ' num2str(currentError)]);
+            disp(['epoch ' num2str(iterator) '. Average reconstruction error is: ' num2str(currentError)]);
         else
-            disp(['epoch ' num2str(iterator) '/' num2str(opts.numepochs)  '. Average reconstruction currentErroror is: ' num2str(currentError)]);
+            disp(['epoch ' num2str(iterator) '/' num2str(opts.numepochs)  '. Average reconstruction error is: ' num2str(currentError)]);
         endif
     until( runUntilThresholdIsReached && (oldError - currentError < opts.threshold) #Condition for running to threshold
                                   ||
