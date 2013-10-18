@@ -5,6 +5,7 @@ train_x = double(reshape(train_x',28,28,60000))/255;
 test_x = double(reshape(test_x',28,28,10000))/255;
 train_y = double(train_y');
 test_y = double(test_y');
+opts = initialiseOptions();
 
 %% ex1 Train a 6c-2s-12c-2s Convolutional neural network 
 %will run 1 epoch in about 200 second and get around 11% error. 

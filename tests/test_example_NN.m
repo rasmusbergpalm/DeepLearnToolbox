@@ -5,9 +5,14 @@ train_x = double(train_x) / 255;
 test_x  = double(test_x)  / 255;
 train_y = double(train_y);
 test_y  = double(test_y);
+opts = initialiseOptions();
 
 % normalize
-[train_x, mu, sigma] = zscore(train_x);
+#[train_x, mu, sigma] = zscore(train_x); -- Causes memory exhausted errors.
+mu = mean(train_x);
+sigma = max(std(train_x),eps);
+train_x -= repmat(mu,rows(train_x),1);
+train_x ./= repmat(sigma,rows(train_x),1);
 test_x = normalize(test_x, mu, sigma);
 
 %% ex1 vanilla neural net

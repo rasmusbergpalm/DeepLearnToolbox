@@ -3,7 +3,7 @@ function cae = caetrain(cae, x, opts)
     cae.rL = [];
     for m = 1 : opts.rounds
         tic;
-        disp([num2str(m) '/' num2str(opts.rounds) ' rounds']);
+        if(opts.verbosity >= 1) disp([num2str(m) '/' num2str(opts.rounds) ' rounds']);end#if
         i1 = randi(numel(x));
         l  = randi(size(x{i1}{1},1) - opts.batchsize - n + 1);
         x1{1} = double(x{i1}{1}(l : l + opts.batchsize - 1, :, :)) / 255;
@@ -32,7 +32,7 @@ function cae = caetrain(cae, x, opts)
 %             disp('Converged');
 %             break;
 %         end
-        toc;
+        if(opts.verbosity >= 1) toc; end#if
     end
 
 end

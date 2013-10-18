@@ -6,15 +6,15 @@ function cae = caeapplygrads(cae)
 %             cae.vok{i}{j} = cae.momentum * cae.vok{i}{j} + cae.alpha ./ (cae.sigma + cae.ddok{i}{j}) .* cae.dok{i}{j};
             cae.vik{i}{j} = cae.alpha * cae.dik{i}{j};
             cae.vok{i}{j} = cae.alpha * cae.dok{i}{j};
-            cae.sv = cae.sv + sum(cae.vik{i}{j}(:) .^ 2);
-            cae.sv = cae.sv + sum(cae.vok{i}{j}(:) .^ 2);
+            cae.sv = cae.sv + mysumsq(cae.vik{i}{j}(:));
+            cae.sv = cae.sv + mysumsq(cae.vok{i}{j}(:));
 
             cae.ik{i}{j} = cae.ik{i}{j} - cae.vik{i}{j};
             cae.ok{i}{j} = cae.ok{i}{j} - cae.vok{i}{j};
         end
 %         cae.vb{j} = cae.momentum * cae.vb{j} + cae.alpha / (cae.sigma + cae.ddb{j}) * cae.db{j};
         cae.vb{j} = cae.alpha * cae.db{j};
-        cae.sv = cae.sv + sum(cae.vb{j} .^ 2);
+        cae.sv = cae.sv + mysumsq(cae.vb{j});
 
         cae.b{j} = cae.b{j} - cae.vb{j};
     end
@@ -22,7 +22,7 @@ function cae = caeapplygrads(cae)
     for i = 1 : numel(cae.o)
 %         cae.vc{i} = cae.momentum * cae.vc{i} + cae.alpha / (cae.sigma + cae.ddc{i}) * cae.dc{i};
         cae.vc{i} = cae.alpha * cae.dc{i};
-        cae.sv = cae.sv + sum(cae.vc{i} .^ 2);
+        cae.sv = cae.sv + mysumsq(cae.vc{i});
 
         cae.c{i} = cae.c{i} - cae.vc{i};
     end

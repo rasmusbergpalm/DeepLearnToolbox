@@ -12,7 +12,7 @@ function nnchecknumgrad(nn, x, y)
                 nn_m = nnff(nn_m, x, y);
                 rand('state',0)
                 nn_p = nnff(nn_p, x, y);
-                dW = (nn_p.L - nn_m.L) / (2 * epsilon);
+                dW = (nn_p.lossPerBatch - nn_m.lossPerBatch) / (2 * epsilon);
                 e = abs(dW - nn.dW{l}(i, j));
                 
                 assert(e < er, 'numerical gradient checking failed');
