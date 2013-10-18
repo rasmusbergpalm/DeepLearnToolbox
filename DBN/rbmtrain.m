@@ -24,23 +24,23 @@ function rbm = rbmtrain(rbm, x, opts)
             hiddenActivationsAtEnd = hiddenActivationsAtBegin = sigmrnd(repmat(rbm.c', opts.batchsize, 1) + visibleActivationsAtBegin * rbm.W');
             
             for sampleStep = 1:opts.gibbsSamplingSteps
-                visibleActivationsAtEnd = sigmrnd(repmat(rbm.b', opts.batchsize, 1) + hiddenActivationsAtEnd * rbm.W);
-                hiddenActivationsAtEnd = sigmrnd(repmat(rbm.c', opts.batchsize, 1) + visibleActivationsAtEnd * rbm.W');
+                v_end = sigmrnd(repmat(rbm.b', opts.batchsize, 1) + hiddenActivationsAtEnd * rbm.W);
+                hiddenActivationsAtEnd = sigmrnd(repmat(rbm.c', opts.batchsize, 1) + v_end * rbm.W');
             end
 
             c1 = hiddenActivationsAtBegin' * visibleActivationsAtBegin;
-            c2 = hiddenActivationsAtEnd' * visibleActivationsAtEnd;
+            c2 = hiddenActivationsAtEnd' * v_end;
 
             #Calculate the changes to the parameters. Store them in order to compute a momentum term.
             rbm.vW = rbm.momentum * rbm.vW + rbm.alpha * (c1 - c2)     / opts.batchsize;
-            rbm.vb = rbm.momentum * rbm.vb + rbm.alpha * sum(visibleActivationsAtBegin - visibleActivationsAtEnd)' / opts.batchsize;
+            rbm.vb = rbm.momentum * rbm.vb + rbm.alpha * sum(visibleActivationsAtBegin - v_end)' / opts.batchsize;
             rbm.vc = rbm.momentum * rbm.vc + rbm.alpha * sum(hiddenActivationsAtBegin - hiddenActivationsAtEnd)' / opts.batchsize;
 
             rbm.W = rbm.W + rbm.vW;
             rbm.b = rbm.b + rbm.vb;
             rbm.c = rbm.c + rbm.vc;
 
-            currentError = currentError + sum(sum((visibleActivationsAtBegin - visibleActivationsAtEnd) .^ 2)) / opts.batchsize;
+            currentError = currentError + sum(sum((visibleActivationsAtBegin - v_end) .^ 2)) / opts.batchsize;
         end
         
         currentError /= numbatches;
