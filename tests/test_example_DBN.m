@@ -5,6 +5,7 @@ train_x = double(train_x) / 255;
 test_x  = double(test_x)  / 255;
 train_y = double(train_y);
 test_y  = double(test_y);
+opts = initialiseOptions();
 
 %%  ex1 train a 100 hidden unit RBM and visualize its weights
 rand('state',0)

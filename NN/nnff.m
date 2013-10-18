@@ -53,8 +53,8 @@ function nn = nnff(nn, x, y)
     
     switch nn.output
         case {'sigm', 'linear'}
-            nn.L = 1/2 * sum(sum(nn.e .^ 2)) / m; 
+            nn.lossPerBatch = 1/2 * sum(mysumsq(nn.e)) / m; 
         case 'softmax'
-            nn.L = -sum(sum(y .* log(nn.a{n}))) / m;
+            nn.lossPerBatch = -sum(sum(y .* log(nn.a{n}))) / m;
     end
 end

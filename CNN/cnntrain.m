@@ -6,7 +6,7 @@ function net = cnntrain(net, x, y, opts)
     end
     net.rL = [];
     for i = 1 : opts.numepochs
-        disp(['epoch ' num2str(i) '/' num2str(opts.numepochs)]);
+        if(opts.verbosity >= 1) disp(['epoch ' num2str(i) '/' num2str(opts.numepochs)]); end#if
         tic;
         kk = randperm(m);
         for l = 1 : numbatches
@@ -21,7 +21,7 @@ function net = cnntrain(net, x, y, opts)
             end
             net.rL(end + 1) = 0.99 * net.rL(end) + 0.01 * net.L;
         end
-        toc;
+        if(opts.verbosity >= 1) toc; end#if
     end
     
 end

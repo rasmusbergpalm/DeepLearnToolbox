@@ -26,7 +26,7 @@ function rbm = rbmtrain(rbm, x, opts)
             for sampleStep = 1:opts.gibbsSamplingSteps
                 visibleActivationsAtEnd = sigmrnd(repmat(rbm.b', opts.batchsize, 1) + hiddenActivationsAtEnd * rbm.W);
                 hiddenActivationsAtEnd = sigmrnd(repmat(rbm.c', opts.batchsize, 1) + visibleActivationsAtEnd * rbm.W');
-            end
+            end#for
 
             c1 = hiddenActivationsAtBegin' * visibleActivationsAtBegin;
             c2 = hiddenActivationsAtEnd' * visibleActivationsAtEnd;
@@ -40,15 +40,17 @@ function rbm = rbmtrain(rbm, x, opts)
             rbm.b = rbm.b + rbm.vb;
             rbm.c = rbm.c + rbm.vc;
 
-            currentError = currentError + sum(sum((visibleActivationsAtBegin - visibleActivationsAtEnd) .^ 2)) / opts.batchsize;
-        end
+            currentError = currentError + sum(mysumsq(visibleActivationsAtBegin - visibleActivationsAtEnd)) / opts.batchsize;
+        end#for
         
         currentError /= numbatches;
-        if(runUntilThresholdIsReached)
-            disp(['epoch ' num2str(iterator) '. Average reconstruction error is: ' num2str(currentError)]);
-        else
-            disp(['epoch ' num2str(iterator) '/' num2str(opts.numepochs)  '. Average reconstruction error is: ' num2str(currentError)]);
-        endif
+        if(opts.verbosity >= 1)
+            if(runUntilThresholdIsReached)
+                disp(['epoch ' num2str(iterator) '. Average reconstruction error is: ' num2str(currentError)]);
+            else
+                disp(['epoch ' num2str(iterator) '/' num2str(opts.numepochs)  '. Average reconstruction error is: ' num2str(currentError)]);
+            end#if
+        end#if
     until( runUntilThresholdIsReached && (oldError - currentError < opts.threshold) #Condition for running to threshold
                                   ||
           !runUntilThresholdIsReached && (iterator >= opts.numepochs)); #Condition for iterating
