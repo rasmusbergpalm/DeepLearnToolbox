@@ -57,11 +57,11 @@ Setup
 Known errors
 ------------------------------
 
-test_cnn_gradients_are_numerically_correct fails on Octave because of a bug in Octave's convn implementation. See http://savannah.gnu.org/bugs/?39314
+`test_cnn_gradients_are_numerically_correct` fails on Octave because of a bug in Octave's convn implementation. See http://savannah.gnu.org/bugs/?39314
 
-test_example_CNN fails in Octave for the same reason.
+`test_example_CNN` fails in Octave for the same reason.
 
-test_example_SAE fails in Octave for unknown reasons.
+`test_example_SAE` fails in Octave for unknown reasons.
 Example: Deep Belief Network
 ---------------------
 ```matlab
