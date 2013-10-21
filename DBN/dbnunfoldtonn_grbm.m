@@ -7,7 +7,11 @@ function nn = dbnunfoldtonn_grbm(dbn, outputsize,grbm);
     else
         size = [dbn.sizes];
     end
+<<<<<<< HEAD
     nn = nnsetup_grbm(size);
+=======
+    nn = nnsetup(size);
+>>>>>>> d85b1462bead21ab809497f476b5ae66f547d45f
     
     for i=1
         nn.W{i} = grbm.vhW';
