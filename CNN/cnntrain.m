@@ -45,7 +45,7 @@ function net = cnntrain(net, x, y, opts, varargin)
                break;
             end        
         end
-    fprintf('1 epoch uses %d second\n',toc);
+    fprintf('1 epoch uses %d second, softmax loss is: %f \n',toc,net.rL(end));
     end
     
 end

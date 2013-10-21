@@ -1,12 +1,5 @@
-function [nn, L]  = nntrain_grbm(nn, train_x, train_y, opts, val_x, val_y)
-%NNTRAIN trains a neural net
-% [nn, L] = nnff(nn, x, y, opts) trains the neural network nn with input x and
-% output y for opts.numepochs epochs, with minibatches of size
-% opts.batchsize. Returns a neural network nn with updated activations,
-% errors, weights and biases, (nn.a, nn.e, nn.W, nn.b) and L, the sum
-% squared error for each training minibatch.
+function [nn, L]  = nntrain_multimodal(nn, train_x, train_y, opts, val_x, val_y)
 
-assert(isfloat(train_x), 'train_x must be a float');
 assert(nargin == 4 || nargin == 6,'number ofinput arguments must be 4 or 6')
 
 loss.train.e               = [];
@@ -23,7 +16,7 @@ if isfield(opts,'plot') && opts.plot == 1
     fhandle = figure();
 end
 
-m = size(train_x, 1);
+m = size(train_x{1}, 1);
 
 batchsize = opts.batchsize;
 numepochs = opts.numepochs;
@@ -39,18 +32,16 @@ for i = 1 : numepochs
     
     kk = randperm(m);
     for l = 1 : numbatches
-        batch_x = train_x(kk((l - 1) * batchsize + 1 : l * batchsize), :);
-        
-        %Add noise to input (for use in denoising autoencoder)
-        if(nn.inputZeroMaskedFraction ~= 0)
-            batch_x = batch_x.*(rand(size(batch_x))>nn.inputZeroMaskedFraction);
+        for mm=1:length(nn.net)
+            batch_x{mm} = train_x{mm}(kk((l - 1) * batchsize + 1 : l * batchsize), :);
         end
+                
         
         batch_y = train_y(kk((l - 1) * batchsize + 1 : l * batchsize), :);
         
-        nn = nnff_grbm(nn, batch_x, batch_y);
-        nn = nnbp_grbm(nn);
-        nn = nnapplygrads(nn,i,opts);
+        nn = nnff_mm(nn, batch_x, batch_y);
+        nn = nnbp_mm(nn);
+        nn = nnapplygrads_mm(nn);
         
         L(n) = nn.L;
         

@@ -20,7 +20,7 @@ function nn = nnbp_grbm(nn)
     end
     
     for i=2
-        d{i} = (d{i + 1} * nn.W{i}' + sparsityError);        
+        d{i} = (d{i + 1} * nn.W{i} + sparsityError);        
     end
 
     for i = 1 : (n - 1)

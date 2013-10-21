@@ -1,4 +1,4 @@
-function nn = nnapplygrads(nn)
+function nn = nnapplygrads(nn,epoch_num,opts)
 %NNAPPLYGRADS updates weights and biases with calculated gradients
 % nn = nnapplygrads(nn) returns an neural network structure with updated
 % weights and biases
@@ -13,7 +13,8 @@ function nn = nnapplygrads(nn)
         dW = nn.learningRate * dW;
         
         if(nn.momentum>0)
-            nn.vW{i} = nn.momentum*nn.vW{i} + dW;
+            momentum=opts.momentum(1)+(opts.momentum(2)-opts.momentum(1))*epoch_num/ opts.numepochs;
+            nn.vW{i} = momentum*nn.vW{i} + dW;
             dW = nn.vW{i};
         end
             

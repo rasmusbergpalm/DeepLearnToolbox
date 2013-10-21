@@ -40,11 +40,11 @@ function nn = nnff_grbm(nn, x, y)
     end
 
     %error and loss
-    nn.e = y - nn.a{n};
+    nn.e = double(y) - nn.a{n};
     switch nn.output
         case {'sigm','linear'}
             nn.L = 1/2 * sum(sum(nn.e .^ 2)) / m; 
         case 'softmax'
-            nn.L = -sum(sum(y .* log(nn.a{n}))) / m;
+            nn.L = -sum(sum(double(y) .* log(nn.a{n}))) / m;
     end
 end

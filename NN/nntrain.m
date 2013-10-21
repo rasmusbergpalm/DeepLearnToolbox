@@ -50,7 +50,7 @@ for i = 1 : numepochs
         
         nn = nnff(nn, batch_x, batch_y);
         nn = nnbp(nn);
-        nn = nnapplygrads(nn);
+        nn = nnapplygrads(nn,i,opts);
         
         L(n) = nn.L;
         
