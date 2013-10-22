@@ -61,3 +61,19 @@ Known errors
 `test_example_CNN` fails in Octave for the same reason.
 
 `test_example_SAE` fails in Octave for unknown reasons.
+
+Contributing
+------------------------------
+Fork repository
+
+create a new branch, e.g. `checkout -b my-stuff`
+
+commit and push your changes to that branch
+
+make sure that the test works (!) (see known errors)
+
+create a pull request
+
+I'll accept your changes
+
+I'll not accept pull requests introducing multiple independent changes at once, or pull requests that introduce new capabilities without accompanying tests.
