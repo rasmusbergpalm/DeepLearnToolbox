@@ -65,17 +65,12 @@ Known errors
 
 Contributing
 ------------------------------
-Fork repository
-
-create a new branch, e.g. `checkout -b my-stuff`
-
-commit and push your changes to that branch
-
-make sure that the test works (!) (see known errors)
-
-create a pull request
-
-I'll accept your changes
+1. Fork repository
+2. Create a new branch, e.g. `checkout -b my-stuff`
+3. Commit and push your changes to that branch
+4. Make sure that the test works (!) (see known errors)
+5. Create a pull request
+6. I accept your pull request
 
 I'll not accept pull requests introducing multiple independent changes at once, or pull requests that introduce new capabilities without accompanying tests.
 Example: Deep Belief Network
