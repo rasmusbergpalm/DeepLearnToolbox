@@ -3,12 +3,12 @@ function dbn = dbnsetup(dbn, x, opts)
     dbn.sizes = [n, dbn.sizes];
 
     for u = 1 : numel(dbn.sizes) - 1
-        #Initialise the parameters of the DBN.
-        #W is the a weight matrix.
-        #b is the bias term of the lower layer.
-        #c is the bias term of the upper layer.
-        #v[Wbc] is the current change to be applied. It is needed to be able to
-        #calculate a momentum term.
+        %Initialise the parameters of the DBN.
+        %W is the a weight matrix.
+        %b is the bias term of the lower layer.
+        %c is the bias term of the upper layer.
+        %v[Wbc] is the current change to be applied. It is needed to be able to
+        %calculate a momentum term.
         dbn.rbm{u}.alpha    = opts.alpha;
         dbn.rbm{u}.momentum = opts.momentum;
 

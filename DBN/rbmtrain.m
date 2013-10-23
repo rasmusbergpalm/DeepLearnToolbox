@@ -5,14 +5,15 @@ function rbm = rbmtrain(rbm, x, opts)
     
     assert(rem(numbatches, 1) == 0, 'numbatches not integer');
 
-	#checking and initialising some options
+	%checking and initialising some options
     runUntilThresholdIsReached = opts.numepochs < 1;
-    if(!isfield(opts,"threshold")) opts.threshold = 0.01; endif;
-    if(!isfield(opts,"gibbsSamplingSteps")) opts.gibbsSamplingSteps = 1; endif;
+    if(!isfield(opts,"threshold")) opts.threshold = 0.01; end%if;
+    if(!isfield(opts,"gibbsSamplingSteps")) opts.gibbsSamplingSteps = 1; end%if;
 
     iterator = 0;
     oldError = 0; currentError = inf;
-    do
+    notDone = true; %Hack to substitute do-until, which is absent an Matlab.
+    while(notDone)
         oldError = currentError;
         iterator++;
         kk = randperm(m);
@@ -26,12 +27,12 @@ function rbm = rbmtrain(rbm, x, opts)
             for sampleStep = 1:opts.gibbsSamplingSteps
                 visibleActivationsAtEnd = sigmrnd(repmat(rbm.b', opts.batchsize, 1) + hiddenActivationsAtEnd * rbm.W);
                 hiddenActivationsAtEnd = sigmrnd(repmat(rbm.c', opts.batchsize, 1) + visibleActivationsAtEnd * rbm.W');
-            end#for
+            end%for
 
             c1 = hiddenActivationsAtBegin' * visibleActivationsAtBegin;
             c2 = hiddenActivationsAtEnd' * visibleActivationsAtEnd;
 
-            #Calculate the changes to the parameters. Store them in order to compute a momentum term.
+            %Calculate the changes to the parameters. Store them in order to compute a momentum term.
             rbm.vW = rbm.momentum * rbm.vW + rbm.alpha * (c1 - c2)     / opts.batchsize;
             rbm.vb = rbm.momentum * rbm.vb + rbm.alpha * sum(visibleActivationsAtBegin - visibleActivationsAtEnd)' / opts.batchsize;
             rbm.vc = rbm.momentum * rbm.vc + rbm.alpha * sum(hiddenActivationsAtBegin - hiddenActivationsAtEnd)' / opts.batchsize;
@@ -41,7 +42,7 @@ function rbm = rbmtrain(rbm, x, opts)
             rbm.c = rbm.c + rbm.vc;
 
             currentError = currentError + sum(mysumsq(visibleActivationsAtBegin - visibleActivationsAtEnd)) / opts.batchsize;
-        end#for
+        end%for
         
         currentError /= numbatches;
         if(opts.verbosity >= 1)
@@ -49,9 +50,14 @@ function rbm = rbmtrain(rbm, x, opts)
                 disp(['epoch ' num2str(iterator) '. Average reconstruction error is: ' num2str(currentError)]);
             else
                 disp(['epoch ' num2str(iterator) '/' num2str(opts.numepochs)  '. Average reconstruction error is: ' num2str(currentError)]);
-            end#if
-        end#if
-    until( runUntilThresholdIsReached && (oldError - currentError < opts.threshold) #Condition for running to threshold
-                                  ||
-          !runUntilThresholdIsReached && (iterator >= opts.numepochs)); #Condition for iterating
-end
+            end%if
+        end%if
+        
+        if runUntilThresholdIsReached
+            done = (oldError - currentError) < opts.threshold; %Condition for running to threshold
+        else
+            done = iterator >= opts.numepochs; %Condition for iterating
+        end%if
+        notDone = not(done);
+    end%while
+end%function

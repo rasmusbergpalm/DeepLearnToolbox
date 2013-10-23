@@ -33,7 +33,7 @@ numbatches = m / batchsize;
 
 assert(rem(numbatches, 1) == 0, 'numbatches must be a integer');
 
-#checking and initialising some options
+%checking and initialising some options
 runUntilThresholdIsReached = opts.numepochs < 1;
 if(runUntilThresholdIsReached)
 	lossPerBatch = zeros(numepochs*numbatches,1);
@@ -46,7 +46,8 @@ iterator = 0;
 batchNumber = 1;
 oldError = 0; currentError = inf;
 
-do
+notDone = true; %Hack to substitute do-until, which is absent an Matlab.
+while(notDone)
 	oldError = currentError;
 	iterator++;
 	if(!runUntilThresholdIsReached) lossPerBatch = [lossPerBatch;zeros(numbatches,1)]; end
@@ -92,13 +93,17 @@ do
             disp(['epoch ' num2str(iterator) '. Took ' num2str(t) ' seconds' '. Mini-batch mean squared error on training set is ' num2str(mean(lossPerBatch((batchNumber-numbatches):(batchNumber-1)))) str_perf]);
         else
             disp(['epoch ' num2str(iterator) '/' num2str(opts.numepochs) '. Took ' num2str(t) ' seconds' '. Mini-batch mean squared error on training set is ' num2str(mean(lossPerBatch((batchNumber-numbatches):(batchNumber-1)))) str_perf]);
-        end#if
-    end#if
+        end%if
+    end%if
 
     nn.learningRate = nn.learningRate * nn.scaling_learningRate;
-until(runUntilThresholdIsReached && (oldError - currentError < opts.threshold) #Condition for running to threshold
-                                  ||
-      !runUntilThresholdIsReached && (iterator >= opts.numepochs)); #Condition for iterating
+    if runUntilThresholdIsReached
+        done = (oldError - currentError) < opts.threshold; %Condition for running to threshold
+    else
+        done = iterator >= opts.numepochs; %Condition for iterating
+    end%if
+    notDone = not(done);
+end%while
 
-end
+end%function
 

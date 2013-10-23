@@ -1,7 +1,7 @@
 function cae = caenumgradcheck(cae, x, y)
     epsilon = 1e-4;
     er = 1e-6;
-    if(opts.verbosity >= 1) disp('performing numerical gradient checking...') end#if
+    if(opts.verbosity >= 1) disp('performing numerical gradient checking...') end%if
     for i = 1 : numel(cae.o)
         p_cae = cae; p_cae.c{i} = p_cae.c{i} + epsilon;
         m_cae = cae; m_cae.c{i} = m_cae.c{i} - epsilon;

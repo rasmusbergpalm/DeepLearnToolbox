@@ -8,7 +8,7 @@ test_y  = double(test_y);
 opts = initialiseOptions();
 
 % normalize
-#[train_x, mu, sigma] = zscore(train_x); -- Causes memory exhausted errors.
+%[train_x, mu, sigma] = zscore(train_x); -- Causes memory exhausted errors.
 mu = mean(train_x);
 sigma = max(std(train_x),eps);
 train_x -= repmat(mu,rows(train_x),1);
