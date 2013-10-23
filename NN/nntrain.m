@@ -7,7 +7,8 @@ function [nn, lossPerBatch]  = nntrain(nn, train_x, train_y, opts, val_x, val_y)
 % squared error for each training minibatch.
 
 assert(isfloat(train_x), 'train_x must be a float');
-assert(nargin == 4 || nargin == 6,'number ofinput arguments must be 4 or 6')
+assert(nargin == 4 || nargin == 6,'number of input arguments must be 4 or 6')
+
 
 loss.train.e               = []; %Collection of errors (mean squared error of output activations after a feedforward pass and the reference activations) after all minibatches have been applied.
 loss.train.e_frac          = []; %Collection of misclassification rates after all minibatches have been applied. Only computed for 'softmax' output.

@@ -1,5 +1,8 @@
 function rbm = rbmtrain(rbm, x, opts)
     assert(isfloat(x), 'x must be a float');
+    assert(all(x >= 0), 'Some input data is smaller than zero!');
+    assert(all(x <= 1), 'Some input data is greater than one!');
+
     m = size(x, 1);
     numbatches = m / opts.batchsize;
     
