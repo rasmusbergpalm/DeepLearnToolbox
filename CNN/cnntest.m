@@ -1,9 +1,9 @@
 function [er, bad] = cnntest(net, x, y)
     %  feedforward
     net = cnnff(net, x);
-    [~, h] = max(net.o);
-    [~, a] = max(y);
-    bad = find(h ~= a);
+    [~, p_ind] = max(net.o, [], 2);
+    [~, y_ind] = max(y, [], 2);
+    bad = find(p_ind ~= y_ind);
 
-    er = numel(bad) / size(y, 2);
+    er = length(bad) / size(x, 3);
 end
