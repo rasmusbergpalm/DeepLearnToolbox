@@ -1,27 +1,23 @@
-function net = cnntrain(net, x, y, opts)
-    m = size(x, 3);
-    numbatches = m / opts.batchsize;
-    if rem(numbatches, 1) ~= 0
-        error('numbatches not integer');
-    end
-    net.rL = [];
-    for i = 1 : opts.numepochs
-        disp(['epoch ' num2str(i) '/' num2str(opts.numepochs)]);
-        tic;
-        kk = randperm(m);
-        for l = 1 : numbatches
-            batch_x = x(:, :, kk((l - 1) * opts.batchsize + 1 : l * opts.batchsize));
-            batch_y = y(:,    kk((l - 1) * opts.batchsize + 1 : l * opts.batchsize));
+function net = cnntrain(net, train_x, train_y)
+  
+train_num = size(train_x, 3);  
+numbatches = ceil(train_num/net.batchsize);
 
-            net = cnnff(net, batch_x);
-            net = cnnbp(net, batch_y);
-            net = cnnapplygrads(net, opts);
-            if isempty(net.rL)
-                net.rL(1) = net.L;
-            end
-            net.rL(end + 1) = 0.99 * net.rL(end) + 0.01 * net.L;
-        end
-        toc;
-    end
-    
+net.rE = zeros(net.numepochs, 1);
+for i = 1 : net.numepochs
+  %tic;
+  kk = randperm(train_num);
+  for j = 1 : numbatches
+    batch_x = train_x(:, :, kk((j-1)*net.batchsize + 1 : min(j*net.batchsize, train_num)));    
+    batch_y = train_y(kk((j-1)*net.batchsize + 1 : min(j*net.batchsize, train_num)), :);
+    net = cnnff(net, batch_x);
+    net = cnnbp(net, batch_y);
+    net = cnnapplygrads(net);
+    if (isempty(net.rL)), net.rL(1) = net.L; end;
+    net.rL(end + 1) = 0.99 * net.rL(end) + 0.01 * net.L;      
+    %disp([i j]);
+  end
+  %toc  
+end
+
 end
