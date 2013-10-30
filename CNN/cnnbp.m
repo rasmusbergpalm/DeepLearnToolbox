@@ -1,10 +1,9 @@
 function net = cnnbp(net, y)
   n = numel(net.layers);
-  batchsize = size(y, 1); % number of examples in the minibatch    
-  curder = (y ./ repmat(net.part, batchsize, 1) + (1 - y) ./ (1 - repmat(net.part, batchsize, 1))) / 2;
+  batchsize = size(y, 1); % number of examples in the minibatch  
   diffmat = net.o - y;
   net.L = 1/2 * sum(diffmat(:).^2) / batchsize;
-  net.od = diffmat .* curder .* (net.o .* (1 - net.o));   %  output delta  
+  net.od = diffmat .* y .* (net.o .* (1 - net.o));   %  output delta  
   net.dffW = (net.fv * net.od)' / batchsize;
   net.fvd = (net.od * net.ffW)'; %  feature vector delta    
   net.dffb = mean(net.od, 1)';
