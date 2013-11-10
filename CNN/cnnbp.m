@@ -30,26 +30,30 @@ function net = cnnbp(net, y)
 
     for l = (n - 1) : -1 : 1
         if  strcmp(net.layers{l}.type, 'c') 
-<<<<<<< HEAD
-=======
-            if l==(n-1) % l==(n-1) condition means the last two layers are sigm fully connnected
-                 for j = 1 : numel(net.layers{l}.a)
-                    net.layers{l}.d{j} = net.layers{l}.a{j} .* (1 - net.layers{l}.a{j}) .* ...
-                        (net.layers{l + 1}.d{j});
-                end
-            else
->>>>>>> d85b1462bead21ab809497f476b5ae66f547d45f
+% 
+%             if l==(n-1) % l==(n-1) condition means the last two layers are sigm fully connnected
+%                  for j = 1 : numel(net.layers{l}.a)
+%                     net.layers{l}.d{j} = net.layers{l}.a{j} .* (1 - net.layers{l}.a{j}) .* ...
+%                         (net.layers{l + 1}.d{j});
+%                 end
+%             else
+
                 for j = 1 : numel(net.layers{l}.a)
                     net.layers{l}.d{j} = net.layers{l}.a{j} .* (1 - net.layers{l}.a{j}) .* ...
                         (expand(net.layers{l + 1}.d{j},[net.layers{l + 1}.scale net.layers{l + 1}.scale 1]) / net.layers{l + 1}.scale ^ 2);
                 end
-<<<<<<< HEAD
-=======
-            end
->>>>>>> d85b1462bead21ab809497f476b5ae66f547d45f
+
+           % end
+
         elseif strcmp(net.layers{l}.type, 't')
             for j = 1 : numel(net.layers{l}.a)
                  net.layers{l}.d{j} = (1 - tanh(net.layers{l}.a{j}).^2) .* ...
+                    (expand(net.layers{l + 1}.d{j},[net.layers{l + 1}.scale net.layers{l + 1}.scale 1]) / net.layers{l + 1}.scale ^ 2);
+            end
+            
+       elseif strcmp(net.layers{l}.type, 'st')
+            for j = 1 : numel(net.layers{l}.a)
+                 net.layers{l}.d{j} = 1.7159*(1 - tanh(2/3.*net.layers{l}.a{j}).^2).*(2/3) .* ...
                     (expand(net.layers{l + 1}.d{j},[net.layers{l + 1}.scale net.layers{l + 1}.scale 1]) / net.layers{l + 1}.scale ^ 2);
             end
             
@@ -75,22 +79,14 @@ function net = cnnbp(net, y)
 
     %%  calc gradients
     for l = 2 : n
-        if strcmp(net.layers{l}.type, 'c')
+        if  (strcmp(net.layers{l}.type, 't') || strcmp(net.layers{l}.type, 'c') || strcmp(net.layers{l}.type, 'st'))
             for j = 1 : numel(net.layers{l}.a)
                 for i = 1 : numel(net.layers{l - 1}.a)
                     net.layers{l}.dk{i}{j} = convn(flipall(net.layers{l - 1}.a{i}), net.layers{l}.d{j}, 'valid') / size(net.layers{l}.d{j}, 3);
                 end
                 net.layers{l}.db{j} = sum(net.layers{l}.d{j}(:)) / size(net.layers{l}.d{j}, 3);
             end
-        end
-         if strcmp(net.layers{l}.type, 't')
-            for j = 1 : numel(net.layers{l}.a)
-                for i = 1 : numel(net.layers{l - 1}.a)
-                    net.layers{l}.dk{i}{j} = convn(flipall(net.layers{l - 1}.a{i}), net.layers{l}.d{j}, 'valid') / size(net.layers{l}.d{j}, 3);
-                end
-                net.layers{l}.db{j} = sum(net.layers{l}.d{j}(:)) / size(net.layers{l}.d{j}, 3);
-            end
-        end
+        end 
     end
     net.dffW = net.od * (net.fv)' / size(net.od, 2);
     net.dffb = mean(net.od, 2);
