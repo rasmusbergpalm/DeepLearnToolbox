@@ -3,6 +3,7 @@ Thank you so much for wanting to give back to the toolbox. Here's some info on h
 #General:
  
 Don't bunch up changes, e.g. if you have bug-fixes, new features and style changes, rather make 3 seperate pull requests.
+
 Ensure that you introduce tests/examples for any new functionality
 
 # Guide
