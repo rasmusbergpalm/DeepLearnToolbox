@@ -1,5 +1,4 @@
 function dbn = dbnsetup(dbn, x, opts)
-    assert(all(x(:)>=0) && all(x(:)<=1), "all data in x must be in [0:1]");
     n = size(x, 2);
     dbn.sizes = [n, dbn.sizes];
 
