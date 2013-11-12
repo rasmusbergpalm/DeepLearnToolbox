@@ -1,6 +1,6 @@
 %%  mnist data
 clear all; close all; clc;
-load ../data/mnist_uint8;
+load mnist_uint8;
 x = cell(100, 1);
 N = 600;
 for i = 1 : 100
@@ -29,4 +29,4 @@ for i=1:numel(cae.ok{1});
     mm = cae.ok{1}{i}(1,:,:); 
     ff(i,:) = mm(:); 
 end; 
-figure;visualize(ff',1)
+figure;visualize(ff')
