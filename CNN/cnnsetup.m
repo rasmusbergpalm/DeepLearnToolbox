@@ -1,5 +1,4 @@
 function net = cnnsetup(net, x, y)
-    assert(exist('OCTAVE_VERSION')==0, 'CNNs does not work with Octave as there is a bug in the implementation of convolution in octave. See: http://savannah.gnu.org/bugs/?39314');
     inputmaps = 1;
     mapsize = size(squeeze(x(:, :, 1)));
 
