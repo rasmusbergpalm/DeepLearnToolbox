@@ -9,6 +9,7 @@ test_y = double(test_y');
 %% ex1 Train a 6c-2s-12c-2s Convolutional neural network 
 %will run 1 epoch in about 200 second and get around 11% error. 
 %With 100 epochs you'll get around 1.2% error
+<<<<<<< HEAD
 
 if !isOctave() 
    rng(0)
@@ -16,6 +17,9 @@ else
    rand('state',0)
 end
 
+=======
+rand('state',0)
+>>>>>>> rasmus/master
 cnn.layers = {
     struct('type', 'i') %input layer
     struct('type', 'c', 'outputmaps', 6, 'kernelsize', 5) %convolution layer
