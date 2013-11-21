@@ -1,0 +1,8 @@
+before_script:
+  - sudo apt-get install octave
+
+script:
+  - sh -c "octave tests/runalltests.m"
+
+notifications:
+  email: false

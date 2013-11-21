@@ -43,12 +43,6 @@ if i > 1 %dont plot first point, its only a point
         legend(p1, M,'Location','NorthEast');
         set(p1, 'Xlim',[0,opts.numepochs + 1])
         
-        if i ==2 % speeds up plotting by factor of ~2
-            set(gca,'LegendColorbarListeners',[]);
-            setappdata(gca,'LegendColorbarManualSpace',1);
-            setappdata(gca,'LegendColorbarReclaimSpace',1);
-        end
-               
         p2 = subplot(1,2,2);
         plot(plot_x,plot_yfrac);
         xlabel('Number of epochs'); ylabel('Misclassification rate');
@@ -56,26 +50,13 @@ if i > 1 %dont plot first point, its only a point
         legend(p2, M,'Location','NorthEast');
         set(p2, 'Xlim',[0,opts.numepochs + 1])
         
-        if i ==2 % speeds up plotting by factor of ~2
-            set(gca,'LegendColorbarListeners',[]);
-            setappdata(gca,'LegendColorbarManualSpace',1);
-            setappdata(gca,'LegendColorbarReclaimSpace',1);
-        end
-
     else
         
         p = plot(plot_x,plot_ye);
         xlabel('Number of epochs'); ylabel('Error');title('Error');
         legend(p, M,'Location','NorthEast');
         set(gca, 'Xlim',[0,opts.numepochs + 1])
-        
-        if i ==2 % speeds up plotting by factor of ~2
-            set(gca,'LegendColorbarListeners',[]);
-            setappdata(gca,'LegendColorbarManualSpace',1);
-            setappdata(gca,'LegendColorbarReclaimSpace',1);
-            
-        end
-        
+                
     end
     drawnow;
 end
