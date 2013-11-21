@@ -1,29 +1,27 @@
-
 function net = cnntrain(net, x, y, opts)
     m = size(x, 3);
     numbatches = m / opts.batchsize;
     if rem(numbatches, 1) ~= 0
         error('numbatches not integer');
     end
-
     net.rL = [];
     for i = 1 : opts.numepochs
         disp(['epoch ' num2str(i) '/' num2str(opts.numepochs)]);
         tic;
         kk = randperm(m);
-        %how many processes?
-        numWorkers = 4
-		pids = 0:numWorkers-1;
-		starts = pids * numbatches / numWorkers
-	
-		%process starts
-		turn = 0;
+        for l = 1 : numbatches
+            batch_x = x(:, :, kk((l - 1) * opts.batchsize + 1 : l * opts.batchsize));
+            batch_y = y(:,    kk((l - 1) * opts.batchsize + 1 : l * opts.batchsize));
 
-        pararrayfun(numWorkers,
-                    @(starts, pids)process_batch(x, y, kk, net, turn, starts, (numbatches/numWorkers),  pids, numWorkers, opts),
-                    starts,
-					pids,
-					"ErrorHandler" , @eh);
+            net = cnnff(net, batch_x);
+            net = cnnbp(net, batch_y);
+            net = cnnapplygrads(net, opts);
+            if isempty(net.rL)
+                net.rL(1) = net.L;
+            end
+            net.rL(end + 1) = 0.99 * net.rL(end) + 0.01 * net.L;
+        end
         toc;
     end
+    
 end
