@@ -29,7 +29,7 @@ cnn.layers = {
 
 opts.alpha = 1;
 opts.batchsize = 250;
-opts.numepochs = 1;
+opts.numepochs = 3;
 
 cnn = cnnsetup(cnn, train_x, train_y);
 cnn = cnntrain(cnn, train_x, train_y, opts);
