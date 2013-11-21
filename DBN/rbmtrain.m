@@ -1,5 +1,6 @@
 function rbm = rbmtrain(rbm, x, opts)
     assert(isfloat(x), 'x must be a float');
+    assert(all(x>=0) && all(x<=1), "all data in x must be in [0:1]");
     m = size(x, 1);
     numbatches = m / opts.batchsize;
     
@@ -14,7 +15,7 @@ function rbm = rbmtrain(rbm, x, opts)
             v1 = batch;
             h1 = sigmrnd(repmat(rbm.c', opts.batchsize, 1) + v1 * rbm.W');
             v2 = sigmrnd(repmat(rbm.b', opts.batchsize, 1) + h1 * rbm.W);
-            h2 = sigmrnd(repmat(rbm.c', opts.batchsize, 1) + v2 * rbm.W');
+            h2 = sigm(repmat(rbm.c', opts.batchsize, 1) + v2 * rbm.W');
 
             c1 = h1' * v1;
             c2 = h2' * v2;
