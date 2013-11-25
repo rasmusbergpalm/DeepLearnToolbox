@@ -1,4 +1,5 @@
 %%  mnist data
+addpath(genpath('../'))
 clear all; close all; clc;
 load mnist_uint8;
 x = cell(100, 1);

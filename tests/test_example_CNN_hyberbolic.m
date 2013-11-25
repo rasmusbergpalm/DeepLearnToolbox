@@ -1,5 +1,6 @@
-function test_example_CNN
-load mnist_uint8;
+clc;clear;
+load('../data/mnist_uint8');
+addpath(genpath('..'))
 
 train_x = double(reshape(train_x',28,28,60000))/255;
 test_x = double(reshape(test_x',28,28,10000))/255;
@@ -9,19 +10,20 @@ test_y = double(test_y');
 %% ex1 Train a 6c-2s-12c-2s Convolutional neural network 
 %will run 1 epoch in about 200 second and get around 11% error. 
 %With 100 epochs you'll get around 1.2% error
-rand('state',0)
+%rand('state',0)
 cnn.layers = {
     struct('type', 'i') %input layer
-    struct('type', 'c', 'outputmaps', 6, 'kernelsize', 5) %convolution layer
-    struct('type', 's', 'scale', 2) %sub sampling layer
-    struct('type', 'c', 'outputmaps', 12, 'kernelsize', 5) %convolution layer
-    struct('type', 's', 'scale', 2) %subsampling layer
+    struct('type', 't', 'outputmaps', 6, 'kernelsize', 5) %convolution layer
+    struct('type', 'm', 'scale', 2) %sub sampling layer
+    struct('type', 't', 'outputmaps', 12, 'kernelsize', 5) %convolution layer
+    struct('type', 'm', 'scale', 2) %subsampling layer
 };
 cnn = cnnsetup(cnn, train_x, train_y);
 
 opts.alpha = 1;
 opts.batchsize = 50;
-opts.numepochs = 1;
+opts.numepochs = 10;
+opts.momentum = 0;
 
 cnn = cnntrain(cnn, train_x, train_y, opts);
 
@@ -31,3 +33,6 @@ cnn = cnntrain(cnn, train_x, train_y, opts);
 figure; plot(cnn.rL);
 
 assert(er<0.12, 'Too big error');
+% epoch 100/100
+% 1 epoch uses 6.878490e+01 second, softmax loss is: 0.319611 
+%% er =5.45%

@@ -10,19 +10,59 @@ function net = cnnsetup(net, x, y)
             for j = 1 : inputmaps
                 net.layers{l}.b{j} = 0;
             end
-        end
-        if strcmp(net.layers{l}.type, 'c')
+
+        
+        elseif strcmp(net.layers{l}.type, 'm')
+            mapsize = mapsize / net.layers{l}.scale;
+            assert(all(floor(mapsize)==mapsize), ['Layer ' num2str(l) ' size must be integer. Actual: ' num2str(mapsize)]);
+            for j = 1 : inputmaps
+                net.layers{l}.b{j} = 0;
+            end
+        
+        
+        elseif strcmp(net.layers{l}.type, 'c')
             mapsize = mapsize - net.layers{l}.kernelsize + 1;
             fan_out = net.layers{l}.outputmaps * net.layers{l}.kernelsize ^ 2;
             for j = 1 : net.layers{l}.outputmaps  %  output map
                 fan_in = inputmaps * net.layers{l}.kernelsize ^ 2;
                 for i = 1 : inputmaps  %  input map
                     net.layers{l}.k{i}{j} = (rand(net.layers{l}.kernelsize) - 0.5) * 2 * sqrt(6 / (fan_in + fan_out));
+                    net.layers{l}.vk{i}{j} = 0;
                 end
                 net.layers{l}.b{j} = 0;
+                net.layers{l}.vb{j} = 0;
+            end
+            inputmaps = net.layers{l}.outputmaps;
+        
+        elseif strcmp(net.layers{l}.type, 't')
+            mapsize = mapsize - net.layers{l}.kernelsize + 1;
+            fan_out = net.layers{l}.outputmaps * net.layers{l}.kernelsize ^ 2;
+            for j = 1 : net.layers{l}.outputmaps  %  output map
+                fan_in = inputmaps * net.layers{l}.kernelsize ^ 2;
+                for i = 1 : inputmaps  %  input map
+                    net.layers{l}.k{i}{j} = (rand(net.layers{l}.kernelsize) - 0.5) * 2 * sqrt(6 / (fan_in + fan_out));
+                    net.layers{l}.vk{i}{j} = 0;
+                end
+                net.layers{l}.b{j} = 0;
+                net.layers{l}.vb{j} = 0;
+            end
+            inputmaps = net.layers{l}.outputmaps;
+            
+         elseif strcmp(net.layers{l}.type, 'st')
+            mapsize = mapsize - net.layers{l}.kernelsize + 1;
+            fan_out = net.layers{l}.outputmaps * net.layers{l}.kernelsize ^ 2;
+            for j = 1 : net.layers{l}.outputmaps  %  output map
+                fan_in = inputmaps * net.layers{l}.kernelsize ^ 2;
+                for i = 1 : inputmaps  %  input map
+                    net.layers{l}.k{i}{j} = (rand(net.layers{l}.kernelsize) - 0.5) * 2 * sqrt(6 / (fan_in + fan_out));
+                    net.layers{l}.vk{i}{j} = 0;
+                end
+                net.layers{l}.b{j} = 0;
+                net.layers{l}.vb{j} = 0;
             end
             inputmaps = net.layers{l}.outputmaps;
         end
+        
     end
     % 'onum' is the number of labels, that's why it is calculated using size(y, 1). If you have 20 labels so the output of the network will be 20 neurons.
     % 'fvnum' is the number of output neurons at the last layer, the layer just before the output layer.

@@ -1,4 +1,4 @@
-function [nn, L]  = nntrain(nn, train_x, train_y, opts, val_x, val_y)
+function [nn, L]  = nntrain_grbm(nn, train_x, train_y, opts, val_x, val_y)
 %NNTRAIN trains a neural net
 % [nn, L] = nnff(nn, x, y, opts) trains the neural network nn with input x and
 % output y for opts.numepochs epochs, with minibatches of size
@@ -48,8 +48,8 @@ for i = 1 : numepochs
         
         batch_y = train_y(kk((l - 1) * batchsize + 1 : l * batchsize), :);
         
-        nn = nnff(nn, batch_x, batch_y);
-        nn = nnbp(nn);
+        nn = nnff_grbm(nn, batch_x, batch_y);
+        nn = nnbp_grbm(nn);
         nn = nnapplygrads(nn,i,opts);
         
         L(n) = nn.L;
@@ -58,19 +58,17 @@ for i = 1 : numepochs
     end
     
     t = toc;
-
-    if opts.validation == 1
-        loss = nneval(nn, loss, train_x, train_y, val_x, val_y);
-        str_perf = sprintf('; Full-batch train mse = %f, val mse = %f', loss.train.e(end), loss.val.e(end));
-    else
-        loss = nneval(nn, loss, train_x, train_y);
-        str_perf = sprintf('; Full-batch train err = %f', loss.train.e(end));
-    end
+    
     if ishandle(fhandle)
+        if opts.validation == 1
+            loss = nneval(nn, loss, train_x, train_y, val_x, val_y);
+        else
+            loss = nneval(nn, loss, train_x, train_y);
+        end
         nnupdatefigures(nn, fhandle, loss, opts, i);
     end
         
-    disp(['epoch ' num2str(i) '/' num2str(opts.numepochs) '. Took ' num2str(t) ' seconds' '. Mini-batch mean squared error on training set is ' num2str(mean(L((n-numbatches):(n-1)))) str_perf]);
+    disp(['epoch ' num2str(i) '/' num2str(opts.numepochs) '. Took ' num2str(t) ' seconds' '. Mean squared error on training set is ' num2str(mean(L((n-numbatches):(n-1))))]);
     nn.learningRate = nn.learningRate * nn.scaling_learningRate;
 end
 end
