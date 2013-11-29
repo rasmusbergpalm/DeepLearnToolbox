@@ -1,7 +1,8 @@
 before_script:
-  - sudo apt-add-repository -y ppa:picaso/octave
+  - sudo apt-add-repository ppa:octave/stable
   - sudo apt-get update 
-  - sudo apt-get install octave
+  - sudo apt-get install octave 
+  - sudo apt-get install liboctave-dev
 script:
   - sh -c "octave tests/runalltests.m"
 
