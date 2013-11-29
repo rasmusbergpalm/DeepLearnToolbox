@@ -1,6 +1,7 @@
 before_script:
+  - sudo apt-add-repository -y ppa:picaso/octave
+  - sudo apt-get update 
   - sudo apt-get install octave
-
 script:
   - sh -c "octave tests/runalltests.m"
 

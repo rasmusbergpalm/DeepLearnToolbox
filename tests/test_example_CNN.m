@@ -10,11 +10,7 @@ test_y = double(test_y');
 %will run 1 epoch in about 200 second and get around 11% error. 
 %With 100 epochs you'll get around 1.2% error
 
-if !isOctave() 
-   rng(0)
-else
-   rand('state',0)
-end
+rand('state',0)
 
 cnn.layers = {
     struct('type', 'i') %input layer
@@ -26,8 +22,8 @@ cnn.layers = {
 
 
 opts.alpha = 1;
-opts.batchsize = 250;
-opts.numepochs = 3;
+opts.batchsize = 200;
+opts.numepochs = 7;
 
 cnn = cnnsetup(cnn, train_x, train_y);
 cnn = cnntrain(cnn, train_x, train_y, opts);
