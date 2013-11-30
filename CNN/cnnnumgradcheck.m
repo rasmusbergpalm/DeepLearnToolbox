@@ -1,4 +1,6 @@
 function cnnnumgradcheck(net, x, y)
+    more off;
+    disp('lalalala')
     epsilon = 1e-4;
     er      = 1e-8;
     n = numel(net.layers);
