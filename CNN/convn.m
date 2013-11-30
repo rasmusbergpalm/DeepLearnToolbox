@@ -1,5 +1,6 @@
 %Overwrite convn function to handle octaves convn(a,b,'valid') bug. See http://savannah.gnu.org/bugs/?39314
 function result = convn(A, B, shape)
+    more off;
     disp('convn')
     disp(isOctave())
     disp(strcmp(shape, 'valid'))
