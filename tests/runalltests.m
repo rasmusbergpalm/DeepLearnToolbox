@@ -1,4 +1,4 @@
-clear all; close all; clc;
+clear all; close all; clc; more off;
 
 addpath(genpath('.'));
 dirlist = dir('tests/test_*');
