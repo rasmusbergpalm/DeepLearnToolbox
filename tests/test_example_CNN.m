@@ -23,12 +23,14 @@ cnn.layers = {
 
 opts.alpha = 1;
 opts.batchsize = 200;
-opts.numepochs = 7;
+opts.numepochs = 1;
 
 cnn = cnnsetup(cnn, train_x, train_y);
 cnn = cnntrain(cnn, train_x, train_y, opts);
 
 [er, bad] = cnntest(cnn, test_x, test_y);
+
+er
 
 %plot mean squared error
 figure; plot(cnn.rL);
