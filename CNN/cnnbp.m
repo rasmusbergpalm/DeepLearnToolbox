@@ -1,7 +1,7 @@
 function net = cnnbp(net, y)
     n = numel(net.layers);
 
-    %  error
+    %   error
     net.e = net.o - y;
     %  loss function
     net.L = 1/2* sum(net.e(:) .^ 2) / size(net.e, 2);

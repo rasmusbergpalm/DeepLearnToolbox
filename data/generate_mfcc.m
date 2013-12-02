@@ -5,18 +5,30 @@
 en_endpoint = 'http://www.repository.voxforge1.org/downloads/SpeechCorpus/Trunk/Audio/MFCC/8kHz_16bit/MFCC_0_D/';
 de_endpoint = 'http://www.repository.voxforge1.org/downloads/de/Trunk/Audio/MFCC/8kHz_16bit/MFCC_0_D/';
 it_endpoint = 'http://www.repository.voxforge1.org/downloads/it/Trunk/Audio/MFCC/8kHz_16bit/MFCC_0_D/';
+<<<<<<< HEAD
 endpoint = it_endpoint;
 limit = 1500;
+=======
+endpoint = en_endpoint;
+>>>>>>> c4cc2e620e82e17e56aa44a67402c178ed13742d
 
 flist = urlread(endpoint);
 
 [s,e] = regexp(flist, ">([a-zA-Z0-9]*-[a-zA-Z0-9]*)+\.tgz<");
 %truncate the amount of data to be crawled
+<<<<<<< HEAD
 s = s(1:min(limit, size(s,2)));
 e = e(1:min(limit, size(s,2)));
 
 confirm_recursive_rmdir(0)
 filename = "it.mat";
+=======
+s = s(1:1500);
+e = e(1:1500);
+
+confirm_recursive_rmdir(0)
+filename = 'en_de_it.mat';
+>>>>>>> c4cc2e620e82e17e56aa44a67402c178ed13742d
 
 function data = fetch_data(flist, endpoint, anfang, ende, id)
 	%print(int2str(id));
@@ -46,7 +58,10 @@ function data = fetch_data(flist, endpoint, anfang, ende, id)
     cd ../../..
 	rmdir(currdir, "s");
 end
+<<<<<<< HEAD
 
+=======
+>>>>>>> c4cc2e620e82e17e56aa44a67402c178ed13742d
 %here goes what to put in the output when the function fails.
 function retcode = eh(error)
     a = error
@@ -55,9 +70,18 @@ end
 
 
 mfccs = pararrayfun(numWorkers = 30,
+<<<<<<< HEAD
                     @(anfang, ende, id)fetch_data(flist, endpoint, anfang, ende, id), %currying with anonym funct
                     s, e, 1:size(s,2), %parameters for the function
                     "ErrorHandler" , @eh);
 
 read_size = size(mfccs)
 save("-mat4-binary", filename, "mfccs");
+=======
+                    @(anfang, ende, id)fetch_data(flist, endpoint, anfang, ende, id),
+					s, e, 1:size(s,2),
+					"ErrorHandler" , @eh);
+
+read_size = size(mfccs)
+save("-mat4-binary" ,filename, mfccs);
+>>>>>>> c4cc2e620e82e17e56aa44a67402c178ed13742d
