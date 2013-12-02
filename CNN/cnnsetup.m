@@ -4,7 +4,7 @@ function net = cnnsetup(net, x, y)
 
     for l = 1 : numel(net.layers)   %  layer
         if strcmp(net.layers{l}.type, 's')
-            mapsize = mapsize / net.layers{l}.scale;
+            mapsize = [mapsize(1)/net.layers{l}.xscale, mapsize(2)/net.layers{l}.yscale];
             assert(all(floor(mapsize)==mapsize), ['Layer ' num2str(l) ' size must be integer. Actual: ' num2str(mapsize)]);
             for j = 1 : inputmaps
                 net.layers{l}.b{j} = 0;

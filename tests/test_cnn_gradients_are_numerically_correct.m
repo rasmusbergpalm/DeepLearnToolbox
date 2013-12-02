@@ -4,9 +4,9 @@ batch_y = rand(10,5);
 cnn.layers = {
     struct('type', 'i') %input layer
     struct('type', 'c', 'outputmaps', 2, 'kernelsize', 5) %convolution layer
-    struct('type', 's', 'scale', 2) %sub sampling layer
+    struct('type', 's', 'xscale', 2, 'yscale', 2) %sub sampling layer
     struct('type', 'c', 'outputmaps', 2, 'kernelsize', 5) %convolution layer
-    struct('type', 's', 'scale', 2) %subsampling layer
+    struct('type', 's', 'xscale', 2, 'yscale', 2) %subsampling layer
 };
 cnn = cnnsetup(cnn, batch_x, batch_y);
 

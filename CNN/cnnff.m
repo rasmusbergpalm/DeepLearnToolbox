@@ -21,8 +21,11 @@ function net = cnnff(net, x)
         elseif strcmp(net.layers{l}.type, 's')
             %  downsample
             for j = 1 : inputmaps
-                z = convn(net.layers{l - 1}.a{j}, ones(net.layers{l}.scale) / (net.layers{l}.scale ^ 2), 'valid');   %  !! replace with variable
-                net.layers{l}.a{j} = z(1 : net.layers{l}.scale : end, 1 : net.layers{l}.scale : end, :);
+                xscale = net.layers{l}.xscale;
+                yscale = net.layers{l}.yscale;
+ 
+                z = convn(net.layers{l - 1}.a{j}, ones(xscale, yscale) / (xscale*yscale), 'valid');   %  !! replace with variable
+                net.layers{l}.a{j} = z(1 : xscale : end, 1 : yscale : end, :);
             end
         end
     end
