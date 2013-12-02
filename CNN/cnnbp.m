@@ -41,7 +41,12 @@ function net = cnnbp(net, y)
         if strcmp(net.layers{l}.type, 'c')
             for j = 1 : numel(net.layers{l}.a)
                 for i = 1 : numel(net.layers{l - 1}.a)
-                    net.layers{l}.dk{i}{j} = custom_convn(flipall(net.layers{l - 1}.a{i}), net.layers{l}.d{j}, 'valid') / size(net.layers{l}.d{j}, 3);
+                    %ugly if, until convn() is fixed in Octave.
+                    if(isOctave())
+                        net.layers{l}.dk{i}{j} = convn_valid(flipall(net.layers{l - 1}.a{i}), net.layers{l}.d{j}) / size(net.layers{l}.d{j}, 3);
+                    else
+                        net.layers{l}.dk{i}{j} = convn(flipall(net.layers{l - 1}.a{i}), net.layers{l}.d{j}, 'valid') / size(net.layers{l}.d{j}, 3);
+                    end				
                 end
                 net.layers{l}.db{j} = sum(net.layers{l}.d{j}(:)) / size(net.layers{l}.d{j}, 3);
             end

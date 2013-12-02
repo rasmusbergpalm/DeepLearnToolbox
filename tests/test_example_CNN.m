@@ -11,6 +11,7 @@ test_y = double(test_y');
 %With 100 epochs you'll get around 1.2% error
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 if !isOctave() 
 rng(0)
 end
@@ -21,6 +22,11 @@ rand('state',0)
 =======
 rand('state',0)
 >>>>>>> 202808a737e3904d01e0b4e6fca82e0d5f51963c
+=======
+
+rand('state',0)
+
+>>>>>>> upstream/master
 cnn.layers = {
     struct('type', 'i') %input layer
     struct('type', 'c', 'outputmaps', 6, 'kernelsize', 5) %convolution layer
@@ -31,15 +37,14 @@ cnn.layers = {
 
 
 opts.alpha = 1;
-opts.batchsize = 250;
-opts.numepochs = 1;
+opts.batchsize = 200;
+opts.numepochs = 7;
 
 cnn = cnnsetup(cnn, train_x, train_y);
 cnn = cnntrain(cnn, train_x, train_y, opts);
 
 [er, bad] = cnntest(cnn, test_x, test_y);
-er
+
 %plot mean squared error
-%figure; plot(cnn.rL);
-er
+figure; plot(cnn.rL);
 assert(er<0.12, 'Too big error');
