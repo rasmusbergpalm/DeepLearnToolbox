@@ -1,14 +1,17 @@
 function net = cnnsetup(net, x, y)
     inputmaps = 1;
     mapsize = size(squeeze(x(:, :, 1)));
-
-    for l = 1 : numel(net.layers)   %  layer
+	
+	for l = 1 : numel(net.layers)   %  layer
         if strcmp(net.layers{l}.type, 's')
             mapsize = [mapsize(1)/net.layers{l}.xscale, mapsize(2)/net.layers{l}.yscale];
             assert(all(floor(mapsize)==mapsize), ['Layer ' num2str(l) ' size must be integer. Actual: ' num2str(mapsize)]);
             for j = 1 : inputmaps
                 net.layers{l}.b{j} = 0;
             end
+			%these are the subsampling filters for each layer
+			net.layers{l}.meanFilter = ones(net.layers{l}.xscale, net.layers{l}.yscale) / (net.layers{l}.xscale*net.layers{l}.yscale);
+			
         end
         if strcmp(net.layers{l}.type, 'c')
             mapsize = mapsize - net.layers{l}.kernelsize + 1;
