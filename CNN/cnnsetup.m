@@ -1,4 +1,5 @@
 function net = cnnsetup(net, x, y)
+    assert(~isOctave() || compare_versions(OCTAVE_VERSION, '3.8.0', '>='), 'Octave 3.8.0 or greater is required for CNNs as there is a bug in convolution in previous versions. See http://savannah.gnu.org/bugs/?39314');
     inputmaps = 1;
     mapsize = size(squeeze(x(:, :, 1)));
 
