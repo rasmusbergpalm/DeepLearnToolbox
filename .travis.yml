@@ -1,5 +1,5 @@
 before_script:
-  - sudo apt-add-repository ppa:octave/unstable --yes
+  - sudo apt-add-repository ppa:dac922/octave-unstable --yes
   - sudo apt-get update -y
   - sudo apt-get install octave -y
   - sudo apt-get install liboctave-dev -y
