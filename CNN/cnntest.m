@@ -1,9 +1,9 @@
-function [er, bad] = cnntest(net, x, y)
+function [predicted_label, er, bad] = cnntest(net, x, y)
     %  feedforward
     net = cnnff(net, x);
-    [~, h] = max(net.o);
+    [~, predicted_label] = max(net.o);
     [~, a] = max(y);
-    bad = find(h ~= a);
+    bad = find(predicted_label ~= a);
 
     er = numel(bad) / size(y, 2);
 end
