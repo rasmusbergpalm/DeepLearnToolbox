@@ -15,11 +15,11 @@ end
 
 %calc misclassification rate if softmax
 if strcmp(nn.output,'softmax')
-    [er_train, ~]               = nntest(nn, train_x, train_y);
+    [er_train, dummy]               = nntest(nn, train_x, train_y);
     loss.train.e_frac(end+1)    = er_train;
     
     if nargin == 6
-        [er_val, ~]             = nntest(nn, val_x, val_y);
+        [er_val, dummy]             = nntest(nn, val_x, val_y);
         loss.val.e_frac(end+1)  = er_val;
     end
 end
