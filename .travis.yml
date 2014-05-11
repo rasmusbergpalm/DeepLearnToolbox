@@ -1,8 +1,11 @@
 before_script:
-  - sudo apt-add-repository ppa:octave/stable --yes
-  - sudo apt-get update -y
-  - sudo apt-get install octave -y
-  - sudo apt-get install liboctave-dev -y
+  - wget ftp://ftp.gnu.org/gnu/octave/octave-3.8.0.tar.bz2
+  - tar -xvf octave-3.8.0.tar.bz2
+  - cd octave-3.8.0
+  - sudo apt-get build-dep octave
+  - ./configure
+  - make
+  - sudo make install
 script:
   - sh -c "octave tests/runalltests.m"
 

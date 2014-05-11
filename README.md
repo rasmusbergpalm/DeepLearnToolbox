@@ -1,5 +1,4 @@
-
-DeepLearnToolbox
+DeepLearnToolbox 
 ================
 
 A Matlab toolbox for Deep Learning.
