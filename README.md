@@ -1,4 +1,6 @@
 
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/rasmusbergpalm/deeplearntoolbox/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
 DeepLearnToolbox
 ================
 
@@ -164,7 +166,9 @@ test_y = double(test_y');
 %% ex1 Train a 6c-2s-12c-2s Convolutional neural network 
 %will run 1 epoch in about 200 second and get around 11% error. 
 %With 100 epochs you'll get around 1.2% error
+
 rand('state',0)
+
 cnn.layers = {
     struct('type', 'i') %input layer
     struct('type', 'c', 'outputmaps', 6, 'kernelsize', 5) %convolution layer
@@ -172,19 +176,19 @@ cnn.layers = {
     struct('type', 'c', 'outputmaps', 12, 'kernelsize', 5) %convolution layer
     struct('type', 's', 'scale', 2) %subsampling layer
 };
-cnn = cnnsetup(cnn, train_x, train_y);
+
 
 opts.alpha = 1;
 opts.batchsize = 50;
 opts.numepochs = 1;
 
+cnn = cnnsetup(cnn, train_x, train_y);
 cnn = cnntrain(cnn, train_x, train_y, opts);
 
 [er, bad] = cnntest(cnn, test_x, test_y);
 
 %plot mean squared error
 figure; plot(cnn.rL);
-
 assert(er<0.12, 'Too big error');
 
 ```
@@ -289,10 +293,45 @@ nn = nntrain(nn, tx, ty, opts, vx, vy);                %  nntrain takes validati
 [er, bad] = nntest(nn, test_x, test_y);
 assert(er < 0.1, 'Too big error');
 
+%% ex7 neural net for regression problem
+rand('state',0);
+randn('state',0);
+
+% Some invented nonlinear relationships to get 3 noisy output targets
+% 1000 records with 10 features
+all_x = randn(20000, 10);
+all_y = randn(20000, 3) * 0.01;
+all_y(:,1) += sum( all_x(:,1:5) .* all_x(:, 3:7), 2 );
+all_y(:,2) += sum( all_x(:,5:9) .* all_x(:, 4:8) .* all_x(:, 2:6), 2 );
+all_y(:,3) += log( sum( all_x(:,4:8) .* all_x(:,4:8), 2 ) ) * 3.0;
+
+train_x = all_x(1:19000,:);
+train_y = all_y(1:19000,:);
+
+test_x = all_x(19001:20000,:);
+test_y = all_y(19001:20000,:);
+
+% the constructed data is already normalized, but this is usually best practice:
+[train_x, mu, sigma] = zscore(train_x);
+test_x = normalize(test_x, mu, sigma);
+
+%% ex7 network setup
+nn = nnsetup([10 50 50 3]);
+nn.activation_function = 'tanh_opt';    %  tanh_opt activation function
+nn.output              = 'linear';      %  linear is usual choice for regression problems
+nn.learningRate        = 0.001;         %  Linear output can be sensitive to learning rate
+nn.momentum            = 0.95;
+
+opts.numepochs =  20;   %  Number of full sweeps through data
+opts.batchsize = 100;   %  Take a mean gradient step over this many samples
+[nn, L] = nntrain(nn, train_x, train_y, opts);
+
+% nnoutput calculates the predicted regression values
+predictions = nnoutput( nn, test_x );
+
+[er, bad] = nntest(nn, test_x, test_y);
+assert(er < 1.5, 'Too big error');
+
 ```
 
-
-
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/rasmusbergpalm/deeplearntoolbox/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
