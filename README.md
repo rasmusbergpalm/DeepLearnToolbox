@@ -52,7 +52,7 @@ Setup
 -----
 
 1. Download.
-2. addpath(genpath('DeepLearnToolbox'));
+2. run dltb_setup.m
 
 Known errors
 ------------------------------
