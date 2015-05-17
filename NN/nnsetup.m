@@ -8,6 +8,7 @@ function nn = nnsetup(architecture)
     
     nn.activation_function              = 'tanh_opt';   %  Activation functions of hidden layers: 'sigm' (sigmoid) or 'tanh_opt' (optimal tanh).
     nn.learningRate                     = 2;            %  learning rate Note: typically needs to be lower when using 'sigm' activation function and non-normalized inputs.
+    nn.learningRatePerLayer             = [];           %  learning rate per layer - for transfer learning pre-training and fine-tuning different parts of the network (should be of length nn.n - 1)
     nn.momentum                         = 0.5;          %  Momentum
     nn.scaling_learningRate             = 1;            %  Scaling factor for the learning rate (each epoch)
     nn.weightPenaltyL2                  = 0;            %  L2 regularization
