@@ -75,6 +75,14 @@ for i = 1 : numepochs
     if ~isempty(nn.learningRatePerLayer)
         nn.learningRatePerLayer = nn.learningRatePerLayer * nn.scaling_learningRate;
     end
+    
+    if isfield(opts,'tol')
+       if opts.validation == 1 && loss.val.e(end)<opts.tol
+           break;
+       elseif loss.train.e(end)<opts.tol
+           break;
+       end
+    end
 end
 end
 
