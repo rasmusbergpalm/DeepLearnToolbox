@@ -17,6 +17,8 @@ function nn = nnff(nn, x, y)
                 nn.a{i} = sigm(nn.a{i - 1} * nn.W{i - 1}');
             case 'tanh_opt'
                 nn.a{i} = tanh_opt(nn.a{i - 1} * nn.W{i - 1}');
+            case 'relu'
+                nn.a{i} = relu(nn.a{i - 1} * nn.W{i - 1}',nn);
         end
         
         %dropout
