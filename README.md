@@ -1,4 +1,15 @@
 
+Deprecation notice.
+-----
+
+This toolbox is outdated and no longer maintained.
+
+There are much better tools available for deep learning than this toolbox, e.g. [Theano](http://deeplearning.net/software/theano/), [torch](http://torch.ch/) or [tensorflow](http://www.tensorflow.org/)
+
+I would suggest you use one of the tools mentioned above rather than use this toolbox.
+
+Best, Rasmus.
+
 DeepLearnToolbox
 ================
 
@@ -54,12 +65,6 @@ Setup
 1. Download.
 2. addpath(genpath('DeepLearnToolbox'));
 
-Known errors
-------------------------------
-
-`test_cnn_gradients_are_numerically_correct` fails on Octave because of a bug in Octave's convn implementation. See http://savannah.gnu.org/bugs/?39314
-
-`test_example_CNN` fails in Octave for the same reason.
 Example: Deep Belief Network
 ---------------------
 ```matlab
