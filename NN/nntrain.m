@@ -72,6 +72,17 @@ for i = 1 : numepochs
         
     disp(['epoch ' num2str(i) '/' num2str(opts.numepochs) '. Took ' num2str(t) ' seconds' '. Mini-batch mean squared error on training set is ' num2str(mean(L((n-numbatches):(n-1)))) str_perf]);
     nn.learningRate = nn.learningRate * nn.scaling_learningRate;
+    if ~isempty(nn.learningRatePerLayer)
+        nn.learningRatePerLayer = nn.learningRatePerLayer * nn.scaling_learningRate;
+    end
+    
+    if isfield(opts,'tol')
+       if opts.validation == 1 && loss.val.e(end)<opts.tol
+           break;
+       elseif loss.train.e(end)<opts.tol
+           break;
+       end
+    end
 end
 end
 

@@ -10,7 +10,12 @@ function nn = nnapplygrads(nn)
             dW = nn.dW{i};
         end
         
-        dW = nn.learningRate * dW;
+        % to apply different learning rates to each layer
+        if isempty(nn.learningRatePerLayer)
+            dW = nn.learningRate * dW;
+        else
+            dW = nn.learningRatePerLayer(i) * dW;
+        end
         
         if(nn.momentum>0)
             nn.vW{i} = nn.momentum*nn.vW{i} + dW;
