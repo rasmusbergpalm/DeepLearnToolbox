@@ -8,7 +8,7 @@ function net = cnnff(net, x)
             %  !!below can probably be handled by insane matrix operations
             for j = 1 : net.layers{l}.outputmaps   %  for each output map
                 %  create temp output map
-                z = zeros(size(net.layers{l - 1}.a{1}) - [net.layers{l}.kernelsize - 1 net.layers{l}.kernelsize - 1 0]);
+                z = zeros(size(net.layers{l - 1}.a{1}) - [net.layers{l}.kernel_y - 1 net.layers{l}.kernel_x - 1 0]);
                 for i = 1 : inputmaps   %  for each input map
                     %  convolve with corresponding kernel and add to temp output map
                     z = z + convn(net.layers{l - 1}.a{i}, net.layers{l}.k{i}{j}, 'valid');

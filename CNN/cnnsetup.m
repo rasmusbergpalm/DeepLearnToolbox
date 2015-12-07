@@ -12,12 +12,19 @@ function net = cnnsetup(net, x, y)
             end
         end
         if strcmp(net.layers{l}.type, 'c')
-            mapsize = mapsize - net.layers{l}.kernelsize + 1;
-            fan_out = net.layers{l}.outputmaps * net.layers{l}.kernelsize ^ 2;
+            if ~isfield(net.layers{l}, 'kernel_x') && ...
+               ~isfield(net.layers{l}, 'kernel_y') && ...
+               isfield(net.layers{l}, 'kernelsize')
+                net.layers{l}.kernel_x = net.layers{l}.kernelsize;                                
+                net.layers{l}.kernel_y = net.layers{l}.kernelsize;
+            end
+            mapsize = mapsize - [net.layers{l}.kernel_y net.layers{l}.kernel_x] + 1;
+            fan_out = net.layers{l}.outputmaps * net.layers{l}.kernel_y * net.layers{l}.kernel_x;
             for j = 1 : net.layers{l}.outputmaps  %  output map
-                fan_in = inputmaps * net.layers{l}.kernelsize ^ 2;
+                fan_in = inputmaps * net.layers{l}.kernel_y * net.layers{l}.kernel_x;
                 for i = 1 : inputmaps  %  input map
-                    net.layers{l}.k{i}{j} = (rand(net.layers{l}.kernelsize) - 0.5) * 2 * sqrt(6 / (fan_in + fan_out));
+                    net.layers{l}.k{i}{j} = ...
+                        (rand(net.layers{l}.kernel_y, net.layers{l}.kernel_x) - 0.5) * 2 * sqrt(6 / (fan_in + fan_out));
                 end
                 net.layers{l}.b{j} = 0;
             end
