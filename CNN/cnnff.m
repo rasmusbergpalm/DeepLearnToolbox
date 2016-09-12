@@ -8,7 +8,7 @@ function net = cnnff(net, x)
             %  !!below can probably be handled by insane matrix operations
             for j = 1 : net.layers{l}.outputmaps   %  for each output map
                 %  create temp output map
-                z = zeros(size(net.layers{l - 1}.a{1}) - [net.layers{l}.kernelsize - 1 net.layers{l}.kernelsize - 1 0]);
+	    z = zeros(postpad(size(net.layers{l - 1}.a{1}), 3, 1) - [net.layers{l}.kernelsize - 1 net.layers{l}.kernelsize - 1 0]);
                 for i = 1 : inputmaps   %  for each input map
                     %  convolve with corresponding kernel and add to temp output map
                     z = z + convn(net.layers{l - 1}.a{i}, net.layers{l}.k{i}{j}, 'valid');
@@ -30,7 +30,7 @@ function net = cnnff(net, x)
     %  concatenate all end layer feature maps into vector
     net.fv = [];
     for j = 1 : numel(net.layers{n}.a)
-        sa = size(net.layers{n}.a{j});
+	sa = postpad(size(net.layers{n}.a{j}), 3, 1);
         net.fv = [net.fv; reshape(net.layers{n}.a{j}, sa(1) * sa(2), sa(3))];
     end
     %  feedforward into output perceptrons
